@@ -11,8 +11,8 @@
     "changePct": -0.18,
     "dayHigh": 1672.5,
     "dayLow": 1615,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 1744,
+    "week52Low": 534,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_ather_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 65678,
       "display": "65,678 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_ather_fundamentals"
@@ -49,7 +49,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": null,
+      "sectorMedian": 17.05,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -75,7 +75,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": null,
+      "sectorMedian": 10.3,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": null,
+      "sectorMedian": 15.75,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,47 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "screener_ather_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": -4.79,
+      "display": "-4.79",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_ather_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": null,
+      "display": "—",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_ather_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹534 – ₹1,744",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_ather_fundamentals"
@@ -1103,8 +1142,25 @@
       "close": 1656
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "high",
+      "reason": "The price moved between ₹534 and ₹1,744 over 52 weeks — a swing of about 227% from its low.",
+      "sourceIds": [
+        "screener_ather_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_ather_market_data",
     "screener_ather_fundamentals"

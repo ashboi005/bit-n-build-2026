@@ -364,10 +364,22 @@ function mergeStock(
   const missingMetrics = fallback.metrics.filter(
     (metric) => !metricKeys.has(metric.key) && !hasIncompatibleCitation(metric, primaryDocuments, fallbackDocuments),
   );
+  const fallbackRisks = new Map(fallback.risk.map((risk) => [risk.key, risk]));
+  const primaryRiskKeys = new Set(primary.risk.map((risk) => risk.key));
+  const mergedRisks = primary.risk.map((risk) => fallbackRisks.get(risk.key) ?? risk);
+  const missingRisks = fallback.risk.filter((risk) => !primaryRiskKeys.has(risk.key));
   return {
     ...primary,
+    price: {
+      ...primary.price,
+      dayHigh: primary.price.dayHigh ?? fallback.price.dayHigh,
+      dayLow: primary.price.dayLow ?? fallback.price.dayLow,
+      week52High: primary.price.week52High ?? fallback.price.week52High,
+      week52Low: primary.price.week52Low ?? fallback.price.week52Low,
+    },
     history: primary.history.length === 0 && fallback.history.length > 0 ? fallback.history : primary.history,
     metrics: [...primaryMetrics, ...missingMetrics],
+    risk: [...mergedRisks, ...missingRisks],
   };
 }
 

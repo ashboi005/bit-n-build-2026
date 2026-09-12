@@ -44,6 +44,10 @@ export function createSources(snapshot: Snapshot = loadSnapshot()): SourcesApi {
     }));
   },
 
+  listDocuments(): SourceDocument[] {
+    return [...snapshot.documents.values()];
+  },
+
   getStock(ticker: string): StockRecord | null {
     return snapshot.stocks.get(ticker.toUpperCase()) ?? null;
   },

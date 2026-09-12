@@ -11,8 +11,8 @@
     "changePct": -1.07,
     "dayHigh": 274,
     "dayLow": 268.3,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 325,
+    "week52Low": 250,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_powergrid_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 250279,
       "display": "2,50,279 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -49,8 +49,8 @@
       "value": 15.8,
       "display": "15.8",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 17.05,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -75,8 +75,8 @@
       "value": 9.1,
       "display": "9.1%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 10.3,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -88,8 +88,8 @@
       "value": 15.3,
       "display": "15.3%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 15.75,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -101,8 +101,47 @@
       "value": 3.34,
       "display": "3.34%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 3.87,
+      "display": "3.87",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 2.503785218137829,
+      "display": "2.5",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹250 – ₹325",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -1103,8 +1142,52 @@
       "close": 269.1
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "low",
+      "reason": "The price moved between ₹250 and ₹325 over 52 weeks — a swing of about 30% from its low.",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "medium",
+      "reason": "P/E is 15.8, compared with a sector median of 17.05.",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "debt",
+      "label": "Debt",
+      "level": "high",
+      "reason": "Debt to equity is 2.50, compared with a sector median of 0.30.",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "medium",
+      "reason": "Return on equity is 15.3%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "screener_powergrid_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_powergrid_market_data",
     "screener_powergrid_fundamentals"

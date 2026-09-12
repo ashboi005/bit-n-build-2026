@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=500312&seriesid=",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:37.504Z",
+  "publishedAt": "2026-09-12T18:56:35.206Z",
   "tickers": [
     "ONGC"
   ],
   "sectors": [],
-  "text": "BSE market-data response for ONGC. Fetched at: 2026-09-12T17:55:37.504Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹232.55; change -4.45; change percent -1.88; previous close ₹237.00; open ₹240.30; high ₹243.00; low ₹232.55.",
+  "text": "BSE market-data response for ONGC. Fetched at: 2026-09-12T18:56:35.206Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹232.55; change -4.45; change percent -1.88; previous close ₹237.00; open ₹240.30; high ₹243.00; low ₹232.55.",
   "chunks": [
     {
       "id": "bse_ongc_market_data_0",
-      "text": "BSE market-data response for ONGC. Fetched at: 2026-09-12T17:55:37.504Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹232.55; change -4.45; change percent -1.88; previous close ₹237.00; open ₹240.30; high ₹243.00; low ₹232.55."
+      "text": "BSE market-data response for ONGC. Fetched at: 2026-09-12T18:56:35.206Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹232.55; change -4.45; change percent -1.88; previous close ₹237.00; open ₹240.30; high ₹243.00; low ₹232.55."
     }
   ]
 }

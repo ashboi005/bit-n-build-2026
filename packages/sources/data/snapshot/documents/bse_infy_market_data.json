@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=500209&seriesid=",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:32.236Z",
+  "publishedAt": "2026-09-12T18:56:35.168Z",
   "tickers": [
     "INFY"
   ],
   "sectors": [],
-  "text": "BSE market-data response for INFY. Fetched at: 2026-09-12T17:55:32.236Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1038.20; change +6.65; change percent +0.64; previous close ₹1031.55; open ₹1035.60; high ₹1047.50; low ₹1029.05.",
+  "text": "BSE market-data response for INFY. Fetched at: 2026-09-12T18:56:35.168Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1038.20; change +6.65; change percent +0.64; previous close ₹1031.55; open ₹1035.60; high ₹1047.50; low ₹1029.05.",
   "chunks": [
     {
       "id": "bse_infy_market_data_0",
-      "text": "BSE market-data response for INFY. Fetched at: 2026-09-12T17:55:32.236Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1038.20; change +6.65; change percent +0.64; previous close ₹1031.55; open ₹1035.60; high ₹1047.50; low ₹1029.05."
+      "text": "BSE market-data response for INFY. Fetched at: 2026-09-12T18:56:35.168Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1038.20; change +6.65; change percent +0.64; previous close ₹1031.55; open ₹1035.60; high ₹1047.50; low ₹1029.05."
     }
   ]
 }

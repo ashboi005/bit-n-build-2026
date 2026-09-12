@@ -11,8 +11,8 @@
     "changePct": -1.14,
     "dayHigh": 4930,
     "dayLow": 4861.65,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 5150,
+    "week52Low": 3479,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_hal_quote"
   },
@@ -40,7 +40,7 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
       ]
     },
     {
@@ -53,7 +53,7 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
       ]
     },
     {
@@ -66,7 +66,7 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
       ]
     },
     {
@@ -79,7 +79,7 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
       ]
     },
     {
@@ -92,7 +92,7 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
       ]
     },
     {
@@ -105,7 +105,46 @@
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_hal_snapshot_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 12.17,
+      "display": "12.17",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hal_snapshot_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 0.009819090692692217,
+      "display": "0.01",
+      "unit": null,
+      "sectorMedian": null,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hal_snapshot_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹3,479 – ₹5,150",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hal_snapshot_fundamentals"
       ]
     }
   ],
@@ -1106,12 +1145,21 @@
   "sectorMedians": {},
   "risk": [
     {
-      "key": "stability",
-      "label": "Business stability",
+      "key": "volatility",
+      "label": "Price volatility",
       "level": "medium",
-      "reason": "A majority of its order book comes from domestic defence programmes.",
+      "reason": "The price moved between ₹3,479 and ₹5,150 over 52 weeks — a swing of about 48% from its low.",
       "sourceIds": [
-        "hal_q2_presentation"
+        "screener_hal_snapshot_fundamentals"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "low",
+      "reason": "Return on equity is 24%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "screener_hal_snapshot_fundamentals"
       ]
     }
   ],
@@ -1120,7 +1168,8 @@
     "hal_q2_presentation",
     "bs_defence_priced_in",
     "bse_hal_quote",
-    "screener_hal_fundamentals"
+    "screener_hal_fundamentals",
+    "screener_hal_snapshot_fundamentals"
   ],
   "newsIds": []
 }

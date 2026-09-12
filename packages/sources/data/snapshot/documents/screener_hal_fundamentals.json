@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://www.screener.in/company/HAL/consolidated/",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:48.130Z",
+  "publishedAt": "2026-09-12T18:55:49.911Z",
   "tickers": [
     "HAL"
   ],
   "sectors": [],
-  "text": "Screener.in consolidated fundamentals for HAL. Fetched at: 2026-09-12T17:55:48.130Z. Returned values: Market Cap (₹ Cr): 328034; Stock P/E: 35.2; Book Value: 614; ROCE (%): 32; ROE (%): 24; Dividend Yield (%): 0.92.",
+  "text": "Screener.in consolidated fundamentals for HAL. Fetched at: 2026-09-12T18:55:49.911Z. Returned values: Market Cap (₹ Cr): 328034; Stock P/E: 35.2; Book Value: 614; ROCE (%): 32; ROE (%): 24; Dividend Yield (%): 0.92; 52-week high (₹): 5150; 52-week low (₹): 3479; EPS (₹): 12.17; Debt to equity: 0.009819090692692217.",
   "chunks": [
     {
       "id": "screener_hal_fundamentals_0",
-      "text": "Screener.in consolidated fundamentals for HAL. Fetched at: 2026-09-12T17:55:48.130Z. Returned values: Market Cap (₹ Cr): 328034; Stock P/E: 35.2; Book Value: 614; ROCE (%): 32; ROE (%): 24; Dividend Yield (%): 0.92."
+      "text": "Screener.in consolidated fundamentals for HAL. Fetched at: 2026-09-12T18:55:49.911Z. Returned values: Market Cap (₹ Cr): 328034; Stock P/E: 35.2; Book Value: 614; ROCE (%): 32; ROE (%): 24; Dividend Yield (%): 0.92; 52-week high (₹): 5150; 52-week low (₹): 3479; EPS (₹): 12.17; Debt to equity: 0.009819090692692217."
     }
   ]
 }

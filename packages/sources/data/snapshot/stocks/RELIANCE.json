@@ -11,8 +11,8 @@
     "changePct": -1.33,
     "dayHigh": 1268.15,
     "dayLow": 1253.2,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 1612,
+    "week52Low": 1250,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_reliance_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 1701716,
       "display": "17,01,716 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_reliance_fundamentals"
@@ -49,8 +49,8 @@
       "value": 22.8,
       "display": "22.8",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 17.05,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_reliance_fundamentals"
@@ -75,8 +75,8 @@
       "value": 10.3,
       "display": "10.3%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 10.3,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_reliance_fundamentals"
@@ -88,8 +88,8 @@
       "value": 8.91,
       "display": "8.91%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 15.75,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_reliance_fundamentals"
@@ -101,8 +101,47 @@
       "value": 0.48,
       "display": "0.48%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 11.83,
+      "display": "11.83",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 0.7700309841234971,
+      "display": "0.77",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹1,250 – ₹1,612",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_reliance_fundamentals"
@@ -1103,8 +1142,52 @@
       "close": 1257.5
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "low",
+      "reason": "The price moved between ₹1,250 and ₹1,612 over 52 weeks — a swing of about 29% from its low.",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "high",
+      "reason": "P/E is 22.8, compared with a sector median of 17.05.",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "debt",
+      "label": "Debt",
+      "level": "high",
+      "reason": "Debt to equity is 0.77, compared with a sector median of 0.30.",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "high",
+      "reason": "Return on equity is 8.91%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "screener_reliance_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_reliance_market_data",
     "screener_reliance_fundamentals"

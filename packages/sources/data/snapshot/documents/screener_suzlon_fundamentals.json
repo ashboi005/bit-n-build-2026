@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://www.screener.in/company/SUZLON/consolidated/",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:44.959Z",
+  "publishedAt": "2026-09-12T18:56:35.247Z",
   "tickers": [
     "SUZLON"
   ],
   "sectors": [],
-  "text": "Screener.in consolidated fundamentals for SUZLON. Fetched at: 2026-09-12T17:55:44.959Z. Returned values: Market Cap (₹ Cr): 60159; Stock P/E: 19.1; Book Value: 6.96; ROCE (%): 34.2; ROE (%): 39.7; Dividend Yield (%): 0.",
+  "text": "Screener.in consolidated fundamentals for SUZLON. Fetched at: 2026-09-12T18:56:35.247Z. Returned values: Market Cap (₹ Cr): 60159; Stock P/E: 19.1; Book Value: 6.96; ROCE (%): 34.2; ROE (%): 39.7; Dividend Yield (%): 0; 52-week high (₹): 61.5; 52-week low (₹): 38.2; EPS (₹): 0.08; Debt to equity: unavailable.",
   "chunks": [
     {
       "id": "screener_suzlon_fundamentals_0",
-      "text": "Screener.in consolidated fundamentals for SUZLON. Fetched at: 2026-09-12T17:55:44.959Z. Returned values: Market Cap (₹ Cr): 60159; Stock P/E: 19.1; Book Value: 6.96; ROCE (%): 34.2; ROE (%): 39.7; Dividend Yield (%): 0."
+      "text": "Screener.in consolidated fundamentals for SUZLON. Fetched at: 2026-09-12T18:56:35.247Z. Returned values: Market Cap (₹ Cr): 60159; Stock P/E: 19.1; Book Value: 6.96; ROCE (%): 34.2; ROE (%): 39.7; Dividend Yield (%): 0; 52-week high (₹): 61.5; 52-week low (₹): 38.2; EPS (₹): 0.08; Debt to equity: unavailable."
     }
   ]
 }

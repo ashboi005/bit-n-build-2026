@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=500400&seriesid=",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:38.649Z",
+  "publishedAt": "2026-09-12T18:56:35.213Z",
   "tickers": [
     "TATAPOWER"
   ],
   "sectors": [],
-  "text": "BSE market-data response for TATAPOWER. Fetched at: 2026-09-12T17:55:38.649Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹365.00; change -2.00; change percent -0.54; previous close ₹367.00; open ₹365.00; high ₹367.40; low ₹362.60.",
+  "text": "BSE market-data response for TATAPOWER. Fetched at: 2026-09-12T18:56:35.213Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹365.00; change -2.00; change percent -0.54; previous close ₹367.00; open ₹365.00; high ₹367.40; low ₹362.60.",
   "chunks": [
     {
       "id": "bse_tatapower_market_data_0",
-      "text": "BSE market-data response for TATAPOWER. Fetched at: 2026-09-12T17:55:38.649Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹365.00; change -2.00; change percent -0.54; previous close ₹367.00; open ₹365.00; high ₹367.40; low ₹362.60."
+      "text": "BSE market-data response for TATAPOWER. Fetched at: 2026-09-12T18:56:35.213Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹365.00; change -2.00; change percent -0.54; previous close ₹367.00; open ₹365.00; high ₹367.40; low ₹362.60."
     }
   ]
 }
