@@ -1,8 +1,12 @@
 "use client";
 
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+=======
+import React, { useState } from "react";
+>>>>>>> Stashed changes
 import { useChat } from "@/hooks/use-chat";
 import { 
   MessageScroller,
@@ -22,9 +26,18 @@ import { Bubble, BubbleContent } from "@bit-n-build-2026/ui/components/bubble";
 import { Marker, MarkerContent, MarkerIcon } from "@bit-n-build-2026/ui/components/marker";
 import { Input } from "@bit-n-build-2026/ui/components/input";
 import { Button } from "@bit-n-build-2026/ui/components/button";
+<<<<<<< Updated upstream
 import { Send, User, Bot, Link as LinkIcon, Briefcase, Plus, MessageSquare } from "lucide-react";
 import { SourceCard } from "@/components/thesis/source-card";
 import type { SourceRef, ChatThread } from "@bit-n-build-2026/contracts";
+=======
+import { Send, User, Bot, Link as LinkIcon, Briefcase, BookOpen, ChevronDown } from "lucide-react";
+import { SourceCard } from "@/components/thesis/source-card";
+import { SpiderTingle } from "@/components/chat/spider-tingle";
+import type { SourceRef } from "@bit-n-build-2026/contracts";
+import { motion, AnimatePresence } from "motion/react";
+import { cn } from "@bit-n-build-2026/ui/lib/utils";
+>>>>>>> Stashed changes
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -74,6 +87,7 @@ export default function ChatPage() {
   };
 
   return (
+<<<<<<< Updated upstream
     <div className="flex h-[calc(100vh-60px)] w-full max-w-[1400px] mx-auto">
       {/* Sidebar */}
       <div className="w-64 border-r bg-muted/10 hidden md:flex flex-col">
@@ -180,38 +194,232 @@ export default function ChatPage() {
             </Button>
           </form>
         </div>
+=======
+    <div className="flex flex-col h-full max-w-4xl mx-auto w-full pt-2 sm:pt-4 relative min-h-0 overflow-hidden">
+      <SpiderTingle isActive={status === "streaming"} />
+      
+      <div className="flex-1 min-h-0 relative">
+        <MessageScrollerProvider>
+          <MessageScroller>
+            <MessageScrollerViewport className="px-4 pb-6 scrollbar-thin">
+              <MessageScrollerContent className="gap-6">
+                {messages.length === 0 && status === "idle" && (
+                  <div className="h-full min-h-[300px] flex items-center justify-center text-sm text-muted-foreground">
+                    Ask a general question or ask about your portfolio...
+                  </div>
+                )}
+                {messages.map((m) => (
+                  <MessageScrollerItem key={m.id}>
+                    <MessageGroup>
+                      <Message align={m.role === "user" ? "end" : "start"} className="gap-3">
+                        <MessageAvatar className="self-start mt-0.5 size-8 shrink-0 rounded-full border border-border/50 bg-muted/70 text-muted-foreground shadow-2xs">
+                          {m.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                        </MessageAvatar>
+                        
+                        <MessageContent className="gap-2">
+                          {m.role === "assistant" && m.usedPortfolio && (
+                            <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-medium mb-0.5 bg-blue-50 dark:bg-blue-900/20 w-fit px-3 py-1 rounded-full border border-blue-500/20">
+                              <Briefcase className="h-3 w-3" />
+                              Used your portfolio context
+                            </div>
+                          )}
+
+                          <Bubble 
+                            variant={m.role === "user" ? "default" : "secondary"}
+                            className={cn(
+                              "transition-all duration-200",
+                              m.role === "user" ? "rounded-2xl rounded-tr-xs" : "rounded-2xl rounded-tl-xs"
+                            )}
+                          >
+                            <BubbleContent 
+                              className={cn(
+                                "w-fit max-w-full min-w-0 border border-transparent leading-relaxed text-sm wrap-break-word shadow-xs",
+                                m.role === "user" 
+                                  ? "rounded-2xl rounded-tr-xs px-4.5 py-3 text-primary-foreground" 
+                                  : "rounded-2xl rounded-tl-xs px-5 py-4 bg-secondary/80 border-border/40 text-foreground"
+                              )}
+                            >
+                              {m.role === "user" ? (
+                                <p className="leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                              ) : (
+                                <ParsedMessage
+                                  content={m.content}
+                                  sources={m.sources}
+                                  isStreaming={m.status === "streaming"}
+                                />
+                              )}
+                            </BubbleContent>
+                          </Bubble>
+
+                          {m.status === "failed" && (
+                            <div className="text-destructive text-xs px-1">Error generating response</div>
+                          )}
+
+                          {/* Collapsible Resources / Sources Dropdown */}
+                          {m.sources && m.sources.length > 0 && (
+                            <SourcesDropdown sources={m.sources} />
+                          )}
+                        </MessageContent>
+                      </Message>
+                    </MessageGroup>
+                  </MessageScrollerItem>
+                ))}
+              </MessageScrollerContent>
+            </MessageScrollerViewport>
+            <MessageScrollerButton />
+          </MessageScroller>
+        </MessageScrollerProvider>
+      </div>
+
+      {/* Input Section with rounded corners and clean spacing */}
+      <div className="p-3 sm:p-4 bg-background/80 backdrop-blur-md border-t border-border/50">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2.5 max-w-4xl mx-auto w-full">
+          <Input 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your message..."
+            disabled={status === "streaming"}
+            className="flex-1 h-11 px-4 text-sm rounded-2xl bg-card border-border/70 shadow-2xs transition-colors focus-visible:ring-1 focus-visible:ring-ring"
+          />
+          <Button 
+            type="submit" 
+            disabled={!input.trim() || status === "streaming"} 
+            size="icon"
+            className="h-11 w-11 rounded-2xl shrink-0 cursor-pointer shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Send className="h-4 w-4" />
+          </Button>
+        </form>
+>>>>>>> Stashed changes
       </div>
     </div>
   );
 }
 
-function ParsedMessage({ content, sources }: { content: string, sources?: SourceRef[] }) {
-  if (!sources || sources.length === 0 || !content) {
-    return <span className="whitespace-pre-wrap">{content || "..."}</span>;
+/**
+ * Drop-down menu for resources/sources that takes up minimal space when collapsed.
+ */
+function SourcesDropdown({ sources }: { sources: SourceRef[] }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!sources || sources.length === 0) return null;
+
+  return (
+    <div className="mt-1 w-full max-w-xl">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border border-border/70 bg-card/60 hover:bg-card text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-2xs active:scale-[0.98]"
+        aria-expanded={isOpen}
+      >
+        <BookOpen className="w-3.5 h-3.5 text-primary" />
+        <span>Sources ({sources.length})</span>
+        <ChevronDown 
+          className={cn(
+            "w-3.5 h-3.5 transition-transform duration-200 text-muted-foreground", 
+            isOpen && "rotate-180"
+          )} 
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, y: -4 }}
+            animate={{ opacity: 1, height: "auto", y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="overflow-hidden mt-2.5 w-full"
+          >
+            <div className="p-3.5 rounded-2xl border border-border/60 bg-card/40 backdrop-blur-xs space-y-2 max-h-72 overflow-y-auto scrollbar-thin shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {sources.map((src) => (
+                  <SourceCard key={src.id} source={src} />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/**
+ * Renders assistant messages with balanced, even paragraph spacing and inline source markers.
+ */
+function ParsedMessage({
+  content,
+  sources,
+  isStreaming,
+}: {
+  content: string;
+  sources?: SourceRef[];
+  isStreaming?: boolean;
+}) {
+  if (!content) {
+    if (isStreaming) {
+      return (
+        <span className="inline-flex items-center gap-1.5 py-1 px-1 text-muted-foreground" aria-label="Thinking...">
+          <span className="w-2 h-2 rounded-full bg-current animate-bounce [animation-delay:-0.3s]" />
+          <span className="w-2 h-2 rounded-full bg-current animate-bounce [animation-delay:-0.15s]" />
+          <span className="w-2 h-2 rounded-full bg-current animate-bounce" />
+        </span>
+      );
+    }
+    return <span className="text-sm leading-relaxed text-muted-foreground">...</span>;
+  }
+
+  // Split content by double linebreaks for even, uniform paragraph spacing
+  const paragraphs = content.split(/\n\n+/);
+
+  return (
+    <div className="space-y-3.5 text-sm sm:text-[14.5px] leading-relaxed text-foreground/90">
+      {paragraphs.map((paragraph, pIdx) => (
+        <p key={pIdx} className="leading-relaxed">
+          {renderParagraphWithCitations(paragraph, sources)}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function renderParagraphWithCitations(text: string, sources?: SourceRef[]) {
+  if (!sources || sources.length === 0 || !text) {
+    return <span className="whitespace-pre-wrap">{text}</span>;
   }
 
   const regex = /\[([^\]]+)\]/g;
-  const parts = [];
+  const parts: React.ReactNode[] = [];
   let lastIndex = 0;
-  
-  let match;
-  while ((match = regex.exec(content)) !== null) {
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(content.substring(lastIndex, match.index));
+      parts.push(text.substring(lastIndex, match.index));
     }
     const sourceId = match[1];
-    const source = sources.find(s => s.id === sourceId);
-    
+    const source = sources.find((s) => s.id === sourceId);
+
     if (source) {
       parts.push(
         <span key={`src-${match.index}`} className="inline-block mx-1 align-baseline translate-y-0.5">
-          <Marker>
-            <MarkerIcon><LinkIcon className="h-3 w-3" /></MarkerIcon>
-            <MarkerContent>
+          <Marker className="rounded-md">
+            <MarkerIcon>
+              <LinkIcon className="h-3 w-3 text-primary" />
+            </MarkerIcon>
+            <MarkerContent className="rounded-md">
               {source.url ? (
-                <a href={source.url} target="_blank" rel="noopener noreferrer">{source.publisher}</a>
+                <a 
+                  href={source.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:underline text-xs"
+                >
+                  {source.publisher}
+                </a>
               ) : (
-                source.publisher
+                <span className="text-xs">{source.publisher}</span>
               )}
             </MarkerContent>
           </Marker>
@@ -222,14 +430,10 @@ function ParsedMessage({ content, sources }: { content: string, sources?: Source
     }
     lastIndex = regex.lastIndex;
   }
-  
-  if (lastIndex < content.length) {
-    parts.push(content.substring(lastIndex));
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
   }
-  
-  return (
-    <span className="whitespace-pre-wrap">
-      {parts.map((part, i) => <React.Fragment key={i}>{part}</React.Fragment>)}
-    </span>
-  );
+
+  return <>{parts}</>;
 }
