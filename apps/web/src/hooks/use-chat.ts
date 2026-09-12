@@ -19,7 +19,11 @@ export function useChat(initialThreadId?: string) {
   const [status, setStatus] = useState<"idle" | "streaming" | "failed">("idle");
 
   useEffect(() => {
-    if (!initialThreadId) return;
+    if (!initialThreadId) {
+      setMessages([]);
+      setThreadId(undefined);
+      return;
+    }
     
     async function fetchThread() {
       try {
@@ -34,6 +38,7 @@ export function useChat(initialThreadId?: string) {
               status: "done",
             }))
           );
+          setThreadId(initialThreadId);
         }
       } catch (err) {
         console.error("Failed to load thread", err);

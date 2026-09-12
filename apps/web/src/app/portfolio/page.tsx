@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ENV } from "@/env";
 import type { Portfolio } from "@bit-n-build-2026/contracts";
 import { Card } from "@bit-n-build-2026/ui/components/card";
 import Loader from "@/components/loader";
+import { ChangesSection } from "@/components/portfolio/changes-section";
 
 export default function PortfolioPage() {
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
@@ -57,6 +57,8 @@ export default function PortfolioPage() {
           Your current holdings, watched assets, and past decisions.
         </p>
       </div>
+
+      <ChangesSection />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6 bg-card border-border shadow-sm flex flex-col justify-center">
