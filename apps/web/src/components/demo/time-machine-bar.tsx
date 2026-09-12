@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@bit-n-build-2026/ui/components/button";
-import { ENV } from "@/env";
 import type { UserProfile, DemoStage } from "@bit-n-build-2026/contracts";
 import { DEMO_STAGES, DEMO_STAGE_LABELS } from "@bit-n-build-2026/contracts";
 import { motion } from "motion/react";
-
-import { Loader2 } from "lucide-react";
+import { Loader2, RotateCcw } from "lucide-react";
 
 interface TimeMachineBarProps {
   onSeed?: (prompt: string) => void;
@@ -17,8 +16,9 @@ interface TimeMachineBarProps {
 
 export function TimeMachineBar({ onSeed, className = "", compact = false }: TimeMachineBarProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [currentStage, setCurrentStage] = useState<DemoStage>("day0");
+  const [loading, setLoading] = useState<DemoStage | "reset" | null>(null);
+  const [currentStage, setCurrentStage] = useState<DemoStage | "reset">("day0");
+  const router = useRouter();
 
   useEffect(() => {
     fetchProfile();
@@ -38,8 +38,31 @@ export function TimeMachineBar({ onSeed, className = "", compact = false }: Time
     }
   };
 
+  const resetDemo = async () => {
+    const confirmed = window.confirm(
+      "Delete this account and start over?\n\nThis removes your profile, decisions and chat history permanently, and signs you out. Used to restart a demo from scratch."
+    );
+    if (!confirmed) return;
+
+    setLoading("reset");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/demo/reset`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (res.ok) {
+        // Redirection on success
+        router.push("/login");
+      }
+    } catch (e) {
+      console.warn("Could not reset demo", e);
+    } finally {
+      setLoading(null);
+    }
+  };
+
   const seedDemo = async (stage: DemoStage) => {
-    setLoading(true);
+    setLoading(stage);
     setCurrentStage(stage);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/demo/seed`, {
@@ -69,25 +92,36 @@ export function TimeMachineBar({ onSeed, className = "", compact = false }: Time
     } catch (e) {
       console.warn("Could not seed demo", e);
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
+
+  const stagesToRender = DEMO_STAGES.filter((s) => s !== "day0");
 
   if (compact) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        {DEMO_STAGES.map((stage) => (
+        <Button
+          size="sm"
+          variant="destructive"
+          onClick={resetDemo}
+          disabled={loading !== null}
+          className="h-8 px-3 text-xs font-semibold cursor-pointer"
+        >
+          {loading === "reset" ? <Loader2 className="w-3 h-3 animate-spin mr-1.5" /> : <RotateCcw className="w-3 h-3 mr-1.5" />}
+          Reset demo
+        </Button>
+        <div className="w-px h-6 bg-border mx-1" />
+        {stagesToRender.map((stage) => (
           <Button
             key={stage}
             size="sm"
             variant={currentStage === stage ? "default" : "outline"}
             onClick={() => seedDemo(stage)}
-            disabled={loading}
+            disabled={loading !== null}
             className="h-8 px-3 text-xs font-semibold cursor-pointer"
           >
-            {loading && currentStage === stage ? (
-              <Loader2 className="w-3 h-3 animate-spin mr-1.5" />
-            ) : null}
+            {loading === stage && <Loader2 className="w-3 h-3 animate-spin mr-1.5" />}
             {DEMO_STAGE_LABELS[stage]}
           </Button>
         ))}
@@ -102,18 +136,27 @@ export function TimeMachineBar({ onSeed, className = "", compact = false }: Time
           <span className="text-xs uppercase tracking-wider font-mono font-bold text-muted-foreground mr-1">
             Stage:
           </span>
-          {DEMO_STAGES.map((stage) => (
+          <Button
+            size="default"
+            variant="destructive"
+            onClick={resetDemo}
+            disabled={loading !== null}
+            className="h-9 px-4 text-sm font-semibold transition-all cursor-pointer"
+          >
+            {loading === "reset" ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <RotateCcw className="w-3.5 h-3.5 mr-1.5" />}
+            Reset demo
+          </Button>
+          <div className="w-px h-6 bg-border mx-1" />
+          {stagesToRender.map((stage) => (
             <Button
               key={stage}
               size="default"
               variant={currentStage === stage ? "default" : "outline"}
               onClick={() => seedDemo(stage)}
-              disabled={loading}
+              disabled={loading !== null}
               className="h-9 px-4 text-sm font-semibold transition-all cursor-pointer"
             >
-              {loading && currentStage === stage ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
-              ) : null}
+              {loading === stage && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />}
               {DEMO_STAGE_LABELS[stage]}
             </Button>
           ))}
