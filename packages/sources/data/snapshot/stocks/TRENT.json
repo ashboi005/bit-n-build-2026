@@ -3,7 +3,7 @@
   "bseCode": "500251",
   "isin": "INE849A01020",
   "name": "Trent Ltd",
-  "sector": "Unclassified",
+  "sector": "Retail",
   "business": "This committed fallback covers the BSE-listed company named Trent Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 2804.4,
@@ -36,8 +36,8 @@
       "value": 149433,
       "display": "1,49,433 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -49,8 +49,8 @@
       "value": 81.7,
       "display": "81.7",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -75,8 +75,8 @@
       "value": 28.3,
       "display": "28.3%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -88,8 +88,8 @@
       "value": 27.7,
       "display": "27.7%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0.14,
       "display": "0.14%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.1877637130801688,
+      "value": 0.1878,
       "display": "0.19",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -1142,38 +1142,13 @@
       "close": 2802.4
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹2,184 and ₹3,499 over 52 weeks — a swing of about 60% from its low.",
-      "sourceIds": [
-        "screener_trent_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "high",
-      "reason": "P/E is 81.7, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_trent_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.19, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_trent_fundamentals"
       ]

@@ -455,6 +455,39 @@ reuse for the rest of the thread.
   them into clickable chips** that open the matching source card. Do not leave
   raw brackets in the text.
 
+## 🧠 Chat feeds the same memory everything else uses
+
+Worth knowing, because it changes how the feature reads to a user:
+
+**Every chat exchange is embedded into the same vector store as their portfolio,
+decisions and onboarding answers.** So a question asked today is retrievable
+weeks later, in a different thread.
+
+Verified end to end:
+
+```
+Thread A:  "I find P/E ratios really confusing and I get nervous about losing money."
+Thread B:  "Remind me what I said I struggle with?"
+           → "You told us that you find P/E ratios confusing and you get nervous
+              about losing money."
+```
+
+Two different threads, no shared message history — that came out of the vector
+store, not the conversation.
+
+**What this means for your UI:**
+
+- **Do not build chat as a throwaway box.** It is a memory the product keeps.
+  Threads are worth listing and returning to.
+- Only the last 12 turns of a thread go into the prompt directly; anything older
+  is recalled semantically. So a long thread does not lose its early context, and
+  you do not need to cap or truncate anything client-side.
+- The "used your portfolio" marker from `chat.context.usedPortfolio` is the same
+  idea made visible. Consider surfacing when older context was recalled too.
+- Retrieval spans **public market sources AND the user's own history** in one
+  pass, which is why an answer can combine "the defence budget rose" with "you
+  already hold 16% BEL".
+
 ## A real answer from today, at Day 25
 
 > Your portfolio already has 16% in BEL, which is a large chunk for a first-time

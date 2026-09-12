@@ -3,7 +3,7 @@
   "bseCode": "532174",
   "isin": "INE090A01021",
   "name": "ICICI Bank Ltd",
-  "sector": "Unclassified",
+  "sector": "Banking",
   "business": "This committed fallback covers the BSE-listed company named ICICI Bank Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 1379.15,
@@ -36,8 +36,8 @@
       "value": 990020,
       "display": "9,90,020 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 1040864.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -49,7 +49,7 @@
       "value": 17.6,
       "display": "17.6",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 15.7,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -75,8 +75,8 @@
       "value": 7.18,
       "display": "7.18%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": 7.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -88,7 +88,7 @@
       "value": 15.9,
       "display": "15.9%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 14.75,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 0.87,
       "display": "0.87%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "normal",
+      "sectorMedian": 1.35,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,11 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.7,
+    "roe": 14.75,
+    "roce": 7.1,
+    "dividend_yield": 1.35,
+    "market_cap": 1040864.5
   },
   "risk": [
     {
@@ -1164,7 +1163,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "medium",
-      "reason": "P/E is 17.6, compared with a sector median of 17.05.",
+      "reason": "P/E is 17.6, compared with the Banking sector median of 15.7. Investors are paying more for its earnings than for its peers'.",
       "sourceIds": [
         "screener_icicibank_fundamentals"
       ]

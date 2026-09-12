@@ -3,7 +3,7 @@
   "bseCode": "541143",
   "isin": "INE171Z01026",
   "name": "Bharat Dynamics Ltd",
-  "sector": "Unclassified",
+  "sector": "Defence",
   "business": "This committed fallback covers the BSE-listed company named Bharat Dynamics Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 1190.5,
@@ -36,7 +36,7 @@
       "value": null,
       "display": "—",
       "unit": "INR crore",
-      "sectorMedian": 294031,
+      "sectorMedian": 311802.5,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 41.65,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -75,7 +75,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": 10.3,
+      "sectorMedian": 34.2,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 25.7,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 0.77,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": 0.0064,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1130,12 +1130,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 41.65,
+    "roe": 25.7,
+    "roce": 34.2,
+    "dividend_yield": 0.77,
+    "market_cap": 311802.5,
+    "debt_to_equity": 0.0064
   },
   "risk": [],
   "documentIds": [

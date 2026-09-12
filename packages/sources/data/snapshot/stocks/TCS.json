@@ -3,7 +3,7 @@
   "bseCode": "532540",
   "isin": "INE467B01029",
   "name": "Tata Consultancy Services Ltd",
-  "sector": "Unclassified",
+  "sector": "Information Technology",
   "business": "This committed fallback covers the BSE-listed company named Tata Consultancy Services Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 2202,
@@ -36,7 +36,7 @@
       "value": 796269,
       "display": "7,96,269 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
+      "sectorMedian": 608696.0,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": 14.8,
       "display": "14.8",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 14.15,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -75,7 +75,7 @@
       "value": 63,
       "display": "63%",
       "unit": "%",
-      "sectorMedian": 10.3,
+      "sectorMedian": 51.5,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": 51.8,
       "display": "51.8%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 41.85,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 2.91,
       "display": "2.91%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "high",
+      "sectorMedian": 3.77,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_tcs_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.007070208353905401,
+      "value": 0.0071,
       "display": "0.01",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "low",
+      "sectorMedian": 0.0035,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_tcs_fundamentals"
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 14.15,
+    "roe": 41.85,
+    "roce": 51.5,
+    "dividend_yield": 3.77,
+    "market_cap": 608696.0,
+    "debt_to_equity": 0.0035
   },
   "risk": [
     {
@@ -1156,24 +1156,6 @@
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹1,976 and ₹3,350 over 52 weeks — a swing of about 70% from its low.",
-      "sourceIds": [
-        "screener_tcs_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 14.8, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_tcs_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.01, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_tcs_fundamentals"
       ]

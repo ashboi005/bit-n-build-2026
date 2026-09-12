@@ -36,8 +36,8 @@
       "value": 328034,
       "display": "3,28,034 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 311802.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -49,8 +49,8 @@
       "value": 35.2,
       "display": "35.2",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 41.65,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -75,8 +75,8 @@
       "value": 32,
       "display": "32%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 34.2,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -88,8 +88,8 @@
       "value": 24,
       "display": "24%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 25.7,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0.92,
       "display": "0.92%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 0.77,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.009819090692692217,
+      "value": 0.0098,
       "display": "0.01",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 0.0064,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
@@ -1142,13 +1142,29 @@
       "close": 4905
     }
   ],
-  "sectorMedians": {},
+  "sectorMedians": {
+    "pe": 41.65,
+    "roe": 25.7,
+    "roce": 34.2,
+    "dividend_yield": 0.77,
+    "market_cap": 311802.5,
+    "debt_to_equity": 0.0064
+  },
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹3,479 and ₹5,150 over 52 weeks — a swing of about 48% from its low.",
+      "sourceIds": [
+        "screener_hal_snapshot_fundamentals"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "medium",
+      "reason": "P/E is 35.2, compared with the Defence sector median of 41.65. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
       ]

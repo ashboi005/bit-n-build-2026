@@ -3,7 +3,7 @@
   "bseCode": "500209",
   "isin": "INE009A01021",
   "name": "Infosys Ltd",
-  "sector": "Unclassified",
+  "sector": "Information Technology",
   "business": "This committed fallback covers the BSE-listed company named Infosys Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 1038.2,
@@ -36,8 +36,8 @@
       "value": 421123,
       "display": "4,21,123 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 608696.0,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -49,8 +49,8 @@
       "value": 13.5,
       "display": "13.5",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "low",
+      "sectorMedian": 14.15,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -75,8 +75,8 @@
       "value": 40,
       "display": "40%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": 51.5,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -88,8 +88,8 @@
       "value": 31.9,
       "display": "31.9%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": 41.85,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -101,7 +101,7 @@
       "value": 4.63,
       "display": "4.63%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 3.77,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": 0,
       "display": "0",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": 0.0035,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 14.15,
+    "roe": 41.85,
+    "roce": 51.5,
+    "dividend_yield": 3.77,
+    "market_cap": 608696.0,
+    "debt_to_equity": 0.0035
   },
   "risk": [
     {
@@ -1156,24 +1156,6 @@
       "label": "Price volatility",
       "level": "high",
       "reason": "The price moved between ₹982 and ₹1,728 over 52 weeks — a swing of about 76% from its low.",
-      "sourceIds": [
-        "screener_infy_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "low",
-      "reason": "P/E is 13.5, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_infy_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.00, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_infy_fundamentals"
       ]

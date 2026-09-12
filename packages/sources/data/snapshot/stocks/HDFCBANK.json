@@ -3,7 +3,7 @@
   "bseCode": "500180",
   "isin": "INE040A01034",
   "name": "HDFC Bank Ltd",
-  "sector": "Unclassified",
+  "sector": "Banking",
   "business": "This committed fallback covers the BSE-listed company named HDFC Bank Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 708,
@@ -36,8 +36,8 @@
       "value": 1091709,
       "display": "10,91,709 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 1040864.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -49,8 +49,8 @@
       "value": 13.8,
       "display": "13.8",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "low",
+      "sectorMedian": 15.7,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -75,8 +75,8 @@
       "value": 7.02,
       "display": "7.02%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": 7.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -88,7 +88,7 @@
       "value": 13.6,
       "display": "13.6%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 14.75,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": 1.84,
       "display": "1.84%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 1.35,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,11 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.7,
+    "roe": 14.75,
+    "roce": 7.1,
+    "dividend_yield": 1.35,
+    "market_cap": 1040864.5
   },
   "risk": [
     {
@@ -1164,7 +1163,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "medium",
-      "reason": "P/E is 13.8, compared with a sector median of 17.05.",
+      "reason": "P/E is 13.8, compared with the Banking sector median of 15.7. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
       ]

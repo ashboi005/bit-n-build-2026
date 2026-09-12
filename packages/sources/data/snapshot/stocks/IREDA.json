@@ -3,7 +3,7 @@
   "bseCode": "544026",
   "isin": "INE202E01016",
   "name": "Indian Renewable Energy Development Agency Ltd",
-  "sector": "Unclassified",
+  "sector": "Financials",
   "business": "This committed fallback covers the BSE-listed company named Indian Renewable Energy Development Agency Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 111.75,
@@ -36,8 +36,8 @@
       "value": 31382,
       "display": "31,382 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_ireda_fundamentals"
@@ -49,8 +49,8 @@
       "value": 16,
       "display": "16",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_ireda_fundamentals"
@@ -75,8 +75,8 @@
       "value": 8.69,
       "display": "8.69%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_ireda_fundamentals"
@@ -88,8 +88,8 @@
       "value": 15.6,
       "display": "15.6%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_ireda_fundamentals"
@@ -101,8 +101,8 @@
       "value": 1.21,
       "display": "1.21%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_ireda_fundamentals"
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1142,29 +1142,13 @@
       "close": 111.71
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹109 and ₹163 over 52 weeks — a swing of about 50% from its low.",
-      "sourceIds": [
-        "screener_ireda_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 16, compared with a sector median of 17.05.",
       "sourceIds": [
         "screener_ireda_fundamentals"
       ]

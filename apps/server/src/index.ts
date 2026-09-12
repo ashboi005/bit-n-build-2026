@@ -245,6 +245,28 @@ new Elysia()
           content,
           sourceIds,
         });
+
+        /**
+         * Index the exchange as a personal memory.
+         *
+         * Only the last 12 turns of a thread are replayed into the prompt, so
+         * without this anything said earlier — or in a different thread — is
+         * lost. Indexing it means a question weeks later can still retrieve
+         * "they asked what P/E meant and said they found it confusing", which
+         * is exactly the kind of thing a friend would forget and we should not.
+         */
+        try {
+          const retriever = await getRetriever();
+          await retriever.indexPersonal(user.id, [
+            {
+              id: messageId,
+              kind: "chat",
+              text: `They asked: "${message}" — we answered: ${content.slice(0, 600)}`,
+            },
+          ]);
+        } catch {
+          // Never fail a reply because indexing hiccuped.
+        }
       }
     });
   })

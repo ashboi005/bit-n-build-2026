@@ -3,7 +3,7 @@
   "bseCode": "532667",
   "isin": "INE040H01021",
   "name": "Suzlon Energy Ltd",
-  "sector": "Unclassified",
+  "sector": "Renewable Energy",
   "business": "This committed fallback covers the BSE-listed company named Suzlon Energy Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 44.16,
@@ -36,8 +36,8 @@
       "value": 60159,
       "display": "60,159 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_suzlon_fundamentals"
@@ -49,8 +49,8 @@
       "value": 19.1,
       "display": "19.1",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_suzlon_fundamentals"
@@ -75,8 +75,8 @@
       "value": 34.2,
       "display": "34.2%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_suzlon_fundamentals"
@@ -88,8 +88,8 @@
       "value": 39.7,
       "display": "39.7%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_suzlon_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_suzlon_fundamentals"
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1142,29 +1142,13 @@
       "close": 44.12
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹38.2 and ₹61.5 over 52 weeks — a swing of about 61% from its low.",
-      "sourceIds": [
-        "screener_suzlon_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 19.1, compared with a sector median of 17.05.",
       "sourceIds": [
         "screener_suzlon_fundamentals"
       ]

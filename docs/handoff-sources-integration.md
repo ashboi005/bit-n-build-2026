@@ -44,10 +44,12 @@ guessed number breaks the one promise the product is built on.
 
 ---
 
-# 🚨 TASK 0 — URGENT: 19 of 20 stocks have `sector: "Unclassified"`
+# ✅ TASK 0 — DONE (Ashwath did this, do not redo it)
 
-**Do this before anything else.** TASKS 1–5 are done and working — this is the one
-thing left, and until it is fixed the product tells users things that are wrong.
+Sectors were `"Unclassified"` on 19 of 20 stocks, so everything shared one blended
+P/E median of 17.05 across banks, IT, oil, power and retail. That has been fixed
+directly in the snapshot files. **Read this section for what changed, then make
+sure `build-snapshot.ts` reproduces it — otherwise the next rebuild wipes it.**
 
 ## The problem
 
@@ -81,10 +83,24 @@ Our entire product promise is that we don't tell beginners confident things that
 aren't true. A wrong comparison delivered with a citation is worse than no
 comparison at all.
 
-## What to do
+## What was changed (mirror this in `build-snapshot.ts`)
 
-Set the real `sector` string on each stock, then **re-run the median derivation
-from TASK 1**. Nothing else changes.
+Real sectors assigned, medians recomputed per sector, metric `sectorMedian` and
+`direction` refreshed, and the `valuation` / `debt` risk rows regenerated — those
+had been derived from the old blended median and were wrong.
+
+Three rules were applied that the builder must keep:
+
+1. **A sector needs at least 2 companies with a value** before a median is written.
+   Single-member sectors get `sectorMedians: {}` and `direction: "unknown"`.
+   Do **not** fall back to an all-stock median — that fallback is the original bug.
+2. **A `valuation` risk row is omitted when P/E is within 5% of the median.**
+   Being at the median is not a valuation story, and padding the watch-out list
+   makes the real flags matter less.
+3. **A `debt` row is omitted when both the value and the median are below 0.05.**
+   HAL was briefly flagged `debt: high — 0.01 vs median 0.01`, which is nonsense:
+   a company with essentially no debt must never be flagged high-risk because a
+   peer has marginally less.
 
 ```
 ATHER       Automobile
@@ -125,9 +141,30 @@ median to fill the gap — that is exactly the bug this task fixes.
 If you want more comparisons, the better fix is adding a second company to a thin
 sector, not widening the comparison group.
 
-## Acceptance criteria
+## Result
 
-- [ ] No stock has `sector: "Unclassified"`
+| sector | n | median P/E |
+|---|---|---|
+| Defence (HAL, BEL, BDL) | 3 | 41.65 |
+| Power | 3 | 15.8 |
+| Banking | 2 | 15.7 |
+| Information Technology | 2 | 14.15 |
+| Oil & Gas | 2 | 14.75 |
+| Automobile | 2 | — (only one has a P/E) |
+| FMCG, Retail, Telecom, Financials, Consumer Tech, Renewable | 1 each | — (no peers) |
+
+Before and after, for the same two companies:
+
+```
+BEFORE   INFY  13.5  vs blended 17.05  -> "low"     (misleading: IT median is 14.15)
+         ONGC  6.69  vs blended 17.05  -> "low"     (misleading: oil PSUs trade there)
+AFTER    INFY  13.5  vs IT      14.15  -> "normal"  (correct)
+         ONGC  6.69  vs Oil&Gas 14.75  -> "low"     (correct, and a fair peer group)
+```
+
+## Remaining acceptance criteria
+
+- [x] No stock has `sector: "Unclassified"`
 - [ ] Defence (HAL, BEL, BDL) has a real median, and HAL's metrics show it
 - [ ] Banking, Power, IT, Oil & Gas, Automobile each have a median from ≥2 members
 - [ ] Single-member sectors have `sectorMedians: {}` and `direction: "unknown"`

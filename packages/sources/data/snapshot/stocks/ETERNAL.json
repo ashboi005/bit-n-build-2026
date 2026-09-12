@@ -3,7 +3,7 @@
   "bseCode": "543320",
   "isin": "INE758T01015",
   "name": "Eternal Ltd",
-  "sector": "Unclassified",
+  "sector": "Consumer Tech",
   "business": "This committed fallback covers the BSE-listed company named Eternal Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 323,
@@ -36,8 +36,8 @@
       "value": 312189,
       "display": "3,12,189 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -49,8 +49,8 @@
       "value": 721,
       "display": "721",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -75,8 +75,8 @@
       "value": 2.48,
       "display": "2.48%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -88,8 +88,8 @@
       "value": 0.38,
       "display": "0.38%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.179531480748627,
+      "value": 0.1795,
       "display": "0.18",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -1142,38 +1142,13 @@
       "close": 323.5
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "high",
       "reason": "The price moved between ₹213 and ₹368 over 52 weeks — a swing of about 73% from its low.",
-      "sourceIds": [
-        "screener_eternal_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "high",
-      "reason": "P/E is 721, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_eternal_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.18, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_eternal_fundamentals"
       ]
