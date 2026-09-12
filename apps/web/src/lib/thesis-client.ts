@@ -5,7 +5,7 @@ export async function* streamThesis(
   query: string,
   signal?: AbortSignal,
 ): AsyncGenerator<ThesisEvent | DiscoveryEvent> {
-  const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/thesis/stream`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/thesis/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

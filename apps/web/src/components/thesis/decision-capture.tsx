@@ -27,7 +27,7 @@ export function DecisionCapture({ ticker, companyName, thesis }: DecisionCapture
     setSubmitting(true);
     
     try {
-      await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/decisions`, {
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/decisions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

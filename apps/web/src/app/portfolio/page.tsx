@@ -14,7 +14,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     async function fetchPortfolio() {
       try {
-        const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/portfolio`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/portfolio`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -29,6 +29,12 @@ export default function PortfolioPage() {
       }
     }
     fetchPortfolio();
+
+    const handleDemoSeeded = () => {
+      fetchPortfolio();
+    };
+    window.addEventListener("thwip-seed-demo", handleDemoSeeded);
+    return () => window.removeEventListener("thwip-seed-demo", handleDemoSeeded);
   }, []);
 
   if (error) {
