@@ -1,9 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ChangeReport, ChangeItem, ChangeSignal } from "@bit-n-build-2026/contracts";
+import type { ChangeReport, ChangeItem, ChangeSignal, DecisionAction } from "@bit-n-build-2026/contracts";
 import { Card } from "@bit-n-build-2026/ui/components/card";
 import { AlertCircle, AlertTriangle, Info, CheckCircle2, CircleDashed, Loader2 } from "lucide-react";
+
+/**
+ * DecisionAction values are "bought" | "sold" | "skipped" | "watching" —
+ * not "buy"/"sell". Mapping them here means a new action is a type error
+ * rather than silently falling through to "Skipped".
+ */
+const ACTION_LABEL: Record<DecisionAction, string> = {
+  bought: "Bought",
+  sold: "Sold",
+  skipped: "Skipped",
+  watching: "Watching",
+};
 
 export function ChangesSection() {
   const [report, setReport] = useState<ChangeReport | null>(null);
@@ -131,7 +143,7 @@ function ChangeItemCard({ item }: { item: ChangeItem }) {
           <span className="text-muted-foreground">{item.companyName}</span>
         </div>
         <div className="text-sm text-muted-foreground font-medium bg-background px-2.5 py-1 rounded shadow-sm border">
-          {item.decision.action === "buy" ? "Bought" : item.decision.action === "sell" ? "Sold" : "Skipped"} {item.decision.daysAgo} days ago
+          {ACTION_LABEL[item.decision.action]} {item.decision.daysAgo} days ago
         </div>
       </div>
 

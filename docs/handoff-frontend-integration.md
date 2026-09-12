@@ -69,7 +69,7 @@ recovery plan.
 
 ---
 
-# TASK 2 — handle discovery (urgent: a general query breaks the screen today)
+# TASK 2 — handle the two early exits (urgent: both break the screen today)
 
 ## The problem
 
@@ -160,6 +160,79 @@ HINDUNILVR  Hindustan Unilever Ltd  (FMCG)
    ⚠ Absence of a flag is not a green light: nothing in the figures we hold stands out…
 ```
 
+## The other redirect: `run.not_covered`
+
+The thesis stream has **two** ways of stopping early, and you need to handle both.
+`run.needs_discovery` is above. This is the other one.
+
+If the user names a real company we hold no sources for — Wipro, Adani, anything
+outside our 20 — the stream stops after parsing and emits:
+
+```ts
+| {
+    type: "run.not_covered";
+    ticker: string | null;      // "WIPRO"
+    name: string | null;        // "Wipro Limited"
+    covered: { ticker: string; name: string; sector: string }[];   // all 20
+  }
+```
+
+Real stream today:
+
+```
+run.started → stage.started(parse) → claim.parsed → stage.completed(parse)
+→ run.not_covered  { ticker: "WIPRO", name: "Wipro Limited", covered: [...20] }
+   failed stages: 0
+```
+
+### Why this exists, and why it is worth rendering well
+
+Before this event, naming an uncovered company ground through **five consecutive
+failed stages** — gather, verify, link, fundamentals, challenge. It never
+invented data, but five red errors in a row reads as broken software.
+
+**This is the single most likely thing a judge will try.** Handled well, it stops
+being a crash and becomes a demonstration of the core promise: we would rather
+say nothing than make something up.
+
+### What to render
+
+Not an error state. A calm, honest message plus a way forward:
+
+```
+We don't have verified sources for Wipro Limited yet.
+
+We only cover companies we've actually checked — 20 of them — because
+every number we show has to come from somewhere.
+
+Here's what we do cover:
+  Defence    HAL · BEL · BDL
+  Power      NTPC · POWERGRID · TATAPOWER
+  Banking    HDFCBANK · ICICIBANK
+  …
+```
+
+Rules:
+
+1. **Do not style it as an error.** No red, no warning triangle. This is the
+   product working correctly.
+2. **Use `event.covered`** — do not hardcode the list. It comes from the server
+   and will grow.
+3. **Group by `sector`** and make each ticker clickable, dropping it into the
+   thesis input so they can carry straight on.
+4. **Say why**, in one line. "Every number we show has to come from somewhere" is
+   the whole pitch in nine words, and this is the best place in the app to say it.
+5. Keep the parsed claim visible above it — showing we understood the question
+   and simply lack the data is very different from looking confused.
+
+### Acceptance
+
+- [ ] `run.not_covered` renders a calm message, not an error
+- [ ] The covered list comes from the event, grouped by sector
+- [ ] Each ticker is clickable into a new thesis
+- [ ] A one-line reason is shown
+- [ ] No failed stages appear on screen
+
 ## 🚨 Design rules — this is the point of the whole screen
 
 1. **Do not rank, score, number or star them.** They are ordered by how many
@@ -187,6 +260,8 @@ That last point is the loop that makes the product make sense:
 - [ ] The disclaimer is visible without hovering
 - [ ] Clicking a card's CTA prefills the thesis input with that ticker
 - [ ] No ranking, scoring or "recommended" language anywhere
+- [ ] `run.not_covered` is handled too (see above) — typing "Wipro" must not
+      leave the screen stuck on one completed stage
 
 ---
 
