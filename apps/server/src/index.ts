@@ -11,6 +11,7 @@ import {
   type OnboardingAnswers,
 } from "@bit-n-build-2026/contracts";
 import { computeChanges, runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
+import { checkFreshness } from "@bit-n-build-2026/sources";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
@@ -22,7 +23,10 @@ import {
   fastModel,
   getRetriever,
   llm,
+  peekRetriever,
   resetUser,
+  scheduleFreshnessCheck,
+  warmRetriever,
   seedProfile,
   sources,
 } from "./services";
@@ -433,16 +437,29 @@ new Elysia()
   })
 
   .get("/api/health", async () => {
-    let vectors: { store: string; points: number } | null = null;
-    try {
-      const retriever = await getRetriever();
-      vectors = { store: retriever.store.name, points: await retriever.store.count() };
-    } catch {
-      vectors = null;
+    // Must never block: a health check that waits on embedding is not a health
+    // check. Report what is ready, and say so while indexing is still running.
+    const freshness = checkFreshness();
+    const retriever = peekRetriever();
+
+    let vectors: { store: string; points: number } | { status: string };
+    if (retriever) {
+      vectors = await retriever.store
+        .count()
+        .then((points) => ({ store: retriever.store.name, points }))
+        .catch(() => ({ status: "unreachable" }));
+    } else {
+      vectors = { status: "indexing" };
     }
+
     return {
       ok: true,
       stocks: sources.listStocks().length,
+      data: {
+        stale: freshness.staleCount,
+        newestAsOf: freshness.newestAsOf,
+        oldestAsOf: freshness.oldestAsOf,
+      },
       models: { smart: env.MERGE_MODEL_SMART, fast: env.MERGE_MODEL_FAST },
       llmConfigured: env.MERGE_API_KEY !== "replace-me",
       vectors,
@@ -452,4 +469,7 @@ new Elysia()
   .get("/", () => "OK")
   .listen(Number(process.env.PORT ?? 3000), ({ port }) => {
     console.log(`Server is running on http://localhost:${port}`);
+    // Background: never delays serving the committed snapshot.
+    warmRetriever();
+    scheduleFreshnessCheck();
   });
