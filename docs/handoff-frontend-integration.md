@@ -545,6 +545,230 @@ for the user to maintain twice.
 
 ---
 
+---
+
+# TASK 8 — Day 0 is now a full account reset (replaces the old Day 0 behaviour)
+
+## What changed on the backend
+
+Day 0 no longer seeds a blank persona. It **deletes the account entirely** so a
+demo can run the whole journey from sign-up onwards.
+
+```
+POST /api/demo/reset        (no body)
+→ 200 { "reset": true, "message": "Account deleted. Sign up again to start a fresh demo." }
+```
+
+It cascades to sessions, profile, decisions, chat history and their vectors. The
+session dies with it, so **every subsequent call returns 401** — verified.
+
+## What to build
+
+1. **Wire the Day 0 button to `POST /api/demo/reset`**, not `/api/demo/seed`.
+   Days 5, 15 and 25 still use `/api/demo/seed` exactly as before.
+
+2. **After a 200, redirect to `/login`.** The session is already invalid, so
+   don't try to refetch the profile first — it will 401.
+
+3. **🚨 Confirm before firing.** This is irreversible and there is no undo. A
+   mis-click during demo prep deletes a real account. A simple confirm dialog is
+   enough, but it must exist:
+
+   > **Delete this account and start over?**
+   > This removes your profile, decisions and chat history permanently, and signs
+   > you out. Used to restart a demo from scratch.
+   > `Cancel` · `Delete and restart`
+
+4. **Style Day 0 differently from the other days.** It is a destructive action,
+   not another point on a timeline. A separate button labelled "Reset demo" sitting
+   apart from `Day 5 · Day 15 · Day 25` is clearer than four identical buttons
+   where one of them nukes everything.
+
+## The demo flow this enables
+
+```
+Reset demo  →  sign-up  →  onboarding (judges watch you answer as yourself)
+            →  ask a thesis        (Day 0: the AI knows only what you just told it)
+            →  Day 15              (your answers are kept; history is layered on)
+            →  ask the same thesis (now it references a thesis that broke)
+```
+
+## Onboarding is no longer overwritten
+
+Seeding Day 5/15/25 **keeps whatever the user answered** and only layers the
+history on top. The persona's answers are a fallback for someone who jumps
+straight to Day 15 without onboarding.
+
+This matters for your UI: after a seed, the onboarding values on screen should be
+**unchanged**. If you cached them, they are still valid. Verified — a ₹500 budget
+and a 1–3 year horizon survive a Day 15 seed intact.
+
+## Acceptance criteria
+
+- [ ] Day 0 calls `/api/demo/reset` and redirects to `/login`
+- [ ] A confirmation step exists and says the word "permanently"
+- [ ] Day 0 is visually distinct from the other three
+- [ ] Days 5/15/25 still seed and do not touch onboarding answers
+
+---
+
+# TASK 9 — "What changed since you last looked"
+
+The feature nothing else can do: the user told us **why** they acted, and we kept
+it. This revisits each decision against what has happened since, and grades
+**their reasoning** — never the stock.
+
+```
+GET /api/changes   →  ChangeReport
+```
+
+Computed on request, so it is instant and always current. It works immediately
+after a Time Machine seed, because seeded decisions are dated relative to today.
+
+## Types (all from `@bit-n-build-2026/contracts`)
+
+```ts
+interface ChangeReport {
+  generatedAt: string;
+  items: ChangeItem[];                 // already sorted: most worth attention first
+  summary: {
+    reviewed: number;
+    needsAttention: number;
+    portfolioProfitLoss: number | null;      // null when prices unavailable
+    portfolioProfitLossPct: number | null;
+  };
+  disclaimer: string;                  // CHANGES_DISCLAIMER — render it
+}
+
+interface ChangeItem {
+  ticker: string;
+  companyName: string;
+
+  decision: {
+    id: string;
+    action: "bought" | "sold" | "skipped" | "watching";
+    thesis: string | null;             // their own words — the thing being tested
+    reasoning: string | null;
+    decidedAt: string;
+    daysAgo: number;
+    quantity: number | null;
+    pricePerShare: number | null;
+  };
+
+  price: { then: number; now: number; changePct: number;
+           direction: "up" | "down" | "flat" } | null;
+
+  position: { quantity: number; investedValue: number; currentValue: number;
+              profitLoss: number; profitLossPct: number; weight: number } | null;
+
+  newDocuments: SourceRef[];           // published AFTER they decided
+  signals: ChangeSignal[];
+  thesisStatus: "holding" | "weakening" | "broken" | "too_early" | "unclear";
+  headline: string;                    // one sentence, at their level
+  nextChecks: string[];                // things to go and verify
+}
+
+interface ChangeSignal {
+  kind: "price_move" | "new_filing" | "valuation_shift" | "concentration" | "thesis_untested";
+  severity: "info" | "attention" | "warning";
+  label: string;                       // short chip text
+  detail: string;                      // one sentence, with the real numbers
+  sourceIds: string[];
+}
+```
+
+Also exported: `CHANGES_DISCLAIMER`, `PRICE_MOVE_ATTENTION` (0.07),
+`PRICE_MOVE_WARNING` (0.15), `CONCENTRATION_WARNING` (0.35) — use these so your
+labels match the backend's thresholds rather than inventing your own.
+
+## Real output from the Day 15 persona
+
+```
+reviewed=3  needsAttention=2  P/L -362 (-2.6%)
+
+BEL — bought 4d ago
+  thesis: "Everyone is talking about this defence stock so it will keep rising"
+  status: broken
+  headline: The market movement suggests the assumption that the stock will keep
+            rising is not currently supported by the facts.
+  price: 454.16 → 405.50 (-10.7%)
+  [attention] Price down: BEL has moved -10.7% since you bought…
+  [attention] Large share of your portfolio: BEL is 48% of what you have invested…
+  [warning]   Your reasoning: You said: "Everyone is talking about this defence
+              stock so it will keep rising". The specific reason you gave has not held up.
+
+ITC — bought 13d ago          status: holding
+TATAMOTORS — bought 9d ago    status: holding
+  headline: Your reasoning is unverified as nothing has changed.
+```
+
+**That BEL card is the feature.** It is the moment the product proves it
+remembers why you acted, not just what you bought.
+
+## What to build
+
+A screen (or the top section of the dashboard) rendering one card per item.
+
+### Card layout
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ BEL  Bharat Electronics          bought 4 days ago       │
+│                                                          │
+│ You said:                                                │
+│ "Everyone is talking about this defence stock so it       │
+│  will keep rising"                                       │
+│                                          ⚠ NOT HELD UP   │
+│ ────────────────────────────────────────────────────────  │
+│ ₹454.16  →  ₹405.50        -10.7%                        │
+│ 15 shares · ₹6,812 invested · now ₹6,082 · -₹730         │
+│ ────────────────────────────────────────────────────────  │
+│ ⚠ Your reasoning — the specific reason you gave has…     │
+│ ● Large share of your portfolio — BEL is 48% of…         │
+│ ────────────────────────────────────────────────────────  │
+│ What to check next                                        │
+│  · What would have to be true for your original reason…  │
+│  · Has anything about the business changed, or only…     │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Rules
+
+1. **Lead with their own words.** `decision.thesis` in quotes, prominent, before
+   any number. The whole point is that we remember *why*.
+2. **`thesisStatus` is about the reasoning, not the stock.** Label it that way:
+   "not held up", not "bad investment". Suggested copy:
+   `holding` → "Still holds" · `weakening` → "Partly holding" ·
+   `broken` → "Not held up" · `too_early` → "Too early to tell" ·
+   `unclear` → "Can't tell yet"
+3. **Colour by `signal.severity`**, never by profit or loss. A position being up
+   is not automatically good news, and colouring by P/L makes this a trading app.
+4. **Render the disclaimer on screen.** It says this reviews reasoning and is not
+   advice.
+5. **`nextChecks` are the call to action**, not a "buy more" button. There is no
+   buy button anywhere in this product.
+6. **`newDocuments` may be empty** — that is normal and correct, not a loading
+   state. Show nothing, not a spinner.
+7. **Nulls are real.** `price`, `position` and the portfolio P/L can all be null
+   when we lack a price. Render a dash, never a zero.
+
+### Empty state
+
+No decisions recorded yet → *"Once you record what you decided, this is where
+we'll tell you whether your reasoning held up."* Link to the thesis screen.
+
+## Acceptance criteria
+
+- [ ] One card per item, in the order the API returned them
+- [ ] The user's own thesis is the most prominent text on each card
+- [ ] Status reads as a judgement on reasoning, not on the company
+- [ ] Colour follows severity, not profit/loss
+- [ ] Disclaimer visible without hovering
+- [ ] Nulls render as dashes
+- [ ] Empty state when there are no decisions
+
+---
+
 # Endpoint reference
 
 | Method | Path | Notes |
@@ -558,6 +782,8 @@ for the user to maintain twice.
 | GET | `/api/stocks` · `/api/stocks/:ticker` | ✅ already wired |
 | GET | `/api/glossary/:term?level=` | tap-to-explain |
 | GET | `/api/profile` · POST `/api/demo/seed` | ✅ already wired |
+| POST | `/api/demo/reset` | **destructive** — deletes the account, see TASK 8 |
+| GET | `/api/changes` | "what changed since you last looked", see TASK 9 |
 | GET | `/api/health` | stocks count, models, vector store |
 
 **Every call needs `credentials: "include"`.**
@@ -572,6 +798,9 @@ for the user to maintain twice.
 4. **TASK 5** — decision capture. Small UI, and it is what makes chat impressive
 5. **TASK 6** — chat. Biggest new surface, most self-contained
 6. **TASK 4** — onboarding. Needed for a clean first-run demo
-7. **TASK 7** — portfolio. Mostly rendering data you will already have
+7. **TASK 8** — Day 0 reset. Small, and it makes the demo repeatable
+8. **TASK 9** — "what changed". The strongest single screen in the product
+9. **TASK 7** — portfolio. Mostly rendering data you will already have
 
-If you only reach 1–3, the demo still lands.
+If you only reach 1–3, the demo still lands. TASK 9 is the one I would add next
+after those — it is the clearest proof the product remembers why you acted.
