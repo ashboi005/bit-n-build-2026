@@ -423,12 +423,56 @@ looking"*, *"why did you say that"*.
 ## Endpoints
 
 ```
-POST /api/chat/stream   { message, threadId? }   → SSE
-GET  /api/chat/:threadId                          → ChatMessage[]
+GET  /api/chat                                    → ChatThread[]   (list, newest first)
+POST /api/chat/stream   { message, threadId? }    → SSE
+GET  /api/chat/:threadId                          → ChatMessage[]  (resume one thread)
 ```
 
-Omit `threadId` to start a new conversation. The first event gives you one to
-reuse for the rest of the thread.
+Omit `threadId` to start a new conversation. The first event (`chat.started`)
+gives you one to reuse for the rest of the thread.
+
+### 🔑 Resuming a conversation
+
+**`GET /api/chat` is what makes chat survive navigation.** Without it the
+threadId only lives in component state, so leaving the page and coming back
+orphans the conversation — the messages are still in the database but nothing can
+find them again.
+
+```ts
+interface ChatThread {
+  threadId: string;
+  title: string;          // first thing the USER said, trimmed to 80 chars
+  lastMessage: string;    // preview line, trimmed to 140
+  lastRole: "user" | "assistant";
+  messageCount: number;
+  createdAt: string;
+  updatedAt: string;      // list is sorted by this, newest first
+}
+```
+
+Real response:
+
+```
+thr_mtyv8xoy_8t03ok   msgs=2   title='Is HAL risky?'
+   last[assistant]: HAL is a large, profitable company with a strong balance sheet, but it…
+thr_mtyv8lae_fe27bv   msgs=4   title='What does P/E mean?'
+   last[assistant]: A "good" P/E depends on the industry and the company's growth…
+```
+
+**How to use it on the chat page:**
+
+1. On mount, `GET /api/chat`.
+2. If it returns threads, **auto-open the first one** (it is the most recently
+   active) and load its messages with `GET /api/chat/:threadId`. The user lands
+   back exactly where they were.
+3. If it returns `[]`, show the empty state and start a new thread on first send.
+4. Keep the threadId in the URL — `/chat/[threadId]` — so a refresh or a shared
+   link restores the right conversation without guessing.
+5. Show the list in a sidebar or a "past conversations" drawer, titled by
+   `title` with `lastMessage` as the preview. `title` is already derived from
+   the user's first message, so do not build your own.
+
+Verified: two threads, four messages restored in order on resume.
 
 ## Events
 
@@ -507,6 +551,9 @@ needs to render both cleanly.
 - [ ] Source cards appear under the answer
 - [ ] A "used your portfolio" indicator shows when true
 - [ ] Reloading the page restores the thread via `GET /api/chat/:threadId`
+- [ ] On mount, `GET /api/chat` auto-opens the most recent thread
+- [ ] The threadId is in the URL so refresh and shared links work
+- [ ] Past conversations are listable, titled by `title`
 
 ---
 
@@ -775,7 +822,8 @@ we'll tell you whether your reasoning held up."* Link to the thesis screen.
 |---|---|---|
 | POST | `/api/thesis/stream` | SSE. **May switch to discovery events mid-stream** |
 | POST | `/api/chat/stream` | SSE |
-| GET | `/api/chat/:threadId` | thread history |
+| GET | `/api/chat` | list threads, newest first — needed to resume |
+| GET | `/api/chat/:threadId` | messages in one thread |
 | GET/POST | `/api/onboarding` | |
 | GET/POST | `/api/decisions` | |
 | GET | `/api/portfolio` | derived from decisions |

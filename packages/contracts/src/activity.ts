@@ -167,6 +167,25 @@ export interface ChatMessage {
   createdAt: string;
 }
 
+/**
+ * A conversation, for listing and resuming.
+ *
+ * Without this the frontend has to hold the threadId in memory, so navigating
+ * away or refreshing orphans the conversation — the messages are still in the
+ * database but nothing can find them again.
+ */
+export interface ChatThread {
+  threadId: string;
+  /** First thing the user said, trimmed. Used as the thread's title. */
+  title: string;
+  /** Last message in the thread, for a preview line. */
+  lastMessage: string;
+  lastRole: "user" | "assistant";
+  messageCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ChatRequest {
   message: string;
   /** Omit to start a new thread. */

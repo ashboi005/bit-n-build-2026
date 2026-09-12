@@ -6,6 +6,7 @@
  */
 
 import {
+  type ChatThread,
   type Decision,
   type DecisionAction,
   type OnboardingAnswers,
@@ -293,6 +294,48 @@ export async function listMessages(userId: string, threadId: string, limit = 20)
     conceptKeys: r.conceptKeys,
     createdAt: r.createdAt.toISOString(),
   }));
+}
+
+/**
+ * The user's conversations, most recently active first.
+ *
+ * Grouped in application code rather than SQL: the volume is tiny (a demo user
+ * has a handful of threads) and it keeps the query portable.
+ */
+export async function listThreads(userId: string, limit = 30): Promise<ChatThread[]> {
+  const rows = await db()
+    .select()
+    .from(chatMessage)
+    .where(eq(chatMessage.userId, userId))
+    .orderBy(asc(chatMessage.createdAt));
+
+  const byThread = new Map<string, typeof rows>();
+  for (const row of rows) {
+    byThread.set(row.threadId, [...(byThread.get(row.threadId) ?? []), row]);
+  }
+
+  const threads: ChatThread[] = [];
+  for (const [threadId, messages] of byThread) {
+    const first = messages[0]!;
+    const last = messages[messages.length - 1]!;
+    // Title from the first thing the USER said — an assistant greeting makes a
+    // useless title.
+    const firstUser = messages.find((m) => m.role === "user") ?? first;
+
+    threads.push({
+      threadId,
+      title: firstUser.content.replace(/\s+/g, " ").trim().slice(0, 80),
+      lastMessage: last.content.replace(/\s+/g, " ").trim().slice(0, 140),
+      lastRole: last.role as "user" | "assistant",
+      messageCount: messages.length,
+      createdAt: first.createdAt.toISOString(),
+      updatedAt: last.createdAt.toISOString(),
+    });
+  }
+
+  return threads
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    .slice(0, limit);
 }
 
 export async function saveMessage(args: {

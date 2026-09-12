@@ -33,6 +33,7 @@ import {
   getUserContext,
   listDecisions,
   listMessages,
+  listThreads,
   newId,
   recordDecision,
   saveMessage,
@@ -270,6 +271,18 @@ new Elysia()
         }
       }
     });
+  })
+
+  /**
+   * The user's conversations, most recent first.
+   *
+   * Lets the UI resume where it left off: without this, navigating away loses
+   * the threadId and the conversation is orphaned in the database.
+   */
+  .get("/api/chat", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+    return listThreads(user.id);
   })
 
   .get("/api/chat/:threadId", async ({ request, params, status }) => {
