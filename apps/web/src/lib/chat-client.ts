@@ -1,15 +1,16 @@
-import type { ThesisEvent, DiscoveryEvent } from "@bit-n-build-2026/contracts";
+import type { ChatEvent } from "@bit-n-build-2026/contracts";
 import { ENV } from "@/env";
 
-export async function* streamThesis(
-  query: string,
+export async function* streamChat(
+  message: string,
+  threadId?: string,
   signal?: AbortSignal,
-): AsyncGenerator<ThesisEvent | DiscoveryEvent> {
-  const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/thesis/stream`, {
+): AsyncGenerator<ChatEvent> {
+  const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/chat/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ message, threadId }),
     signal,
   });
 
@@ -29,7 +30,7 @@ export async function* streamThesis(
     for (const frame of frames) {
       const line = frame.split("\n").find((l) => l.startsWith("data: "));
       if (!line) continue;
-      yield JSON.parse(line.slice(6)) as ThesisEvent | DiscoveryEvent;
+      yield JSON.parse(line.slice(6)) as ChatEvent;
     }
   }
 }

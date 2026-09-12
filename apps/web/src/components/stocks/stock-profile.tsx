@@ -62,7 +62,7 @@ export function StockProfile({ stock, recentSources }: StockProfileProps) {
             <h3 className="font-semibold text-lg">Thinking about investing in this?</h3>
             <p className="text-sm text-muted-foreground">Tell us why, and we'll investigate your reasoning.</p>
           </div>
-          <Link href={`/thesis?ticker=${stock.ticker}`} className={buttonVariants({ size: "lg", className: "shrink-0" })}>
+          <Link href={`/?ticker=${stock.ticker}`} className={buttonVariants({ size: "lg", className: "shrink-0" })}>
             Tell us why <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
         </div>

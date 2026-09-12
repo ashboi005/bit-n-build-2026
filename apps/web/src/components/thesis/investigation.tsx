@@ -10,6 +10,7 @@ import { MetricGrid } from "./metric-grid";
 import { CounterPanel } from "./counter-panel";
 import { ConceptsLearned } from "./concepts-learned";
 import { VerdictCard } from "./verdict-card";
+import { DecisionCapture } from "./decision-capture";
 
 interface InvestigationProps {
   claim: ParsedClaim | null;
@@ -99,7 +100,16 @@ export function Investigation({
 
       {/* Stage: Verdict */}
       {stages.verdict && stages.verdict.status !== "pending" && (
-        <VerdictCard verdict={verdict} />
+        <>
+          <VerdictCard verdict={verdict} />
+          {stages.verdict.status === "done" && claim?.asset && claim?.raw && (
+            <DecisionCapture 
+              ticker={claim.asset.ticker}
+              companyName={claim.asset.name}
+              thesis={claim.raw}
+            />
+          )}
+        </>
       )}
     </div>
   );
