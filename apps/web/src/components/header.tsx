@@ -26,7 +26,7 @@ export default function Header() {
         <nav className="flex items-center gap-6 text-lg font-bold">
           {links.map(({ to, label }) => {
             return (
-              <Link key={to} href={to} className="transition-colors hover:text-primary">
+              <Link key={to} href={to as any} className="transition-colors hover:text-primary">
                 {label}
               </Link>
             );

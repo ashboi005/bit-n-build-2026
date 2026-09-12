@@ -1,12 +1,8 @@
 "use client";
 
-<<<<<<< Updated upstream
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-=======
-import React, { useState } from "react";
->>>>>>> Stashed changes
 import { useChat } from "@/hooks/use-chat";
 import { 
   MessageScroller,
@@ -26,18 +22,12 @@ import { Bubble, BubbleContent } from "@bit-n-build-2026/ui/components/bubble";
 import { Marker, MarkerContent, MarkerIcon } from "@bit-n-build-2026/ui/components/marker";
 import { Input } from "@bit-n-build-2026/ui/components/input";
 import { Button } from "@bit-n-build-2026/ui/components/button";
-<<<<<<< Updated upstream
-import { Send, User, Bot, Link as LinkIcon, Briefcase, Plus, MessageSquare } from "lucide-react";
-import { SourceCard } from "@/components/thesis/source-card";
-import type { SourceRef, ChatThread } from "@bit-n-build-2026/contracts";
-=======
-import { Send, User, Bot, Link as LinkIcon, Briefcase, BookOpen, ChevronDown } from "lucide-react";
+import { Send, User, Bot, Link as LinkIcon, Briefcase, Plus, MessageSquare, BookOpen, ChevronDown } from "lucide-react";
 import { SourceCard } from "@/components/thesis/source-card";
 import { SpiderTingle } from "@/components/chat/spider-tingle";
-import type { SourceRef } from "@bit-n-build-2026/contracts";
+import type { SourceRef, ChatThread } from "@bit-n-build-2026/contracts";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@bit-n-build-2026/ui/lib/utils";
->>>>>>> Stashed changes
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -87,114 +77,6 @@ export default function ChatPage() {
   };
 
   return (
-<<<<<<< Updated upstream
-    <div className="flex h-[calc(100vh-60px)] w-full max-w-[1400px] mx-auto">
-      {/* Sidebar */}
-      <div className="w-64 border-r bg-muted/10 hidden md:flex flex-col">
-        <div className="p-4 border-b flex items-center justify-between">
-          <span className="font-medium text-sm">Past Conversations</span>
-          <Link href="/chat">
-            <Button size="icon" variant="ghost" className="h-8 w-8">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {threads.length === 0 && (
-            <div className="p-4 text-xs text-muted-foreground text-center">
-              No conversations yet.
-            </div>
-          )}
-          {threads.map((t) => {
-            const isActive = t.threadId === (threadId || threadIdParam);
-            return (
-              <Link 
-                key={t.threadId} 
-                href={`/chat?threadId=${t.threadId}`} 
-                className={`block p-3 rounded-lg text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <MessageSquare className="h-3 w-3 opacity-70 flex-shrink-0" />
-                  <div className="truncate font-semibold">{t.title || "New Chat"}</div>
-                </div>
-                <div className="truncate text-xs text-muted-foreground pl-5">{t.lastMessage}</div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0 pt-4 max-w-4xl mx-auto w-full">
-        <div className="flex-1 min-h-0 relative">
-          <MessageScrollerProvider>
-            <MessageScroller>
-              <MessageScrollerViewport className="px-4 pb-4">
-                <MessageScrollerContent>
-                  {messages.length === 0 && status === "idle" && (
-                    <div className="h-full flex items-center justify-center text-muted-foreground">
-                      Ask a general question or ask about your portfolio...
-                    </div>
-                  )}
-                  {messages.map((m) => (
-                    <MessageScrollerItem key={m.id}>
-                      <MessageGroup>
-                        <Message align={m.role === "user" ? "end" : "start"}>
-                          <MessageAvatar>
-                            {m.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                          </MessageAvatar>
-                          <MessageContent>
-                            {m.role === "assistant" && m.usedPortfolio && (
-                              <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-medium mb-1 bg-blue-50 dark:bg-blue-900/20 w-fit px-2 py-0.5 rounded-md">
-                                <Briefcase className="h-3 w-3" />
-                                Used your portfolio context
-                              </div>
-                            )}
-                            <Bubble variant={m.role === "user" ? "default" : "secondary"}>
-                              <BubbleContent>
-                                {m.role === "user" ? m.content : <ParsedMessage content={m.content} sources={m.sources} />}
-                              </BubbleContent>
-                            </Bubble>
-                            {m.status === "failed" && (
-                              <div className="text-destructive text-xs">Error generating response</div>
-                            )}
-                            {m.sources && m.sources.length > 0 && (
-                              <div className="flex flex-col gap-2 mt-2 max-w-[80%]">
-                                <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Sources</div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                  {m.sources.map(src => (
-                                    <SourceCard key={src.id} source={src} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </MessageContent>
-                        </Message>
-                      </MessageGroup>
-                    </MessageScrollerItem>
-                  ))}
-                </MessageScrollerContent>
-              </MessageScrollerViewport>
-              <MessageScrollerButton />
-            </MessageScroller>
-          </MessageScrollerProvider>
-        </div>
-
-        <div className="p-4 bg-background border-t">
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input 
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              disabled={status === "streaming"}
-              className="flex-1"
-            />
-            <Button type="submit" disabled={!input.trim() || status === "streaming"} size="icon">
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
-        </div>
-=======
     <div className="flex flex-col h-full max-w-4xl mx-auto w-full pt-2 sm:pt-4 relative min-h-0 overflow-hidden">
       <SpiderTingle isActive={status === "streaming"} />
       
@@ -290,7 +172,6 @@ export default function ChatPage() {
             <Send className="h-4 w-4" />
           </Button>
         </form>
->>>>>>> Stashed changes
       </div>
     </div>
   );
