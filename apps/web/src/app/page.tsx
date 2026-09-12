@@ -8,6 +8,7 @@ import { ThesisInput } from "@/components/thesis/thesis-input";
 import { Investigation } from "@/components/thesis/investigation";
 import { Discovery } from "@/components/thesis/discovery";
 import { TimeMachineBar } from "@/components/demo/time-machine-bar";
+import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 import Loader from "@/components/loader";
 
 export default function Home() {
@@ -75,6 +76,7 @@ export default function Home() {
           <Discovery state={discoveryState} />
         )}
       </div>
+      <OnboardingFlow />
     </main>
   );
 }

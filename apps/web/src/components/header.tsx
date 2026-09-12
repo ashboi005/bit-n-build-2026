@@ -7,6 +7,8 @@ import UserMenu from "./user-menu";
 export default function Header() {
   const links = [
     { to: "/", label: "THWIP" },
+    { to: "/chat", label: "Chat" },
+    { to: "/portfolio", label: "Portfolio" },
   ] as const;
 
   return (
