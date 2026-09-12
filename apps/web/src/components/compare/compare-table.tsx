@@ -130,11 +130,11 @@ export function CompareTable() {
         </div>
       )}
 
-      <Card className="overflow-x-auto shadow-sm">
-        <table className="w-full text-sm text-left">
+      <Card className="overflow-x-auto shadow-sm relative">
+        <table className="w-full text-sm text-left border-collapse">
           <thead className="bg-muted/50 border-b">
             <tr>
-              <th className="p-4 font-medium text-muted-foreground min-w-[200px]"></th>
+              <th className="p-4 font-medium text-muted-foreground min-w-[200px] sticky left-0 z-20 bg-muted/95 backdrop-blur shadow-[1px_0_0_0_hsl(var(--border))]"></th>
               {records.map(r => (
                 <th key={r.ticker} className="p-4 min-w-[160px]">
                   <div className="font-bold text-lg">{r.ticker}</div>
@@ -151,8 +151,8 @@ export function CompareTable() {
           
           <tbody className="divide-y divide-border/50 font-variant-numeric tabular-nums">
             {/* What they do */}
-            <tr className="hover:bg-muted/10 transition-colors">
-              <td className="p-4 font-medium text-muted-foreground align-top">What they do</td>
+            <tr className="hover:bg-muted/10 transition-colors group">
+              <td className="p-4 font-medium text-muted-foreground align-top sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">What they do</td>
               {records.map(r => (
                 <td key={r.ticker} className="p-4 align-top">
                   <span className="line-clamp-4 leading-relaxed" title={r.business}>{r.business || "—"}</span>
@@ -162,8 +162,8 @@ export function CompareTable() {
             </tr>
 
             {/* Current Price */}
-            <tr className="hover:bg-muted/10 transition-colors">
-              <td className="p-4 font-medium text-muted-foreground">Price</td>
+            <tr className="hover:bg-muted/10 transition-colors group">
+              <td className="p-4 font-medium text-muted-foreground sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">Price</td>
               {records.map(r => (
                 <td key={r.ticker} className="p-4 font-mono font-medium">
                   {r.price?.last ? `₹${r.price.last.toLocaleString()}` : "—"}
@@ -173,8 +173,8 @@ export function CompareTable() {
             </tr>
             
             {/* 52-week range */}
-            <tr className="hover:bg-muted/10 transition-colors">
-              <td className="p-4 font-medium text-muted-foreground">52-week range</td>
+            <tr className="hover:bg-muted/10 transition-colors group">
+              <td className="p-4 font-medium text-muted-foreground sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">52-week range</td>
               {records.map(r => (
                 <td key={r.ticker} className="p-4 font-mono font-medium">
                   {r.price?.week52Low && r.price?.week52High ? `₹${r.price.week52Low.toLocaleString()} – ₹${r.price.week52High.toLocaleString()}` : "—"}
@@ -184,7 +184,10 @@ export function CompareTable() {
             </tr>
 
             {/* Divider row */}
-            <tr><td colSpan={sameSector ? records.length + 2 : records.length + 1} className="bg-muted/30 h-1"></td></tr>
+            <tr>
+              <td className="sticky left-0 z-10 bg-muted/30 shadow-[1px_0_0_0_hsl(var(--border))]"></td>
+              <td colSpan={sameSector ? records.length + 1 : records.length} className="bg-muted/30 h-1"></td>
+            </tr>
 
             {/* Metrics */}
             {presentMetricKeys.map(key => {
@@ -192,8 +195,8 @@ export function CompareTable() {
               const label = records.find(r => r.metrics.some(m => m.key === key))?.metrics.find(m => m.key === key)?.label || key;
               
               return (
-                <tr key={key} className="hover:bg-muted/10 transition-colors">
-                  <td className="p-4 font-medium text-muted-foreground">{label}</td>
+                <tr key={key} className="hover:bg-muted/10 transition-colors group">
+                  <td className="p-4 font-medium text-muted-foreground sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">{label}</td>
                   {records.map(r => {
                     const m = r.metrics.find(m => m.key === key);
                     return (
@@ -219,14 +222,17 @@ export function CompareTable() {
             })}
 
             {/* Divider row */}
-            <tr><td colSpan={sameSector ? records.length + 2 : records.length + 1} className="bg-muted/30 h-1"></td></tr>
+            <tr>
+              <td className="sticky left-0 z-10 bg-muted/30 shadow-[1px_0_0_0_hsl(var(--border))]"></td>
+              <td colSpan={sameSector ? records.length + 1 : records.length} className="bg-muted/30 h-1"></td>
+            </tr>
 
             {/* Risks */}
             {presentRiskKeys.map(key => {
               const label = RISK_LABELS[key] || key;
               return (
-                <tr key={key} className="hover:bg-muted/10 transition-colors">
-                  <td className="p-4 font-medium text-muted-foreground">{label}</td>
+                <tr key={key} className="hover:bg-muted/10 transition-colors group">
+                  <td className="p-4 font-medium text-muted-foreground sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">{label}</td>
                   {records.map(r => {
                     const rk = r.risk.find(rk => rk.key === key);
                     return (
@@ -254,11 +260,14 @@ export function CompareTable() {
             })}
 
             {/* Divider row */}
-            <tr><td colSpan={sameSector ? records.length + 2 : records.length + 1} className="bg-muted/30 h-1"></td></tr>
+            <tr>
+              <td className="sticky left-0 z-10 bg-muted/30 shadow-[1px_0_0_0_hsl(var(--border))]"></td>
+              <td colSpan={sameSector ? records.length + 1 : records.length} className="bg-muted/30 h-1"></td>
+            </tr>
 
             {/* Hand-off row (Task 4) */}
-            <tr className="bg-primary/5 transition-colors">
-              <td className="p-4 font-medium text-primary/80">Next steps</td>
+            <tr className="bg-primary/5 transition-colors group">
+              <td className="p-4 font-medium text-primary/80 sticky left-0 z-10 bg-card group-hover:bg-muted/50 transition-colors shadow-[1px_0_0_0_hsl(var(--border))]">Next steps</td>
               {records.map(r => (
                 <td key={r.ticker} className="p-4">
                   <Link 
