@@ -4,7 +4,7 @@ import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
 import type { ProfilePort } from "@bit-n-build-2026/engine";
 import { createLlm } from "@bit-n-build-2026/llm";
 import { createRetriever, createStore, type Retriever } from "@bit-n-build-2026/rag";
-import { sources } from "@bit-n-build-2026/sources";
+import { checkFreshness, refreshIfStale, sources } from "@bit-n-build-2026/sources";
 import { chatMessage, userDecision } from "@bit-n-build-2026/db/schema/activity";
 import { user } from "@bit-n-build-2026/db/schema/auth";
 import { userProfile } from "@bit-n-build-2026/db/schema/profile";
@@ -27,6 +27,12 @@ export { sources };
 /* ------------------------------------------------------------------ RAG */
 
 let retrieverPromise: Promise<Retriever> | null = null;
+let retrieverReady: Retriever | null = null;
+
+/** The retriever if it has finished warming up, else null. Never blocks. */
+export function peekRetriever(): Retriever | null {
+  return retrieverReady;
+}
 
 /**
  * Built lazily and once. Indexing embeds every source chunk, which costs a few
@@ -69,9 +75,54 @@ export function getRetriever(): Promise<Retriever> {
     } else {
       console.log(`[rag] ${stored} chunks already indexed and current`);
     }
+    retrieverReady = retriever;
     return retriever;
   })();
   return retrieverPromise;
+}
+
+/* ---------------------------------------------------------- freshness */
+
+/**
+ * Keep the snapshot current without ever blocking a request.
+ *
+ * Runs in the background on boot. The committed snapshot is served immediately
+ * either way — a refresh is an upgrade, never a dependency. If it fails, the
+ * old figures stay exactly as they were, because a stale price is a small
+ * problem and a null price is a broken screen.
+ */
+export function warmRetriever(): void {
+  // Index in the background at startup, so the first user request is not the
+  // one that pays for embedding every document.
+  void getRetriever().catch((error) =>
+    console.warn("[rag] warmup failed:", error instanceof Error ? error.message : error),
+  );
+}
+
+export function scheduleFreshnessCheck(): void {
+  const report = checkFreshness();
+  console.log(
+    `[data] ${report.total} stocks, ${report.staleCount} stale` +
+      (report.newestAsOf ? ` (newest ${report.newestAsOf.slice(0, 16)})` : ""),
+  );
+
+  if (!report.shouldRefresh) return;
+
+  console.log(`[data] ${report.staleCount} stale — refreshing in background: ${report.stale.join(", ")}`);
+  void refreshIfStale()
+    .then(({ result }) => {
+      if (!result) return;
+      console.log(
+        `[data] refreshed ${result.updated.length}/${result.attempted}` +
+          (result.failed.length ? ` — kept old data for ${result.failed.join(", ")}` : ""),
+      );
+    })
+    .catch((error) => {
+      console.warn(
+        "[data] refresh failed, keeping committed snapshot:",
+        error instanceof Error ? error.message : error,
+      );
+    });
 }
 
 /* -------------------------------------------------------------- profiles */

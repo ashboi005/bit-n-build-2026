@@ -198,5 +198,20 @@ export type ChatEvent =
   | { type: "chat.context"; usedPortfolio: boolean; sources: SourceRef[] }
   | { type: "chat.delta"; text: string }
   | { type: "chat.sources"; sources: SourceRef[] }
+  /**
+   * What citation validation found. Emitted before chat.completed.
+   *
+   * `removed` are source ids the model invented — already stripped from the
+   * final content. `unsupported` are sentences stating a figure that does not
+   * appear in the source they cited: a fabricated number wearing a real
+   * citation, which is worse than an uncited one because it looks verified.
+   */
+  | {
+      type: "chat.audit";
+      valid: string[];
+      removed: string[];
+      unsupported: string[];
+    }
+  /** `content` here is the AUDITED text — render this, not the accumulated deltas. */
   | { type: "chat.completed"; messageId: string; content: string }
   | { type: "chat.failed"; message: string };

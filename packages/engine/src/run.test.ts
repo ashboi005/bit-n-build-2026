@@ -25,7 +25,8 @@ describe("runThesis", () => {
         learnConcepts: () => undefined,
       },
       sources: {
-        getDocument: () => null,
+        listStocks: () => [],
+      getDocument: () => null,
         getGlossary: () => null,
         getStock: () => null,
         resolveTicker: () => null,
