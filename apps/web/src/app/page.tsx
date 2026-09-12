@@ -1,39 +1,80 @@
 "use client";
 
-const TITLE_TEXT = `
- ██████╗ ███████╗████████╗████████╗███████╗██████╗
- ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
- ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
- ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
- ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
- ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
-
- ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
- ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-    ██║       ███████╗   ██║   ███████║██║     █████╔╝
-    ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-    ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-    ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
- `;
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { useThesisRun } from "@/hooks/use-thesis-run";
+import { ThesisInput } from "@/components/thesis/thesis-input";
+import { Investigation } from "@/components/thesis/investigation";
+import { Discovery } from "@/components/thesis/discovery";
+import { TimeMachineBar } from "@/components/demo/time-machine-bar";
+import Loader from "@/components/loader";
 
 export default function Home() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+  const { 
+    status, claim, stages, sources, metrics, concepts, verdict,
+    discoveryState, mode,
+    run 
+  } = useThesisRun();
+  const [suggestedQuery, setSuggestedQuery] = useState("");
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/login");
+    }
+  }, [isPending, session, router]);
+
+  if (isPending || !session) {
+    return <Loader />;
+  }
+
+  const isIdle = status === "idle";
+  const isRunning = status === "running";
+
   return (
-    <div className="container mx-auto max-w-3xl px-4 py-2">
-      <pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
-      <div className="grid gap-6">
-        <section className="rounded-lg border p-6 text-center space-y-4">
-          <h2 className="text-xl font-bold">Mind Over Money — Investment Thesis Stress-Tester</h2>
-          <p className="text-sm text-muted-foreground">
-            Visually stress-test your investment reasoning with live evidence and counter-arguments.
-          </p>
-          <a
-            href="/thesis"
-            className="inline-block px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity"
-          >
-            Open Thesis Workbench →
-          </a>
-        </section>
+    <main className="min-h-[calc(100vh-4rem)] p-4 md:p-8 bg-background">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <TimeMachineBar onSeed={(prompt) => setSuggestedQuery(prompt)} />
+        {/* Header Title section */}
+        {isIdle && (
+          <div className="text-center space-y-2 py-8">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+              Investigate Your Thesis
+            </h1>
+            <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+              Type your investment reasoning. We stress-test it against live data,
+              verify claims with real sources, and highlight counter-arguments.
+            </p>
+          </div>
+        )}
+
+        {/* Thesis Input Component */}
+        <ThesisInput
+          onSubmit={(query) => run(query)}
+          isLoading={isRunning}
+          compact={!isIdle}
+          suggestedQuery={suggestedQuery}
+        />
+
+        {/* Live Investigation Assembly */}
+        {!isIdle && mode === "thesis" && (
+          <Investigation
+            claim={claim}
+            stages={stages}
+            sources={sources}
+            metrics={metrics}
+            concepts={concepts}
+            verdict={verdict}
+          />
+        )}
+
+        {/* Discovery UI */}
+        {!isIdle && mode === "discovery" && discoveryState && (
+          <Discovery state={discoveryState} />
+        )}
       </div>
-    </div>
+    </main>
   );
 }

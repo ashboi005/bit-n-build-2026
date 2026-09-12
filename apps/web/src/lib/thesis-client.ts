@@ -1,10 +1,10 @@
-import type { ThesisEvent } from "@bit-n-build-2026/contracts";
+import type { ThesisEvent, DiscoveryEvent } from "@bit-n-build-2026/contracts";
 import { ENV } from "@/env";
 
 export async function* streamThesis(
   query: string,
   signal?: AbortSignal,
-): AsyncGenerator<ThesisEvent> {
+): AsyncGenerator<ThesisEvent | DiscoveryEvent> {
   const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/thesis/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -29,7 +29,7 @@ export async function* streamThesis(
     for (const frame of frames) {
       const line = frame.split("\n").find((l) => l.startsWith("data: "));
       if (!line) continue;
-      yield JSON.parse(line.slice(6)) as ThesisEvent;
+      yield JSON.parse(line.slice(6)) as ThesisEvent | DiscoveryEvent;
     }
   }
 }

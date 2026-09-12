@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@bit-n-build-2026/ui/components/button";
 import { Textarea } from "@bit-n-build-2026/ui/components/textarea";
 import { MOCK_EXAMPLE_QUERIES } from "@bit-n-build-2026/contracts/mock";
@@ -10,10 +10,17 @@ interface ThesisInputProps {
   onSubmit: (query: string) => void;
   isLoading?: boolean;
   compact?: boolean;
+  suggestedQuery?: string;
 }
 
-export function ThesisInput({ onSubmit, isLoading, compact }: ThesisInputProps) {
+export function ThesisInput({ onSubmit, isLoading, compact, suggestedQuery }: ThesisInputProps) {
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    if (suggestedQuery) {
+      setQuery(suggestedQuery);
+    }
+  }, [suggestedQuery]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
