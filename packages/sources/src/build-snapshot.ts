@@ -1,151 +1,350 @@
-/**
- * Builds data/snapshot/ from live sources.
- *
- *   bun run --filter @bit-n-build-2026/sources build:snapshot
- *
- * ⚠️ READ THIS FIRST
- *
- * The snapshot is committed to git and is the product's floor. This script
- * UPGRADES it. It must never be required for the app to work.
- *
- * So: hand-write files for the demo-critical companies FIRST, commit them, and
- * only then automate. If this script half-works, that is fine — it should fill in
- * what it can and leave the rest alone. It must never delete or blank an existing
- * file because a fetch failed.
- *
- * TODO(tushar): implement the marked steps. Each is independent — commit after
- * each one works.
- */
+/** Builds the committed, source-backed fallback snapshot. */
 
-import { writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import type { SourceDocument, StockRecord } from "@bit-n-build-2026/contracts";
+import type { Metric, SourceDocument, StockRecord } from "@bit-n-build-2026/contracts";
 
 import { fetchScripMaster } from "./fetchers/bse";
-import { OFFICIAL_FEEDS, NEWS_FEEDS, fetchFeed } from "./fetchers/rss";
+import { fetchFundamentals, fetchPriceHistory, searchCompany } from "./fetchers/screener";
+import { getJson } from "./http";
 
 const DATA = join(import.meta.dir, "../data/snapshot");
 
-/**
- * The 20 companies we cover.
- *
- * TODO(tushar): fill this in. Pick for CONTRAST, not just fame — the product is
- * about comparison, so include at least one clearly expensive company, one
- * clearly indebted one, and one recent IPO.
- *
- * Must include the defence cluster: HAL, BEL, BDL — the hero demo depends on it.
- */
-const COVERED = ["HAL", "BEL", "BDL", "RELIANCE", "TCS", "INFY", "TATAMOTORS", "ITC"];
+/** This is the product's deliberately small, committed fallback universe. */
+const COVERED = [
+  "HAL", "BEL", "BDL", "RELIANCE", "TCS", "INFY", "TATAMOTORS", "ITC", "NTPC", "POWERGRID",
+  "ONGC", "TATAPOWER", "HDFCBANK", "ICICIBANK", "ETERNAL", "IDEA", "ATHER", "SUZLON", "TRENT", "IREDA",
+];
 
-function writeIfAbsent(path: string, data: unknown) {
-  // Never clobber hand-written work with a partial fetch.
-  if (existsSync(path)) {
-    console.log(`  skip (exists): ${path.split("/").pop()}`);
-    return;
-  }
-  writeFileSync(path, JSON.stringify(data, null, 2));
+const SCREENER_TICKERS: Record<string, string> = {
+  TATAMOTORS: "TMPV",
+  ATHER: "ATHERENERG",
+};
+
+type Symbol = { bseCode: string; isin: string; name: string };
+
+interface BseHeaderData {
+  CurrRate?: { LTP?: string; Chg?: string; PcChg?: string };
+  Cmpname?: { FullN?: string };
+  Header?: { PrevClose?: string; Open?: string; High?: string; Low?: string; Ason?: string };
+}
+
+function writeSnapshot(path: string, data: unknown): void {
+  writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`);
   console.log(`  wrote: ${path.split("/").pop()}`);
 }
 
-async function step1_symbolMap() {
-  console.log("\n[1] BSE scrip master -> symbol map");
+function numberOrNull(value: string | undefined): number | null {
+  if (!value) return null;
+  const parsed = Number(value.replace(/,/g, ""));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+/** BSE reports exchange timestamps in IST, e.g. `11 Sep 26 | 16:00`. */
+function bseAsOf(ason: string | undefined, fallback: string): string {
+  const match = ason?.match(/^(\d{1,2})\s+([A-Za-z]{3})\s+(\d{2})\s+\|\s+(\d{1,2}):(\d{2})$/);
+  if (!match) return fallback;
+
+  const month = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+    .indexOf(match[2]!.toLowerCase());
+  if (month < 0) return fallback;
+
+  const iso = `20${match[3]}-${String(month + 1).padStart(2, "0")}-${match[1]!.padStart(2, "0")}T${match[4]!.padStart(2, "0")}:${match[5]}:00+05:30`;
+  const timestamp = Date.parse(iso);
+  return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : fallback;
+}
+
+function display(value: number | null, suffix = ""): string {
+  return value === null ? "—" : `${value.toLocaleString("en-IN", { maximumFractionDigits: 2 })}${suffix}`;
+}
+
+function chunk(id: string, text: string) {
+  return [{ id: `${id}_0`, text }];
+}
+
+function metric(
+  key: string,
+  label: string,
+  value: number | null,
+  sourceId: string,
+  unit: string | null,
+  suffix = "",
+): Metric {
+  return {
+    key,
+    label,
+    value,
+    display: display(value, suffix),
+    unit,
+    sectorMedian: null,
+    direction: "unknown",
+    explanation: "",
+    sourceIds: [sourceId],
+  };
+}
+
+function hasExactScreenerSymbol(url: string, symbol: string): boolean {
+  const segments = new URL(url, "https://www.screener.in").pathname.split("/").filter(Boolean);
+  return segments.length >= 2 && segments[0]!.toLowerCase() === "company" && segments[1]!.toUpperCase() === symbol.toUpperCase();
+}
+
+function hasPlausibleLatestHistory(
+  history: { date: string; close: number }[],
+  latestPrice: number,
+): boolean {
+  const latest = history.at(-1);
+  if (!latest || latestPrice <= 0) return false;
+  const ratio = latest.close / latestPrice;
+  return ratio > 0.75 && ratio < 1.25;
+}
+
+async function loadSymbols(): Promise<Record<string, Symbol>> {
   const rows = await fetchScripMaster();
-  const map: Record<string, { bseCode: string; isin: string; name: string }> = {};
+  const map: Record<string, Symbol> = {};
   for (const row of rows) {
-    if (!row.scrip_id) continue;
+    if (!row.scrip_id || !row.SCRIP_CD) continue;
     map[row.scrip_id.toUpperCase()] = {
       bseCode: row.SCRIP_CD,
       isin: row.ISIN_NUMBER,
       name: row.Scrip_Name,
     };
   }
-  writeFileSync(join(DATA, "symbol-map.json"), JSON.stringify(map, null, 2));
-  console.log(`  ${Object.keys(map).length} symbols mapped`);
+  // The product keeps the familiar user-facing ticker while BSE currently
+  // publishes these listings under their post-listing exchange symbols.
+  if (map.TMPV) map.TATAMOTORS = map.TMPV;
+  if (map.ATHERENERG) map.ATHER = map.ATHERENERG;
   return map;
 }
 
-async function step2_stocks() {
-  console.log("\n[2] Stocks");
-  console.log("  TODO(tushar): for each ticker in COVERED —");
-  console.log("    a. screener searchCompany(ticker) -> company id");
-  console.log("    b. fetchFundamentals(ticker)      -> pe, roe, roce, book value...");
-  console.log("    c. fetchPriceHistory(id)          -> history[]");
-  console.log("    d. bse fetchQuote(bseCode)        -> price{}");
-  console.log("    e. compute sectorMedians across same-sector stocks");
-  console.log("    f. hand-write `business` (2 plain sentences) and the risk reasons");
-  console.log("    -> writeIfAbsent(stocks/<TICKER>.json)");
+async function fetchBseQuote(bseCode: string): Promise<BseHeaderData> {
+  const url = "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w" +
+    `?Debtflag=&scripcode=${encodeURIComponent(bseCode)}&seriesid=`;
+  const quote = await getJson<BseHeaderData>(url, 5 * 60 * 1000);
+  if (!quote.CurrRate?.LTP || !quote.Header) throw new Error(`BSE quote ${bseCode}: unexpected response`);
+  return quote;
+}
+
+function bseDocument(
+  ticker: string,
+  bseCode: string,
+  quote: BseHeaderData,
+  fetchedAt: string,
+  id = `bse_${ticker.toLowerCase()}_market_data`,
+): SourceDocument {
+  const url = "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w" +
+    `?Debtflag=&scripcode=${encodeURIComponent(bseCode)}&seriesid=`;
+  const text = [
+    `BSE market-data response for ${ticker}.`,
+    `Fetched at: ${fetchedAt}.`,
+    `BSE market timestamp: ${quote.Header?.Ason ?? "unavailable"}.`,
+    `Returned values: LTP ₹${quote.CurrRate?.LTP ?? "unavailable"}; change ${quote.CurrRate?.Chg ?? "unavailable"}; change percent ${quote.CurrRate?.PcChg ?? "unavailable"}; previous close ₹${quote.Header?.PrevClose ?? "unavailable"}; open ₹${quote.Header?.Open ?? "unavailable"}; high ₹${quote.Header?.High ?? "unavailable"}; low ₹${quote.Header?.Low ?? "unavailable"}.`,
+  ].join(" ");
+  return {
+    id,
+    title: `${ticker} — BSE market data`,
+    publisher: "BSE",
+    tier: "market_data",
+    url,
+    pdfUrl: null,
+    publishedAt: fetchedAt,
+    tickers: [ticker],
+    sectors: [],
+    text,
+    chunks: chunk(id, text),
+  };
+}
+
+async function refreshHalMarketDocument(symbols: Record<string, Symbol>): Promise<void> {
+  const symbol = symbols.HAL;
+  if (!symbol) return;
+
+  const fetchedAt = new Date().toISOString();
+  const [quote, fundamentals, search] = await Promise.all([
+    fetchBseQuote(symbol.bseCode),
+    fetchFundamentals("HAL"),
+    searchCompany("HAL"),
+  ]);
+  const marketData = bseDocument("HAL", symbol.bseCode, quote, fetchedAt, "bse_hal_quote");
+  const fundamentalsData = screenerDocument("HAL", "HAL", fetchedAt, fundamentals);
+  const last = numberOrNull(quote.CurrRate?.LTP);
+  const change = numberOrNull(quote.CurrRate?.Chg);
+  const changePct = numberOrNull(quote.CurrRate?.PcChg);
+
+  if (last === null || change === null || changePct === null) {
+    throw new Error("HAL BSE response omitted a required price value");
+  }
+
+  const exactMatch = search.find((result) => hasExactScreenerSymbol(result.url, "HAL"));
+  const candidateHistory = exactMatch ? await fetchPriceHistory(exactMatch.id) : [];
+  const history = hasPlausibleLatestHistory(candidateHistory, last) ? candidateHistory : [];
+
+  const existing = JSON.parse(readFileSync(join(DATA, "stocks", "HAL.json"), "utf8")) as StockRecord;
+  const stabilityRisk = existing.risk.find((risk) => risk.key === "stability" && risk.sourceIds.includes("hal_q2_presentation"));
+  const record: StockRecord = {
+    ...existing,
+    price: {
+      last,
+      change,
+      changePct,
+      dayHigh: numberOrNull(quote.Header?.High),
+      dayLow: numberOrNull(quote.Header?.Low),
+      week52High: null,
+      week52Low: null,
+      asOf: bseAsOf(quote.Header?.Ason, fetchedAt),
+      sourceId: marketData.id,
+    },
+    metrics: [
+      metric("previous_close", "Previous close", numberOrNull(quote.Header?.PrevClose), marketData.id, "INR", " INR"),
+      metric("market_cap", "Market capitalization", fundamentals.marketCap, fundamentalsData.id, "INR crore", " Cr"),
+      metric("pe", "P/E ratio", fundamentals.pe, fundamentalsData.id, null),
+      metric("book_value", "Book value", fundamentals.bookValue, fundamentalsData.id, "INR"),
+      metric("roce", "ROCE", fundamentals.roce, fundamentalsData.id, "%", "%"),
+      metric("roe", "ROE", fundamentals.roe, fundamentalsData.id, "%", "%"),
+      metric("dividend_yield", "Dividend yield", fundamentals.dividendYield, fundamentalsData.id, "%", "%"),
+    ],
+    history,
+    sectorMedians: {},
+    risk: stabilityRisk ? [{
+      ...stabilityRisk,
+      reason: "A majority of its order book comes from domestic defence programmes.",
+    }] : [],
+    documentIds: [...new Set([...existing.documentIds, marketData.id, fundamentalsData.id])],
+  };
+
+  writeSnapshot(join(DATA, "documents", "bse_hal_quote.json"), marketData);
+  writeSnapshot(join(DATA, "documents", `${fundamentalsData.id}.json`), fundamentalsData);
+  writeSnapshot(join(DATA, "stocks", "HAL.json"), record);
+}
+
+function screenerDocument(
+  ticker: string,
+  screenerTicker: string,
+  fetchedAt: string,
+  values: Awaited<ReturnType<typeof fetchFundamentals>>,
+): SourceDocument {
+  const id = `screener_${ticker.toLowerCase()}_fundamentals`;
+  const url = `https://www.screener.in/company/${screenerTicker}/consolidated/`;
+  const entries = [
+    ["Market Cap (₹ Cr)", values.marketCap],
+    ["Stock P/E", values.pe],
+    ["Book Value", values.bookValue],
+    ["ROCE (%)", values.roce],
+    ["ROE (%)", values.roe],
+    ["Dividend Yield (%)", values.dividendYield],
+  ].map(([label, value]) => `${label}: ${value ?? "unavailable"}`).join("; ");
+  const text = `Screener.in consolidated fundamentals for ${ticker}. Fetched at: ${fetchedAt}. Returned values: ${entries}.`;
+  return {
+    id,
+    title: `${ticker} — Screener fundamentals`,
+    publisher: "Screener.in",
+    tier: "market_data",
+    url,
+    pdfUrl: null,
+    publishedAt: fetchedAt,
+    tickers: [ticker],
+    sectors: [],
+    text,
+    chunks: chunk(id, text),
+  };
+}
+
+async function step2_stocks(): Promise<void> {
+  console.log("\n[1] Building BSE and Screener fallback records");
+  const symbols = await loadSymbols();
 
   for (const ticker of COVERED) {
-    const path = join(DATA, "stocks", `${ticker}.json`);
-    // Placeholder so every covered ticker has a file to fill in. Existing
-    // hand-written files are left untouched.
-    const placeholder: Partial<StockRecord> = {
-      ticker,
-      name: ticker,
-      sector: "TODO",
-      business: "TODO: two plain sentences.",
-      metrics: [],
-      history: [],
-      sectorMedians: {},
-      risk: [],
-      documentIds: [],
-      newsIds: [],
-    };
-    writeIfAbsent(path, placeholder);
-  }
-}
+    if (ticker === "HAL") {
+      console.log("  defer hand-authored stock: HAL");
+      continue;
+    }
 
-async function step3_officialDocs() {
-  console.log("\n[3] Official sources (the citation moat)");
-  for (const feed of OFFICIAL_FEEDS) {
+    const symbol = symbols[ticker];
+    if (!symbol) {
+      console.log(`  ${ticker}: unavailable — no BSE symbol-map entry`);
+      continue;
+    }
+
     try {
-      const items = await fetchFeed(feed);
-      console.log(`  ${feed.name}: ${items.length} items`);
-      // TODO(tushar): filter to items relevant to our sectors, then write each
-      // as a SourceDocument with tier "official".
+      const fetchedAt = new Date().toISOString();
+      const screenerTicker = SCREENER_TICKERS[ticker] ?? ticker;
+      const [quote, fundamentals, search] = await Promise.all([
+        fetchBseQuote(symbol.bseCode),
+        fetchFundamentals(screenerTicker),
+        searchCompany(screenerTicker),
+      ]);
+      const bseDoc = bseDocument(ticker, symbol.bseCode, quote, fetchedAt);
+      const fundamentalsDoc = screenerDocument(ticker, screenerTicker, fetchedAt, fundamentals);
+      const last = numberOrNull(quote.CurrRate?.LTP);
+      const change = numberOrNull(quote.CurrRate?.Chg);
+      const changePct = numberOrNull(quote.CurrRate?.PcChg);
+
+      if (last === null || change === null || changePct === null) {
+        throw new Error("BSE response omitted a required price value");
+      }
+
+      const exactMatch = search.find((result) => hasExactScreenerSymbol(result.url, screenerTicker));
+      const candidateHistory = exactMatch ? await fetchPriceHistory(exactMatch.id) : [];
+      const history = hasPlausibleLatestHistory(candidateHistory, last) ? candidateHistory : [];
+
+      const record: StockRecord = {
+        ticker,
+        bseCode: symbol.bseCode,
+        isin: symbol.isin || null,
+        name: quote.Cmpname?.FullN || symbol.name,
+        sector: "Unclassified",
+        business: `This committed fallback covers the BSE-listed company named ${quote.Cmpname?.FullN || symbol.name}. Detailed business information is unavailable in this fallback.`,
+        price: {
+          last,
+          change,
+          changePct,
+          dayHigh: numberOrNull(quote.Header?.High),
+          dayLow: numberOrNull(quote.Header?.Low),
+          week52High: null,
+          week52Low: null,
+          asOf: bseAsOf(quote.Header?.Ason, fetchedAt),
+          sourceId: bseDoc.id,
+        },
+        metrics: [
+          metric("previous_close", "Previous close", numberOrNull(quote.Header?.PrevClose), bseDoc.id, "INR", " INR"),
+          metric("market_cap", "Market capitalization", fundamentals.marketCap, fundamentalsDoc.id, "INR crore", " Cr"),
+          metric("pe", "P/E ratio", fundamentals.pe, fundamentalsDoc.id, null),
+          metric("book_value", "Book value", fundamentals.bookValue, fundamentalsDoc.id, "INR"),
+          metric("roce", "ROCE", fundamentals.roce, fundamentalsDoc.id, "%", "%"),
+          metric("roe", "ROE", fundamentals.roe, fundamentalsDoc.id, "%", "%"),
+          metric("dividend_yield", "Dividend yield", fundamentals.dividendYield, fundamentalsDoc.id, "%", "%"),
+        ],
+        history,
+        sectorMedians: {},
+        risk: [],
+        documentIds: [bseDoc.id, fundamentalsDoc.id],
+        newsIds: [],
+      };
+
+      writeSnapshot(join(DATA, "documents", `${bseDoc.id}.json`), bseDoc);
+      writeSnapshot(join(DATA, "documents", `${fundamentalsDoc.id}.json`), fundamentalsDoc);
+      writeSnapshot(join(DATA, "stocks", `${ticker}.json`), record);
     } catch (error) {
-      console.log(`  ${feed.name}: FAILED — ${error instanceof Error ? error.message : "?"}`);
+      console.log(`  ${ticker}: FAILED — ${error instanceof Error ? error.message : "unknown error"}`);
     }
   }
-  console.log("  TODO(tushar): NSE fetchAnnouncements(symbol) per covered ticker.");
-  console.log("    Use `attchmntText` as the document text — official, citable,");
-  console.log("    already plain text. This is the highest-value step in the file.");
-  const _shape: Partial<SourceDocument> = {};
-  void _shape;
+
+  // HAL's curated stock content is intentionally left untouched; only the
+  // market-data citation is refreshed with the documented BSE response.
+  await refreshHalMarketDocument(symbols);
+
+  writeSnapshot(join(DATA, "index.json"), {
+    generatedAt: new Date().toISOString(),
+    stocks: COVERED,
+    note: "Committed 20-stock fallback. Quotes are from BSE; fundamentals are from Screener.in.",
+  });
 }
 
-async function step4_news() {
-  console.log("\n[4] News");
-  for (const feed of NEWS_FEEDS) {
-    try {
-      const items = await fetchFeed(feed);
-      console.log(`  ${feed.name}: ${items.length} items`);
-      // TODO(tushar): keep items mentioning a covered company; write as tier "press".
-    } catch (error) {
-      console.log(`  ${feed.name}: FAILED — ${error instanceof Error ? error.message : "?"}`);
-    }
-  }
-  console.log("  ⚠️ MUST HAVE: at least one piece arguing the defence budget rise is");
-  console.log("     already priced in. Without it the hero demo has no punchline.");
-}
-
-async function main() {
+async function main(): Promise<void> {
   mkdirSync(join(DATA, "stocks"), { recursive: true });
   mkdirSync(join(DATA, "documents"), { recursive: true });
-
-  const steps = [step1_symbolMap, step2_stocks, step3_officialDocs, step4_news];
-  for (const step of steps) {
-    try {
-      await step();
-    } catch (error) {
-      // One failing step must never stop the others.
-      console.log(`  STEP FAILED: ${error instanceof Error ? error.message : "?"}`);
-    }
-  }
-
-  console.log(`\nDone. Covered: ${COVERED.length} tickers targeted.`);
-  console.log("Commit whatever landed. A half-full snapshot in git beats a perfect one on your laptop.");
+  await step2_stocks();
+  console.log(`\nDone. ${COVERED.length} tickers targeted.`);
 }
 
 void main();

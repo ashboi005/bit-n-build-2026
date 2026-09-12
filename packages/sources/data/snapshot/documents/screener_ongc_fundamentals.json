@@ -1,0 +1,20 @@
+{
+  "id": "screener_ongc_fundamentals",
+  "title": "ONGC — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/ONGC/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:37.504Z",
+  "tickers": [
+    "ONGC"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for ONGC. Fetched at: 2026-09-12T17:55:37.504Z. Returned values: Market Cap (₹ Cr): 292491; Stock P/E: 6.69; Book Value: 296; ROCE (%): 14.2; ROE (%): 11.6; Dividend Yield (%): 5.7.",
+  "chunks": [
+    {
+      "id": "screener_ongc_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for ONGC. Fetched at: 2026-09-12T17:55:37.504Z. Returned values: Market Cap (₹ Cr): 292491; Stock P/E: 6.69; Book Value: 296; ROCE (%): 14.2; ROE (%): 11.6; Dividend Yield (%): 5.7."
+    }
+  ]
+}

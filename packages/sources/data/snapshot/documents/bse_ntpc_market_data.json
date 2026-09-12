@@ -1,0 +1,20 @@
+{
+  "id": "bse_ntpc_market_data",
+  "title": "NTPC — BSE market data",
+  "publisher": "BSE",
+  "tier": "market_data",
+  "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=532555&seriesid=",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:35.460Z",
+  "tickers": [
+    "NTPC"
+  ],
+  "sectors": [],
+  "text": "BSE market-data response for NTPC. Fetched at: 2026-09-12T17:55:35.460Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹333.30; change -3.70; change percent -1.10; previous close ₹337.00; open ₹332.65; high ₹336.25; low ₹332.00.",
+  "chunks": [
+    {
+      "id": "bse_ntpc_market_data_0",
+      "text": "BSE market-data response for NTPC. Fetched at: 2026-09-12T17:55:35.460Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹333.30; change -3.70; change percent -1.10; previous close ₹337.00; open ₹332.65; high ₹336.25; low ₹332.00."
+    }
+  ]
+}

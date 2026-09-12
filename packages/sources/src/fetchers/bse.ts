@@ -38,19 +38,46 @@ export async function fetchScripMaster(): Promise<BseScripRow[]> {
 
 export interface BseQuote {
   CurrRate: { LTP: string; Chg: string; PcChg: string };
-  Header: { ScripCode: string; Scrip_Name: string; PrevClose: string };
+  Header: {
+    PrevClose?: string;
+    Open?: string;
+    High?: string;
+    Low?: string;
+    Ason?: string;
+  };
+  Cmpname?: { FullN?: string };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+/** Validates the current BSE quote shape without relying on retired fields. */
+export function parseQuote(value: unknown): BseQuote {
+  if (
+    !isRecord(value) ||
+    !isRecord(value.CurrRate) ||
+    !isRecord(value.Header) ||
+    !isNonEmptyString(value.CurrRate.LTP) ||
+    !isNonEmptyString(value.CurrRate.Chg) ||
+    !isNonEmptyString(value.CurrRate.PcChg)
+  ) {
+    throw new Error("BSE quote: unexpected response shape");
+  }
+  return value as unknown as BseQuote;
 }
 
 /** Live quote. `scripCode` is the BSE numeric code from the scrip master. */
 export async function fetchQuote(scripCode: string): Promise<BseQuote> {
-  const json = await getJson<BseQuote>(
+  const json = await getJson<unknown>(
     `${API}/getScripHeaderData/w?Debtflag=&scripcode=${scripCode}&seriesid=`,
     5 * 60 * 1000,
   );
-  if (!json?.Header?.ScripCode) {
-    throw new Error(`BSE quote ${scripCode}: unexpected shape — headers probably stripped`);
-  }
-  return json;
+  return parseQuote(json);
 }
 
 export interface BseAnnouncement {

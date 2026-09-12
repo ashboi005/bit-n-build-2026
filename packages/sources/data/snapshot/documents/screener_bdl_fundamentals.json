@@ -1,0 +1,20 @@
+{
+  "id": "screener_bdl_fundamentals",
+  "title": "BDL — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/BDL/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:29.108Z",
+  "tickers": [
+    "BDL"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T17:55:29.108Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable.",
+  "chunks": [
+    {
+      "id": "screener_bdl_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T17:55:29.108Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable."
+    }
+  ]
+}
