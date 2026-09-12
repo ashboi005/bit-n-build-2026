@@ -66,15 +66,14 @@ export function BottomNavBar({
         const isActive = activeIndex === idx;
 
         return (
-          <Link href={item.href as any} key={item.label} passHref legacyBehavior>
-            <motion.a
+          <Link href={item.href as any} key={item.label} className="focus:outline-none focus-visible:ring-0">
+            <motion.div
               whileTap={{ scale: 0.97 }}
               className={cn(
                 "flex items-center gap-0 px-3 py-2 rounded-full transition-colors duration-200 relative h-10 min-w-[44px] min-h-[40px] max-h-[44px]",
                 isActive
                   ? "bg-primary/10 dark:bg-primary/15 text-primary dark:text-primary gap-2"
-                  : "bg-transparent text-muted-foreground dark:text-muted-foreground hover:bg-muted dark:hover:bg-muted",
-                "focus:outline-none focus-visible:ring-0",
+                  : "bg-transparent text-muted-foreground dark:text-muted-foreground hover:bg-muted dark:hover:bg-muted"
               )}
               onClick={() => setActiveIndex(idx)}
               aria-label={item.label}
@@ -110,7 +109,7 @@ export function BottomNavBar({
                   {item.label}
                 </span>
               </motion.div>
-            </motion.a>
+            </motion.div>
           </Link>
         );
       })}
