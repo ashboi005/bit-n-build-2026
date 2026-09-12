@@ -9,6 +9,7 @@ import { Investigation } from "@/components/thesis/investigation";
 import { DiscoveryView } from "@/components/discovery/discovery-view";
 import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 import Loader from "@/components/loader";
+import { LandingPage } from "@/components/landing-page";
 
 export default function Home() {
   const router = useRouter();
@@ -22,12 +23,6 @@ export default function Home() {
   const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
 
   useEffect(() => {
-    if (!isPending && !session) {
-      router.push("/login");
-    }
-  }, [isPending, session, router]);
-
-  useEffect(() => {
     const handler = (e: Event) => {
       const customEvent = e as CustomEvent<{ suggestedPrompt?: string }>;
       if (customEvent.detail?.suggestedPrompt) {
@@ -38,8 +33,12 @@ export default function Home() {
     return () => window.removeEventListener("thwip-seed-demo", handler);
   }, []);
 
-  if (isPending || !session) {
+  if (isPending) {
     return <Loader />;
+  }
+
+  if (!session) {
+    return <LandingPage />;
   }
 
   const isIdle = status === "idle";
