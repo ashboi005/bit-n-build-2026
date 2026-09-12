@@ -58,4 +58,12 @@ export interface DemoSeedRequest {
 export interface DemoSeedResponse {
   stage: DemoStage;
   profile: UserProfile;
+  /**
+   * A thesis worth typing at this stage, for the UI to prefill.
+   *
+   * ⚠️ This is a PROMPT, not a scripted answer. Seeding sets up the user's state
+   * and suggests what to ask — the investigation that follows always runs live
+   * through the real pipeline. See docs/demo.md.
+   */
+  suggestedPrompt: string;
 }

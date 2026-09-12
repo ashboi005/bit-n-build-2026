@@ -134,6 +134,14 @@ Summarise where their reasoning stands. You are grading the REASONING, not the s
 Never say buy, sell, hold or avoid. Never give a score or a probability.`;
 }
 
+/** Words allowed per level. This text renders inside a small metric card. */
+const METRIC_WORD_BUDGET: Record<Level, number> = {
+  new: 30,
+  learning: 22,
+  practicing: 14,
+  independent: 8,
+};
+
 export function explainMetricPrompt(
   label: string,
   display: string,
@@ -141,12 +149,37 @@ export function explainMetricPrompt(
   level: Level,
 ): string {
   const comparison =
-    sectorMedian === null ? "No sector median available." : `Sector median: ${sectorMedian}.`;
-  return `Explain this one number to the user.
+    sectorMedian === null ? "There is no sector median." : `The sector median is ${sectorMedian}.`;
 
-${label}: ${display}. ${comparison}
+  return `${label} is ${display}. ${comparison}
 
-${LEVEL_GUIDANCE[level]}
+Write ONE sentence a beginner can read at a glance, at most ${METRIC_WORD_BUDGET[level]} words.
 
-Return only the explanation text. No preamble, no "this means that".`;
+Hard rules:
+- Plain sentence only. NO markdown, NO headings, NO bold, NO bullet points.
+- Do not define the term — that is handled elsewhere. Say what THIS value means here.
+- Do not restate the number.
+- No preamble. Start with the substance.
+
+Good: "Higher than most other defence companies, so investors expect faster growth."
+Bad:  "# Understanding P/E\n\n**The P/E ratio** is a way to..."`;
+}
+
+/** Strip anything the model adds despite being told not to. */
+export function sanitiseMetricExplanation(raw: string, level: Level): string {
+  let text = raw
+    .replace(/^#+\s.*$/gm, "")       // headings
+    .replace(/\*\*(.*?)\*\*/g, "$1")  // bold
+    .replace(/[*_`>#]/g, "")          // stray markdown
+    .replace(/\s+/g, " ")
+    .trim();
+
+  // First sentence only.
+  const firstStop = text.search(/[.!?](\s|$)/);
+  if (firstStop > 20) text = text.slice(0, firstStop + 1);
+
+  const maxChars = METRIC_WORD_BUDGET[level] * 9;
+  if (text.length > maxChars) text = `${text.slice(0, maxChars).trimEnd()}…`;
+
+  return text;
 }

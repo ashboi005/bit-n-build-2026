@@ -11,9 +11,8 @@ export type LlmConfig = {
   MERGE_API_KEY: string;
   /**
    * Base URL, including /v1.
-   * Merge's docs show both `gateway.merge.dev/v1` and `api-gateway.merge.dev/v1`.
-   * Keep it configurable and confirm against your dashboard — if auth works but
-   * every call 404s, this is the first thing to check.
+   * Confirmed working: `api-gateway.merge.dev/v1`. The bare `gateway.merge.dev`
+   * host returns 405 — it is the product page, not the API.
    */
   MERGE_BASE_URL: string;
   /** Model id for reasoning-heavy steps (claim parsing, challenge, verdict). */
@@ -25,14 +24,15 @@ export type LlmConfig = {
 };
 
 export const DEFAULT_LLM_CONFIG = {
-  MERGE_BASE_URL: "https://gateway.merge.dev/v1",
-  MERGE_MODEL_SMART: "anthropic/claude-opus-4-6",
-  MERGE_MODEL_FAST: "google/gemini-2.5-flash",
-  MERGE_MODEL_EMBED: "openai/text-embedding-3-small",
+  MERGE_BASE_URL: "https://api-gateway.merge.dev/v1",
+  MERGE_MODEL_SMART: "anthropic/claude-sonnet-5",
+  MERGE_MODEL_FAST: "google/gemini-3.5-flash",
+  MERGE_MODEL_EMBED: "google/gemini-embedding-001",
 } satisfies Omit<LlmConfig, "MERGE_API_KEY">;
 
 /**
- * ⚠️ Model ids are gateway-specific and change. Run `listModels()` once at the
- * start of the build and pin whatever it actually returns. Do not trust these
- * defaults blindly — an unknown model id fails at call time, not at startup.
+ * Verified present on the gateway (289 models available). Alternatives if we
+ * need them: anthropic/claude-opus-5 for maximum reasoning quality at higher
+ * latency, anthropic/claude-haiku-4-5-20251001 for speed.
+ * google/gemini-embedding-001 is currently the only embedding model offered.
  */

@@ -9,6 +9,19 @@
 
 import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
 
+/**
+ * What this user would plausibly ask at each stage. The UI prefills it.
+ *
+ * ⚠️ These are questions, not answers. The pipeline runs for real every time —
+ * nothing here is a canned response. See docs/demo.md.
+ */
+export const DEMO_PROMPTS: Record<DemoStage, string> = {
+  day0: "Government increased defense spending, so I want to buy HAL",
+  day5: "Everyone on Instagram is saying this stock will explode",
+  day15: "Defence spending is up, so HAL should benefit",
+  day25: "HAL's P/E looks high against the sector — is the order book enough to justify it?",
+};
+
 export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
   day0: {
     level: "new",

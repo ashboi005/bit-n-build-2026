@@ -29,8 +29,35 @@ export class LlmError extends Error {
   }
 }
 
-/** One retry on transient failures — a 12-hour demo shouldn't die on a 503. */
+/** Retry on transient failures — a 12-hour demo shouldn't die on a 503. */
 const RETRY_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+
+/**
+ * Max requests in flight against the gateway at once.
+ *
+ * Measured: single calls take ~2s, and 2-3 concurrent are fine, but at 4+ the
+ * gateway intermittently drops the connection (ECONNRESET) and the call hangs
+ * for ~18s before failing. Capping here means callers can fire off as many
+ * requests as they like without having to know that.
+ */
+const MAX_IN_FLIGHT = 3;
+
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+
+async function acquire(): Promise<void> {
+  if (inFlight < MAX_IN_FLIGHT) {
+    inFlight++;
+    return;
+  }
+  await new Promise<void>((resolve) => waiting.push(resolve));
+  inFlight++;
+}
+
+function release(): void {
+  inFlight--;
+  waiting.shift()?.();
+}
 
 export function createLlm(env: LlmConfig) {
   const baseUrl = env.MERGE_BASE_URL.replace(/\/$/, "");
@@ -40,18 +67,32 @@ export function createLlm(env: LlmConfig) {
 
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt > 0) {
-        await new Promise((r) => setTimeout(r, 400 * attempt));
+        await new Promise((r) => setTimeout(r, 500 * attempt));
       }
 
-      const res = await fetch(`${baseUrl}${path}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${env.MERGE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-        signal,
-      });
+      await acquire();
+      let res: Response;
+      try {
+        res = await fetch(`${baseUrl}${path}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${env.MERGE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+          signal,
+        });
+      } catch (error) {
+        // fetch THROWS on connection reset rather than returning a status, so
+        // without this a dropped socket would skip the retry loop entirely.
+        if (signal?.aborted) throw error;
+        lastError = new LlmError(
+          `${path} network error: ${error instanceof Error ? error.message : "unknown"}`,
+        );
+        continue;
+      } finally {
+        release();
+      }
 
       if (res.ok) return res;
 
@@ -213,19 +254,37 @@ export function createLlm(env: LlmConfig) {
   }
 
   /**
-   * List the model ids this gateway key can actually reach.
-   * Run this once at the start of the build and pin what it returns —
-   * the defaults in config.ts are a guess until you do.
+   * Every model id this gateway key can reach.
+   *
+   * Note the response shape: the id field is `model`, not `id` as OpenAI uses,
+   * and the list is cursor-paginated (289 models at the time of writing).
    */
   async function listModels(): Promise<string[]> {
-    const res = await fetch(`${baseUrl}/models`, {
-      headers: { Authorization: `Bearer ${env.MERGE_API_KEY}` },
-    });
-    if (!res.ok) {
-      throw new LlmError(`/models failed: ${res.status}`, res.status, await res.text());
+    const ids: string[] = [];
+    let cursor: string | null = null;
+
+    for (let page = 0; page < 25; page++) {
+      const url = new URL(`${baseUrl}/models`);
+      if (cursor) url.searchParams.set("cursor", cursor);
+
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${env.MERGE_API_KEY}` },
+      });
+      if (!res.ok) {
+        throw new LlmError(`/models failed: ${res.status}`, res.status, await res.text());
+      }
+
+      const json = (await res.json()) as {
+        data?: { model: string }[];
+        has_more?: boolean;
+        next_cursor?: string | null;
+      };
+      ids.push(...(json.data ?? []).map((m) => m.model));
+
+      if (!json.has_more || !json.next_cursor) break;
+      cursor = json.next_cursor;
     }
-    const json = (await res.json()) as { data?: { id: string }[] };
-    return (json.data ?? []).map((m) => m.id);
+    return ids;
   }
 
   return { chat, chatStream, structured, embed, listModels };

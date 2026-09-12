@@ -26,6 +26,7 @@ import type { ProfilePort, SourcesPort } from "./ports";
 import {
   challengePrompt,
   explainMetricPrompt,
+  sanitiseMetricExplanation,
   linkExposurePrompt,
   PARSE_SYSTEM,
   profileBlock,
@@ -36,6 +37,8 @@ import { claimSchema, findingsSchema, verdictSchema } from "./schemas";
 
 export interface EngineDeps {
   llm: Llm;
+  /** Cheap model for short, high-volume rewrites. Falls back to the default. */
+  fastModel?: string;
   sources: SourcesPort;
   profile: ProfilePort;
   /** Optional: log dropped claims so we can see the citation guard working. */
@@ -54,7 +57,7 @@ export async function* runThesis(
   deps: EngineDeps,
   opts: RunOptions,
 ): AsyncGenerator<ThesisEvent> {
-  const { llm, sources, profile } = deps;
+  const { llm, sources, profile, fastModel } = deps;
   const runId = nextId("run");
   const startedAt = Date.now();
 
@@ -72,6 +75,8 @@ export async function* runThesis(
   // Collected as we go, so later stages can see earlier results.
   const sourceRefs: SourceRef[] = [];
   const allFindings: Finding[] = [];
+  // Assigned inside the parse stage's nested generator, which TS can't track —
+  // hence the explicit annotation and the non-null assertions below.
   let claim: ParsedClaim | null = null;
   let metrics: Metric[] = [];
 
@@ -87,16 +92,6 @@ export async function* runThesis(
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       yield { type: "stage.failed", stage: id, message };
-    }
-  }
-
-  /**
-   * A stage that needs evidence must not quietly report success with nothing in
-   * it. If gather found nothing, say so where the user can see it.
-   */
-  function requireSources() {
-    if (sourceRefs.length === 0) {
-      throw new Error("No sources available to check this against.");
     }
   }
 
@@ -201,48 +196,52 @@ export async function* runThesis(
     }
   });
 
-  // ------------------------------------------------------- verify_trigger
-  yield* stage("verify_trigger", async function* () {
-    if (!claim) throw new Error("No claim to verify");
-    requireSources();
-    const result = await llm.structured({
-      messages: [
-        { role: "system", content: PARSE_SYSTEM },
-        { role: "user", content: verifyTriggerPrompt(claim, sourceRefs) },
-      ],
-      schema: findingsSchema,
-      schemaName: "findings",
-      signal: opts.signal,
-    });
-    yield* emitFindings("verify_trigger", result);
-  });
+  /* ------------------------------------------------------------------ *
+   * The next three stages are independent of one another: each needs only the
+   * claim, the sources, and the raw (pre-explanation) metrics. Run them as one
+   * concurrent wave and yield the results in stage order, so the UI still sees
+   * an ordered investigation while we pay for one round trip instead of four.
+   * Cuts a run from ~40s to ~15s, which is the difference between a demo that
+   * holds a room and one that doesn't.
+   * ------------------------------------------------------------------ */
 
-  // -------------------------------------------------------- link_exposure
-  yield* stage("link_exposure", async function* () {
-    if (!claim) throw new Error("No claim to link");
-    requireSources();
-    const result = await llm.structured({
-      messages: [
-        { role: "system", content: PARSE_SYSTEM },
-        { role: "user", content: linkExposurePrompt(claim, sourceRefs) },
-      ],
-      schema: findingsSchema,
-      schemaName: "findings",
-      signal: opts.signal,
-    });
-    yield* emitFindings("link_exposure", result);
-  });
+  const parsedClaim = claim as ParsedClaim | null;
+  const stock = parsedClaim?.asset?.ticker ? sources.getStock(parsedClaim.asset.ticker) : null;
 
-  // --------------------------------------------------------- fundamentals
-  // No AI decides these numbers. They come straight from the data layer.
-  // The model only writes the one-line explanation, at the user's level.
-  yield* stage("fundamentals", async function* () {
-    const ticker = claim?.asset?.ticker;
-    const stock = ticker ? sources.getStock(ticker) : null;
-    if (!stock) throw new Error("No fundamentals available for this company.");
+  /** Settle rather than reject, so an early failure can't become an unhandled rejection. */
+  const settle = <T>(p: Promise<T>) =>
+    p.then(
+      (value) => ({ ok: true as const, value }),
+      (error: unknown) => ({ ok: false as const, error }),
+    );
 
-    metrics = await Promise.all(
-      stock.metrics.map(async (metric) => {
+  const findingsCall = (prompt: string) =>
+    settle(
+      llm.structured({
+        messages: [
+          { role: "system", content: PARSE_SYSTEM },
+          { role: "user", content: prompt },
+        ],
+        schema: findingsSchema,
+        schemaName: "findings",
+        signal: opts.signal,
+      }),
+    );
+
+  const haveInput = Boolean(parsedClaim) && sourceRefs.length > 0;
+  const metricsSummary =
+    stock?.metrics.map((m) => `${m.label} ${m.display}`).join(", ") || "not available";
+
+  const verifyWave = haveInput ? findingsCall(verifyTriggerPrompt(parsedClaim!, sourceRefs)) : null;
+  const linkWave = haveInput ? findingsCall(linkExposurePrompt(parsedClaim!, sourceRefs)) : null;
+  const challengeWave = haveInput
+    ? findingsCall(challengePrompt(parsedClaim!, sourceRefs, metricsSummary))
+    : null;
+  const metricsWave = stock ? settle(explainMetrics(stock.metrics)) : null;
+
+  async function explainMetrics(raw: Metric[]): Promise<Metric[]> {
+    return Promise.all(
+      raw.map(async (metric) => {
         try {
           const explanation = await llm.chat({
             messages: [
@@ -256,37 +255,54 @@ export async function* runThesis(
                 ),
               },
             ],
-            maxTokens: 160,
+            model: fastModel,
+            maxTokens: 120,
             temperature: 0.3,
             signal: opts.signal,
           });
-          return { ...metric, explanation: explanation.trim() };
+          return {
+            ...metric,
+            explanation: sanitiseMetricExplanation(explanation, level),
+          };
         } catch {
           // Keep the number even if the explanation fails — the figure is the fact.
           return metric;
         }
       }),
     );
+  }
 
+  /** Await one wave result and emit it, turning a failure into stage.failed. */
+  async function* emitWave(
+    id: StageId,
+    wave: Awaited<ReturnType<typeof findingsCall>> | null,
+  ): AsyncGenerator<ThesisEvent> {
+    if (!wave) throw new Error("No sources available to check this against.");
+    if (!wave.ok) {
+      throw wave.error instanceof Error ? wave.error : new Error("Model call failed");
+    }
+    yield* emitFindings(id, wave.value);
+  }
+
+  yield* stage("verify_trigger", async function* () {
+    yield* emitWave("verify_trigger", verifyWave ? await verifyWave : null);
+  });
+
+  yield* stage("link_exposure", async function* () {
+    yield* emitWave("link_exposure", linkWave ? await linkWave : null);
+  });
+
+  // No AI decides these numbers — they come straight from the data layer.
+  // The model only writes the one-line explanation, at the user's level.
+  yield* stage("fundamentals", async function* () {
+    if (!stock) throw new Error("No fundamentals available for this company.");
+    const result = metricsWave ? await metricsWave : null;
+    metrics = result?.ok ? result.value : stock.metrics;
     yield { type: "metrics.ready", metrics };
   });
 
-  // ------------------------------------------------------------ challenge
   yield* stage("challenge", async function* () {
-    if (!claim) throw new Error("No claim to challenge");
-    requireSources();
-    const summary = metrics.map((m) => `${m.label} ${m.display}`).join(", ") || "not available";
-
-    const result = await llm.structured({
-      messages: [
-        { role: "system", content: PARSE_SYSTEM },
-        { role: "user", content: challengePrompt(claim, sourceRefs, summary) },
-      ],
-      schema: findingsSchema,
-      schemaName: "findings",
-      signal: opts.signal,
-    });
-    yield* emitFindings("challenge", result);
+    yield* emitWave("challenge", challengeWave ? await challengeWave : null);
   });
 
   // ---------------------------------------------------------------- learn

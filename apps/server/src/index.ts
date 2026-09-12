@@ -3,10 +3,12 @@ import { runThesis } from "@bit-n-build-2026/engine";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
+import { DEMO_PROMPTS } from "./demo-personas";
 import { env } from "./env.server";
 import {
   auth,
   createProfilePort,
+  fastModel,
   getProfile,
   llm,
   seedProfile,
@@ -63,6 +65,7 @@ new Elysia()
           for await (const event of runThesis(
             {
               llm,
+              fastModel,
               sources,
               profile: createProfilePort(user.id),
               onDrop: (stage, reason, text) => {
@@ -114,7 +117,7 @@ new Elysia()
   .get("/api/profile", async ({ request, status }) => {
     const user = await currentUser(request);
     if (!user) return status(401);
-    return getProfile(user.id);
+    return await getProfile(user.id);
   })
 
   /** The Time Machine. Resets the profile to a scripted persona. */
@@ -134,7 +137,12 @@ new Elysia()
       return status(400);
     }
 
-    return { stage, profile: seedProfile(user.id, stage) };
+    return {
+      stage,
+      profile: await seedProfile(user.id, stage),
+      // A question to prefill, NOT a scripted answer — the pipeline runs live.
+      suggestedPrompt: DEMO_PROMPTS[stage],
+    };
   })
 
   .get("/api/health", () => ({
