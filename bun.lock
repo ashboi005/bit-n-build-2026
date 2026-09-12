@@ -20,6 +20,7 @@
         "@bit-n-build-2026/auth": "workspace:*",
         "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/db": "workspace:*",
+        "@bit-n-build-2026/engine": "workspace:*",
         "@bit-n-build-2026/llm": "workspace:*",
         "@elysiajs/cors": "^1.4.2",
         "@sinclair/typebox": "^0.34.52",

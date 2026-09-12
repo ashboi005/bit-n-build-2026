@@ -13,6 +13,7 @@
   "dependencies": {
     "@bit-n-build-2026/contracts": "workspace:*",
     "@bit-n-build-2026/llm": "workspace:*",
+    "@bit-n-build-2026/engine": "workspace:*",
     "@bit-n-build-2026/auth": "workspace:*",
     "@bit-n-build-2026/db": "workspace:*",
     "@elysiajs/cors": "^1.4.2",
