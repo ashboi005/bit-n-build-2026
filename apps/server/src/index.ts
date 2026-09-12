@@ -11,6 +11,11 @@ import {
   type OnboardingAnswers,
 } from "@bit-n-build-2026/contracts";
 import { runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
+import { extensionTrustedOrigin } from "@bit-n-build-2026/auth/extension-oauth";
+import {
+  oauthProviderAuthServerMetadata,
+  oauthProviderOpenIdConfigMetadata,
+} from "@better-auth/oauth-provider";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
@@ -24,7 +29,9 @@ import {
   llm,
   seedProfile,
   sources,
+  verifyExtensionAccessToken,
 } from "./services";
+import { bearerToken, isAllowedBrowserOrigin, oauthSubject } from "./extension-auth";
 import {
   getOnboarding,
   getPortfolio,
@@ -40,8 +47,19 @@ import {
 
 async function currentUser(request: Request) {
   const session = await auth.api.getSession({ headers: request.headers });
-  return session?.user ?? null;
+  if (session?.user) return session.user;
+
+  const token = bearerToken(request.headers);
+  if (!token) return null;
+  try {
+    const subject = oauthSubject(await verifyExtensionAccessToken(token));
+    return subject ? { id: subject } : null;
+  } catch {
+    return null;
+  }
 }
+
+const extensionOrigin = extensionTrustedOrigin(env.EXTENSION_CHROME_ID);
 
 /** Shared SSE plumbing. Every streaming endpoint uses this. */
 function sse(produce: (emit: (event: unknown) => void) => Promise<void>): Response {
@@ -83,11 +101,18 @@ const oneOf = <T extends readonly string[]>(list: T, value: unknown): T[number] 
 new Elysia()
   .use(
     cors({
-      origin: env.CORS_ORIGIN,
+      origin: (request) =>
+        isAllowedBrowserOrigin(request.headers.get("origin"), env.CORS_ORIGIN, extensionOrigin),
       methods: ["GET", "POST", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
     }),
+  )
+  .get("/.well-known/oauth-authorization-server/api/auth", ({ request }) =>
+    oauthProviderAuthServerMetadata(auth)(request),
+  )
+  .get("/.well-known/openid-configuration/api/auth", ({ request }) =>
+    oauthProviderOpenIdConfigMetadata(auth)(request),
   )
   .all("/api/auth/*", async (context) => {
     const { request, status } = context;

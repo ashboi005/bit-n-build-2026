@@ -1,0 +1,22 @@
+{
+  "name": "@bit-n-build-2026/extension",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun x wxt",
+    "build": "bun x wxt build",
+    "zip": "bun x wxt zip",
+    "check-types": "bun x tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@bit-n-build-2026/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@bit-n-build-2026/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "typescript": "catalog:",
+    "wxt": "^0.21.4"
+  }
+}
