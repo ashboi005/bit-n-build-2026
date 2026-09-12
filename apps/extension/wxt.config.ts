@@ -6,7 +6,7 @@ import { defineConfig } from "wxt";
 const envFile = new URL(".env", import.meta.url);
 const fileEnv = existsSync(envFile) ? parseEnv(readFileSync(envFile, "utf8")) : {};
 const buildEnv = { ...fileEnv, ...process.env };
-const apiOrigin = (buildEnv.WXT_API_ORIGIN ?? "https://api-thwip.ashwathsoni.dev").replace(
+const apiOrigin = (buildEnv.WXT_API_ORIGIN ?? "https://thwip-api.ashwathsoni.dev").replace(
   /\/$/,
   "",
 );
