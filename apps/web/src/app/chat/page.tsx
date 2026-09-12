@@ -77,7 +77,44 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto w-full pt-2 sm:pt-4 relative min-h-0 overflow-hidden">
+    <div className="flex h-[calc(100vh-60px)] w-full max-w-[1400px] mx-auto">
+      {/* Sidebar */}
+      <div className="w-64 border-r bg-muted/10 hidden md:flex flex-col">
+        <div className="p-4 border-b flex items-center justify-between">
+          <span className="font-medium text-sm">Past Conversations</span>
+          <Link href="/chat">
+            <Button size="icon" variant="ghost" className="h-8 w-8">
+              <Plus className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          {threads.length === 0 && (
+            <div className="p-4 text-xs text-muted-foreground text-center">
+              No conversations yet.
+            </div>
+          )}
+          {threads.map((t) => {
+            const isActive = t.threadId === (threadId || threadIdParam);
+            return (
+              <Link 
+                key={t.threadId} 
+                href={`/chat?threadId=${t.threadId}`} 
+                className={`block p-3 rounded-lg text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <MessageSquare className="h-3 w-3 opacity-70 flex-shrink-0" />
+                  <div className="truncate font-semibold">{t.title || "New Chat"}</div>
+                </div>
+                <div className="truncate text-xs text-muted-foreground pl-5">{t.lastMessage}</div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-w-0 pt-2 sm:pt-4 relative min-h-0 overflow-hidden max-w-4xl mx-auto w-full">
       <SpiderTingle isActive={status === "streaming"} />
       
       <div className="flex-1 min-h-0 relative">
@@ -172,6 +209,7 @@ export default function ChatPage() {
             <Send className="h-4 w-4" />
           </Button>
         </form>
+      </div>
       </div>
     </div>
   );
