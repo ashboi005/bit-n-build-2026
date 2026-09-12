@@ -816,6 +816,12 @@ we'll tell you whether your reasoning held up."* Link to the thesis screen.
 
 ---
 
+# Related docs
+
+- **** — the side-by-side comparison tool.
+  A separate, AI-free page: pick 2-3 companies, see their figures against their
+  sector, with citations. Build it after the tasks above.
+
 # Endpoint reference
 
 | Method | Path | Notes |
