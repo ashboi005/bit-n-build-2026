@@ -15,9 +15,20 @@
 20 stocks, 43 documents, real provenance, layered library → snapshot → cache.
 Nothing in this file asks you to change that architecture.
 
-Three fields are **empty on almost every stock record**, and each one silently
-disables a feature that is already built elsewhere in the product. The fixes are
-arithmetic over numbers already on disk.
+**STATUS (updated after commit 30b24c4): TASKS 1–5 are DONE and verified working.**
+Sector medians, risk arrays, 52-week ranges, `eps`, `debt_to_equity` and
+`listDocuments()` all landed and the backend is running on them.
+
+**Only TASK 0 below is outstanding**, and it is urgent — it makes the comparisons
+TASK 1 built actively misleading. Read TASK 0, do it, and re-run TASK 1's median
+derivation. Treat TASKS 1–5 as reference for how things were built.
+
+Two small leftovers worth fixing while you are in there:
+- **BDL** has no figures at all (`pe`, `market_cap`, `eps` … all `null`), so it has
+  no risk entries and no 52-week range. Its consolidated screener page is empty —
+  try the standalone page (`/company/BDL/` without `/consolidated/`).
+- **HAL** has `sectorMedians: {}` because it is currently alone in "Defence".
+  TASK 0 fixes this by putting BEL and BDL in the same sector.
 
 **Files you will edit:**
 - `packages/sources/data/snapshot/stocks/*.json` — 20 files
@@ -30,6 +41,99 @@ first. Match the types exactly — `bun run check-types` must stay clean.
 **The unbreakable rule of this codebase:** never invent a number. If a figure
 isn't available, the field is `null`. A `null` renders as an honest dash. A
 guessed number breaks the one promise the product is built on.
+
+---
+
+# 🚨 TASK 0 — URGENT: 19 of 20 stocks have `sector: "Unclassified"`
+
+**Do this before anything else.** TASKS 1–5 are done and working — this is the one
+thing left, and until it is fixed the product tells users things that are wrong.
+
+## The problem
+
+Only HAL has a real sector. Every other stock is `"Unclassified"`, so all 19 land
+in one bucket and share a single blended P/E median of **17.05** — computed across
+banks, IT, oil, power, retail, EV and defence together.
+
+HAL, being alone in "Defence", gets **no median at all**, so the hero demo company
+has no sector comparison on any metric.
+
+## Why this is worse than having no median
+
+The product currently says, on screen, to a beginner:
+
+```
+ONGC   ✓ Valuation below sector: P/E of 6.69, below the sector median of 17.05
+INFY   ✓ Valuation below sector: P/E of 13.5, below the sector median of 17.05
+```
+
+Both are misleading:
+
+- **Oil PSUs structurally trade around a P/E of 6–8.** ONGC at 6.69 is completely
+  normal for its sector, not cheap. We are presenting it as a bargain because we
+  compared it to retail and IT companies.
+- **Infosys at 13.5 sits right on the IT median** (TCS is 14.8). It is not cheap
+  relative to its peers. We are calling it cheap because banks and oil dragged the
+  blended median around.
+- The card also literally displays the word **"Unclassified"** as the sector.
+
+Our entire product promise is that we don't tell beginners confident things that
+aren't true. A wrong comparison delivered with a citation is worse than no
+comparison at all.
+
+## What to do
+
+Set the real `sector` string on each stock, then **re-run the median derivation
+from TASK 1**. Nothing else changes.
+
+```
+ATHER       Automobile
+BDL         Defence
+BEL         Defence
+ETERNAL     Consumer Tech
+HAL         Defence
+HDFCBANK    Banking
+ICICIBANK   Banking
+IDEA        Telecom
+INFY        Information Technology
+IREDA       Financials
+ITC         FMCG
+NTPC        Power
+ONGC        Oil & Gas
+POWERGRID   Power
+RELIANCE    Oil & Gas
+SUZLON      Renewable Energy
+TATAMOTORS  Automobile
+TATAPOWER   Power
+TCS         Information Technology
+TRENT       Retail
+```
+
+Put this mapping in `build-snapshot.ts` so a rebuild keeps it. These are public
+facts about what each company does, not derived figures.
+
+## ⚠️ Sectors with fewer than 2 companies
+
+After this mapping, several sectors have only one member (Telecom, Retail,
+Consumer Tech, Renewable Energy, Financials). **Omit the median key entirely for
+those** — as TASK 1 already says, never write a median computed from one company.
+
+Those stocks will show no sector comparison, which is correct and honest: we do
+not have peers to compare them against. Do **not** fall back to an all-stock
+median to fill the gap — that is exactly the bug this task fixes.
+
+If you want more comparisons, the better fix is adding a second company to a thin
+sector, not widening the comparison group.
+
+## Acceptance criteria
+
+- [ ] No stock has `sector: "Unclassified"`
+- [ ] Defence (HAL, BEL, BDL) has a real median, and HAL's metrics show it
+- [ ] Banking, Power, IT, Oil & Gas, Automobile each have a median from ≥2 members
+- [ ] Single-member sectors have `sectorMedians: {}` and `direction: "unknown"`
+- [ ] `ONGC` is no longer described as "below the sector median"
+- [ ] Discovery for "something cheap" no longer returns ONGC and INFY together
+      on the basis of one blended median
 
 ---
 
