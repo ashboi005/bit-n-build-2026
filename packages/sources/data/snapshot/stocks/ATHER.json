@@ -36,7 +36,7 @@
       "value": 65678,
       "display": "65,678 Cr",
       "unit": "INR crore",
-      "sectorMedian": 88285.0,
+      "sectorMedian": 88285,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1144,7 +1144,7 @@
   ],
   "sectorMedians": {
     "dividend_yield": 0.5,
-    "market_cap": 88285.0
+    "market_cap": 88285
   },
   "risk": [
     {

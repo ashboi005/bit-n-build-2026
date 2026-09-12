@@ -88,7 +88,7 @@
       "value": 11.6,
       "display": "11.6%",
       "unit": "%",
-      "sectorMedian": 10.25,
+      "sectorMedian": 10.26,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -1144,7 +1144,7 @@
   ],
   "sectorMedians": {
     "pe": 14.75,
-    "roe": 10.25,
+    "roe": 10.26,
     "roce": 12.25,
     "dividend_yield": 3.09,
     "market_cap": 997103.5,
@@ -1173,7 +1173,7 @@
       "key": "debt",
       "label": "Debt",
       "level": "low",
-      "reason": "Debt to equity is 0.3, compared with the Oil & Gas sector median of 0.53.",
+      "reason": "Debt to equity is 0.2989, compared with the Oil & Gas sector median of 0.5345.",
       "sourceIds": [
         "screener_ongc_fundamentals"
       ]

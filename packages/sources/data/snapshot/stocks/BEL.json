@@ -36,7 +36,7 @@
       "value": 295571,
       "display": "2,95,571 Cr",
       "unit": "INR crore",
-      "sectorMedian": 311802.5,
+      "sectorMedian": 295571,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -49,8 +49,8 @@
       "value": 48.1,
       "display": "48.1",
       "unit": null,
-      "sectorMedian": 41.65,
-      "direction": "high",
+      "sectorMedian": 48.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -75,7 +75,7 @@
       "value": 36.4,
       "display": "36.4%",
       "unit": "%",
-      "sectorMedian": 34.2,
+      "sectorMedian": 32,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": 27.4,
       "display": "27.4%",
       "unit": "%",
-      "sectorMedian": 25.7,
+      "sectorMedian": 24,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 0.62,
       "display": "0.62%",
       "unit": "%",
-      "sectorMedian": 0.77,
-      "direction": "low",
+      "sectorMedian": 0.62,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -127,7 +127,7 @@
       "value": 0.0031,
       "display": "0",
       "unit": null,
-      "sectorMedian": 0.0064,
+      "sectorMedian": 0.0065,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 41.65,
-    "roe": 25.7,
-    "roce": 34.2,
-    "dividend_yield": 0.77,
-    "market_cap": 311802.5,
-    "debt_to_equity": 0.0064
+    "pe": 48.1,
+    "roe": 24,
+    "roce": 32,
+    "dividend_yield": 0.62,
+    "market_cap": 295571,
+    "debt_to_equity": 0.0065
   },
   "risk": [
     {
@@ -1156,15 +1156,6 @@
       "label": "Price volatility",
       "level": "low",
       "reason": "The price moved between ₹380 and ₹473 over 52 weeks — a swing of about 24% from its low.",
-      "sourceIds": [
-        "screener_bel_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 48.1, compared with the Defence sector median of 41.65. Investors are paying more for its earnings than for its peers'.",
       "sourceIds": [
         "screener_bel_fundamentals"
       ]

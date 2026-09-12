@@ -83,7 +83,26 @@ Our entire product promise is that we don't tell beginners confident things that
 aren't true. A wrong comparison delivered with a citation is worse than no
 comparison at all.
 
-## What was changed (mirror this in `build-snapshot.ts`)
+## Already wired into `build-snapshot.ts` — nothing to mirror
+
+The rules live in **`packages/sources/src/derive.ts`** (`deriveAll()`), and
+`applyDerivedStockData()` in `build-snapshot.ts` now calls it. A rebuild
+reproduces sectors, medians, directions and risk rows automatically. The old
+duplicate helpers (`derivedRisk`, `median`, `MEDIAN_KEYS`, `sourceIdsFor`,
+`relativeRiskLevel`, `metricValue`) were removed so there is one implementation.
+
+There is also **`bun run --filter @bit-n-build-2026/sources enrich`**, which
+re-fetches any stock missing core figures and then re-derives everything. It is
+idempotent — running it twice produces byte-identical files. Run it after any
+data change.
+
+**BDL is fixed**: its consolidated screener page is empty, so `enrich` falls back
+to the standalone page. It now has market cap, P/E, book value, ROCE, ROE,
+dividend yield, a 52-week range and 3 risk rows. IDEA was partially filled the
+same way. ATHER genuinely reports no ratios on either page, so its figures stay
+`null` — correct, not a bug.
+
+### What changed
 
 Real sectors assigned, medians recomputed per sector, metric `sectorMedian` and
 `direction` refreshed, and the `valuation` / `debt` risk rows regenerated — those

@@ -101,7 +101,7 @@
       "value": 0.87,
       "display": "0.87%",
       "unit": "%",
-      "sectorMedian": 1.35,
+      "sectorMedian": 1.36,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1146,7 +1146,7 @@
     "pe": 15.7,
     "roe": 14.75,
     "roce": 7.1,
-    "dividend_yield": 1.35,
+    "dividend_yield": 1.36,
     "market_cap": 1040864.5
   },
   "risk": [

@@ -36,7 +36,7 @@
       "value": 796269,
       "display": "7,96,269 Cr",
       "unit": "INR crore",
-      "sectorMedian": 608696.0,
+      "sectorMedian": 608696,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": 0.0071,
       "display": "0.01",
       "unit": null,
-      "sectorMedian": 0.0035,
+      "sectorMedian": 0.0036,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -1147,8 +1147,8 @@
     "roe": 41.85,
     "roce": 51.5,
     "dividend_yield": 3.77,
-    "market_cap": 608696.0,
-    "debt_to_equity": 0.0035
+    "market_cap": 608696,
+    "debt_to_equity": 0.0036
   },
   "risk": [
     {

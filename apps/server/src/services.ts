@@ -91,6 +91,17 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
   await db.delete(userDecision).where(eq(userDecision.userId, userId));
   await db.delete(chatMessage).where(eq(chatMessage.userId, userId));
 
+  /**
+   * Resolve each persona's price offset against the CURRENT snapshot price, so
+   * the story ("BEL is down, Infosys is up") holds whatever the real numbers are.
+   */
+  const priceFor = (d: PersonaDecision): number | null => {
+    if (d.priceOffsetPct === null) return null;
+    const last = sources.getStock(d.ticker)?.price?.last;
+    if (!last) return null;
+    return Math.round(last * (1 + d.priceOffsetPct) * 100) / 100;
+  };
+
   // Insert this persona's decisions, dated relative to today.
   const rows = persona.decisions.map((d, i) => ({
     id: `seed_${stage}_${i}_${userId.slice(0, 8)}`,
@@ -99,7 +110,7 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
     companyName: d.companyName,
     action: d.action,
     quantity: d.quantity,
-    pricePerShare: d.pricePerShare,
+    pricePerShare: priceFor(d),
     thesis: d.thesis,
     investigationSummary: null,
     reasoning: d.reasoning,
@@ -123,7 +134,7 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
    * a persona whose profile disagrees with its own portfolio is worse than no
    * persona at all.
    */
-  const holdings = buildHoldings(persona.decisions);
+  const holdings = buildHoldings(persona.decisions, priceFor);
 
   const profileRow = {
     userId,
@@ -160,7 +171,7 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
       text:
         `They ${d.action} ${d.ticker} (${d.companyName})` +
         (d.quantity ? `, ${d.quantity} shares` : "") +
-        (d.pricePerShare ? ` at ₹${d.pricePerShare}` : "") +
+        (priceFor(d) ? ` at ₹${priceFor(d)}` : "") +
         (d.thesis ? `. Their thesis: "${d.thesis}"` : "") +
         (d.reasoning ? `. Their reasoning: "${d.reasoning}"` : "") +
         (d.outcomeNote ? `. Outcome: ${d.outcomeNote}` : ""),
@@ -195,14 +206,17 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
 }
 
 /** Net quantity and average cost per ticker, from bought/sold decisions. */
-function buildHoldings(decisions: PersonaDecision[]): UserProfile["holdings"] {
+function buildHoldings(
+  decisions: PersonaDecision[],
+  priceFor: (d: PersonaDecision) => number | null,
+): UserProfile["holdings"] {
   const held = new Map<string, { name: string; qty: number; cost: number }>();
 
   for (const d of [...decisions].sort((a, b) => b.daysAgo - a.daysAgo)) {
     if (d.action !== "bought" || !d.quantity) continue;
     const entry = held.get(d.ticker) ?? { name: d.companyName, qty: 0, cost: 0 };
     entry.qty += d.quantity;
-    entry.cost += d.quantity * (d.pricePerShare ?? 0);
+    entry.cost += d.quantity * (priceFor(d) ?? 0);
     held.set(d.ticker, entry);
   }
 

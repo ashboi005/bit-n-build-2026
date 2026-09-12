@@ -18,7 +18,17 @@ export interface PersonaDecision {
   companyName: string;
   action: DecisionAction;
   quantity: number | null;
-  pricePerShare: number | null;
+  /**
+   * What they paid, as an offset from the CURRENT price in the snapshot.
+   * -0.08 means they bought 8% below today's price, so they are up 8%.
+   *
+   * Absolute prices were tried first and were a mistake: they drift out of date
+   * the moment Tushar refreshes the data, and a hardcoded ₹980 for Tata Motors
+   * (its pre-demerger price) against a real ₹302 showed the demo user a 40%
+   * loss nobody intended. An offset keeps the story deterministic whatever the
+   * real price is.
+   */
+  priceOffsetPct: number | null;
   thesis: string | null;
   reasoning: string | null;
   outcome: "held_up" | "broke" | "unresolved";
@@ -87,7 +97,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "unresolved",
@@ -132,7 +142,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
@@ -144,7 +154,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Tata Motors Ltd",
         action: "bought",
         quantity: 8,
-        pricePerShare: 980,
+        priceOffsetPct: 0.02,
         thesis: "Car sales are recovering",
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
@@ -156,7 +166,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Bharat Electronics Ltd",
         action: "bought",
         quantity: 15,
-        pricePerShare: 445,
+        priceOffsetPct: 0.12,
         thesis: "Everyone is talking about this defence stock so it will keep rising",
         reasoning: "I saw it on three different reels in one day.",
         outcome: "broke",
@@ -219,7 +229,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
@@ -231,7 +241,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Tata Motors Ltd",
         action: "bought",
         quantity: 8,
-        pricePerShare: 980,
+        priceOffsetPct: 0.02,
         thesis: "Car sales are recovering",
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
@@ -243,7 +253,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Bharat Electronics Ltd",
         action: "bought",
         quantity: 15,
-        pricePerShare: 445,
+        priceOffsetPct: 0.12,
         thesis: "Everyone is talking about this defence stock so it will keep rising",
         reasoning: "I saw it on three different reels in one day.",
         outcome: "broke",
@@ -256,7 +266,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Nestle India Ltd",
         action: "skipped",
         quantity: null,
-        pricePerShare: null,
+        priceOffsetPct: null,
         thesis: "Nestle is a safe household name",
         reasoning:
           "Its P/E was far above the rest of the sector and I couldn't find a reason the earnings justified it.",
@@ -269,7 +279,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Infosys Ltd",
         action: "bought",
         quantity: 12,
-        pricePerShare: 1560,
+        priceOffsetPct: -0.15,
         thesis: "Infosys looks cheap compared to its own history",
         reasoning:
           "Compared its P/E to TCS and Wipro and to its own past, then checked earnings were still growing.",

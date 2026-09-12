@@ -36,7 +36,7 @@
       "value": 328034,
       "display": "3,28,034 Cr",
       "unit": "INR crore",
-      "sectorMedian": 311802.5,
+      "sectorMedian": 295571,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": 35.2,
       "display": "35.2",
       "unit": null,
-      "sectorMedian": 41.65,
+      "sectorMedian": 48.1,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -75,7 +75,7 @@
       "value": 32,
       "display": "32%",
       "unit": "%",
-      "sectorMedian": 34.2,
+      "sectorMedian": 32,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": 24,
       "display": "24%",
       "unit": "%",
-      "sectorMedian": 25.7,
+      "sectorMedian": 24,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": 0.92,
       "display": "0.92%",
       "unit": "%",
-      "sectorMedian": 0.77,
+      "sectorMedian": 0.62,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": 0.0098,
       "display": "0.01",
       "unit": null,
-      "sectorMedian": 0.0064,
+      "sectorMedian": 0.0065,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 41.65,
-    "roe": 25.7,
-    "roce": 34.2,
-    "dividend_yield": 0.77,
-    "market_cap": 311802.5,
-    "debt_to_equity": 0.0064
+    "pe": 48.1,
+    "roe": 24,
+    "roce": 32,
+    "dividend_yield": 0.62,
+    "market_cap": 295571,
+    "debt_to_equity": 0.0065
   },
   "risk": [
     {
@@ -1163,8 +1163,8 @@
     {
       "key": "valuation",
       "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 35.2, compared with the Defence sector median of 41.65. Investors are paying less for its earnings than for its peers'.",
+      "level": "low",
+      "reason": "P/E is 35.2, compared with the Defence sector median of 48.1. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_hal_snapshot_fundamentals"
       ]

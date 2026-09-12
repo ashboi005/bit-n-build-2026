@@ -6,14 +6,14 @@
   "sector": "Defence",
   "business": "This committed fallback covers the BSE-listed company named Bharat Dynamics Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 1190.5,
+    "last": 1190,
     "change": -0.5,
     "changePct": -0.04,
     "dayHigh": 1191.5,
     "dayLow": 1165,
-    "week52High": null,
-    "week52Low": null,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "week52High": 1655,
+    "week52Low": 1086,
+    "asOf": "2026-09-12T20:10:36.301Z",
     "sourceId": "bse_bdl_market_data"
   },
   "metrics": [
@@ -33,11 +33,11 @@
     {
       "key": "market_cap",
       "label": "Market capitalization",
-      "value": null,
-      "display": "—",
+      "value": 43621,
+      "display": "₹43,621 Cr",
       "unit": "INR crore",
-      "sectorMedian": 311802.5,
-      "direction": "unknown",
+      "sectorMedian": 295571,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
@@ -46,11 +46,11 @@
     {
       "key": "pe",
       "label": "P/E ratio",
-      "value": null,
-      "display": "—",
+      "value": 83.8,
+      "display": "83.8",
       "unit": null,
-      "sectorMedian": 41.65,
-      "direction": "unknown",
+      "sectorMedian": 48.1,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
@@ -59,8 +59,8 @@
     {
       "key": "book_value",
       "label": "Book value",
-      "value": null,
-      "display": "—",
+      "value": 116,
+      "display": "₹116",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -72,11 +72,11 @@
     {
       "key": "roce",
       "label": "ROCE",
-      "value": null,
-      "display": "—",
+      "value": 13.8,
+      "display": "13.8%",
       "unit": "%",
-      "sectorMedian": 34.2,
-      "direction": "unknown",
+      "sectorMedian": 32,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
@@ -85,11 +85,11 @@
     {
       "key": "roe",
       "label": "ROE",
-      "value": null,
-      "display": "—",
+      "value": 10.2,
+      "display": "10.2%",
       "unit": "%",
-      "sectorMedian": 25.7,
-      "direction": "unknown",
+      "sectorMedian": 24,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
@@ -98,11 +98,11 @@
     {
       "key": "dividend_yield",
       "label": "Dividend yield",
-      "value": null,
-      "display": "—",
+      "value": 0.41,
+      "display": "0.41%",
       "unit": "%",
-      "sectorMedian": 0.77,
-      "direction": "unknown",
+      "sectorMedian": 0.62,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
@@ -127,11 +127,24 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.0064,
+      "sectorMedian": 0.0065,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_bdl_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹1,086 – ₹1,655",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "bse_bdl_market_data"
       ]
     }
   ],
@@ -1130,14 +1143,42 @@
     }
   ],
   "sectorMedians": {
-    "pe": 41.65,
-    "roe": 25.7,
-    "roce": 34.2,
-    "dividend_yield": 0.77,
-    "market_cap": 311802.5,
-    "debt_to_equity": 0.0064
+    "pe": 48.1,
+    "roe": 24,
+    "roce": 32,
+    "dividend_yield": 0.62,
+    "market_cap": 295571,
+    "debt_to_equity": 0.0065
   },
-  "risk": [],
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "medium",
+      "reason": "The price moved between ₹1,086 and ₹1,655 over 52 weeks — a swing of about 52% from its low.",
+      "sourceIds": [
+        "bse_bdl_market_data"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "high",
+      "reason": "P/E is 83.8, compared with the Defence sector median of 48.1. Investors are paying more for its earnings than for its peers'.",
+      "sourceIds": [
+        "bse_bdl_market_data"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "medium",
+      "reason": "Return on equity is 10.2%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "bse_bdl_market_data"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_bdl_market_data",
     "screener_bdl_fundamentals"
