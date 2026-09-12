@@ -1,4 +1,4 @@
-e"use client";
+"use client";
 
 import type { RiskFactor, RiskLevel } from "@bit-n-build-2026/contracts";
 import { AlertCircle, CheckCircle2, HelpCircle, ShieldAlert } from "lucide-react";

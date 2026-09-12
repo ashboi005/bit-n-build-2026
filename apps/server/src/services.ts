@@ -1,14 +1,14 @@
 import { createAuth as createConfiguredAuth } from "@bit-n-build-2026/auth";
 import { type Database, createDb } from "@bit-n-build-2026/db";
-import { userProfile } from "@bit-n-build-2026/db/schema/profile";
-import { eq } from "drizzle-orm";
-import { createLlm } from "@bit-n-build-2026/llm";
-import type { ProfilePort } from "@bit-n-build-2026/engine";
 import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
+import type { ProfilePort } from "@bit-n-build-2026/engine";
+import { createLlm } from "@bit-n-build-2026/llm";
+import { createRetriever, createStore, type Retriever } from "@bit-n-build-2026/rag";
+import { sources } from "@bit-n-build-2026/sources";
+import { userProfile } from "@bit-n-build-2026/db/schema/profile";
 
 import { DEMO_PERSONAS } from "./demo-personas";
 import { env } from "./env.server";
-import { sources } from "@bit-n-build-2026/sources";
 
 const db = createDb(env);
 
@@ -17,58 +17,81 @@ export function getDb(): Database {
 }
 
 export const auth = createConfiguredAuth(env, db);
-
 export const llm = createLlm(env);
 export const fastModel = env.MERGE_MODEL_FAST;
-
 export { sources };
 
+/* ------------------------------------------------------------------ RAG */
+
+let retrieverPromise: Promise<Retriever> | null = null;
+
 /**
- * Profiles live in Postgres.
- *
- * Deliberately a real table rather than a memory map: the demo seed is then a
- * genuine database write, so if a judge asks to see the user's state, there is
- * state to show. The Time Machine reads and writes the same rows the product
- * uses in normal operation — there is no separate "demo mode" code path.
+ * Built lazily and once. Indexing embeds every source chunk, which costs a few
+ * seconds and a few API calls — doing it at import time would make the server
+ * slow to boot and would run again on every hot reload.
  */
+export function getRetriever(): Promise<Retriever> {
+  retrieverPromise ??= (async () => {
+    const store = await createStore({
+      qdrantUrl: env.QDRANT_URL || undefined,
+      qdrantApiKey: env.QDRANT_API_KEY || undefined,
+    });
+    const retriever = createRetriever(llm, store);
 
-function toProfile(row: typeof userProfile.$inferSelect): UserProfile {
-  return {
-    level: row.level as UserProfile["level"],
-    knownConcepts: row.knownConcepts,
-    holdings: row.holdings as UserProfile["holdings"],
-    pastTheses: row.pastTheses as UserProfile["pastTheses"],
-    startedAt: row.startedAt,
-    dayIndex: row.dayIndex,
-  };
+    if (await retriever.isEmpty()) {
+      /**
+       * Collect every document we can reach through the public sources API.
+       *
+       * `SourcesApi` has no listDocuments() yet, so this walks each stock's
+       * documentIds. A document that no stock links to is therefore invisible
+       * to retrieval — asked Tushar for listDocuments() in
+       * docs/handoff-sources-integration.md; this workaround needs no change
+       * on his side to run today.
+       */
+      const docs = [
+        ...new Map(
+          sources
+            .listStocks()
+            .flatMap((s) => sources.getStock(s.ticker)?.documentIds ?? [])
+            .map((id) => sources.getDocument(id))
+            .filter((d): d is NonNullable<typeof d> => d !== null)
+            .map((d) => [d.id, d] as const),
+        ).values(),
+      ];
+
+      try {
+        const count = await retriever.indexDocuments(docs);
+        console.log(`[rag] indexed ${count} chunks from ${docs.length} documents`);
+      } catch (error) {
+        console.warn(
+          "[rag] indexing failed — falling back to keyword search:",
+          error instanceof Error ? error.message : error,
+        );
+      }
+    }
+    return retriever;
+  })();
+  return retrieverPromise;
 }
 
-function toRow(userId: string, profile: UserProfile) {
-  return {
-    userId,
-    level: profile.level,
-    knownConcepts: profile.knownConcepts,
-    holdings: profile.holdings,
-    pastTheses: profile.pastTheses,
-    startedAt: profile.startedAt,
-    dayIndex: profile.dayIndex,
-  };
-}
+/* -------------------------------------------------------------- profiles */
 
-/** Read the profile, creating a day-0 one on first sight. */
 export async function getProfile(userId: string): Promise<UserProfile> {
-  const [row] = await db.select().from(userProfile).where(eq(userProfile.userId, userId));
-  if (row) return toProfile(row);
-
-  const seeded = structuredClone(DEMO_PERSONAS.day0);
-  await db.insert(userProfile).values(toRow(userId, seeded)).onConflictDoNothing();
-  return seeded;
+  const { getProfile: read } = await import("./store");
+  return read(userId);
 }
 
-/** Time Machine: overwrite the profile with a scripted persona. */
 export async function seedProfile(userId: string, stage: DemoStage): Promise<UserProfile> {
   const seeded = structuredClone(DEMO_PERSONAS[stage]);
-  const row = toRow(userId, seeded);
+  const row = {
+    userId,
+    level: seeded.level,
+    knownConcepts: seeded.knownConcepts,
+    holdings: seeded.holdings,
+    pastTheses: seeded.pastTheses,
+    startedAt: seeded.startedAt,
+    dayIndex: seeded.dayIndex,
+  };
   await db
     .insert(userProfile)
     .values(row)
@@ -78,15 +101,13 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
 
 export function createProfilePort(userId: string): ProfilePort {
   return {
-    get: () => getProfile(userId),
+    get: async () => {
+      const { getProfile: read } = await import("./store");
+      return read(userId);
+    },
     learnConcepts: async (keys) => {
-      const profile = await getProfile(userId);
-      const known = new Set(profile.knownConcepts);
-      for (const key of keys) known.add(key);
-      await db
-        .update(userProfile)
-        .set({ knownConcepts: [...known] })
-        .where(eq(userProfile.userId, userId));
+      const { learnConcepts } = await import("./store");
+      await learnConcepts(userId, keys);
     },
   };
 }

@@ -17,6 +17,7 @@
   "dependencies": {
     "@bit-n-build-2026/contracts": "workspace:*",
     "@bit-n-build-2026/llm": "workspace:*",
+    "@bit-n-build-2026/rag": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

@@ -25,8 +25,8 @@ export type LlmConfig = {
 
 export const DEFAULT_LLM_CONFIG = {
   MERGE_BASE_URL: "https://api-gateway.merge.dev/v1",
-  MERGE_MODEL_SMART: "anthropic/claude-sonnet-5",
-  MERGE_MODEL_FAST: "anthropic/claude-haiku-4-5-20251001",
+  MERGE_MODEL_SMART: "deepseek/deepseek-v4.1-flash",
+  MERGE_MODEL_FAST: "zai/glm-4.7-flash",
   MERGE_MODEL_EMBED: "google/gemini-embedding-001",
 } satisfies Omit<LlmConfig, "MERGE_API_KEY">;
 

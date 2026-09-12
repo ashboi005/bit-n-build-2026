@@ -132,7 +132,13 @@ export type ThesisEvent =
   | { type: "stage.failed"; stage: StageId; message: string }
   | { type: "verdict.ready"; verdict: Verdict }
   | { type: "run.completed"; runId: string; durationMs: number }
-  | { type: "run.failed"; message: string };
+  | { type: "run.failed"; message: string }
+  /**
+   * The user named no company ("I want to invest long term"). The stream
+   * switches to discovery events from here. Additive: a client that ignores
+   * this still behaves correctly, it just shows nothing further.
+   */
+  | { type: "run.needs_discovery"; query: string };
 
 export type ThesisEventType = ThesisEvent["type"];
 
@@ -280,5 +286,10 @@ export function reduceThesis(state: ThesisState, event: ThesisEvent): ThesisStat
 
     case "run.failed":
       return { ...state, status: "failed", error: event.message };
+
+    case "run.needs_discovery":
+      // The stream continues with discovery events, which this reducer does not
+      // own. Mark the run done so the UI stops showing stages as pending.
+      return { ...state, status: "done" };
   }
 }

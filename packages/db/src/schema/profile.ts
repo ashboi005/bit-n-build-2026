@@ -30,6 +30,24 @@ export const userProfile = pgTable("user_profile", {
   startedAt: text("started_at").notNull(),
   dayIndex: integer("day_index").notNull().default(0),
 
+  /* ---- Onboarding: the initial context the dynamic profile starts from ---- */
+
+  /** "18-24" | "25-34" | "35-44" | "45-54" | "55+" — a band, not a birthday. */
+  ageBand: text("age_band"),
+  /** What they are actually here for. Drives which risks matter to them. */
+  primaryGoal: text("primary_goal"),
+  /** How they react to a 20% drop — self-reported, which is the honest measure. */
+  riskComfort: text("risk_comfort"),
+  /** Never invested | tried a bit | invests regularly. */
+  experience: text("experience"),
+  /** Rough monthly amount in INR. Lets us size a decision against their means. */
+  monthlyBudget: integer("monthly_budget"),
+  /** How long before they would need this money back. */
+  horizon: text("horizon"),
+  /** Free text: anything they want us to know. */
+  notes: text("notes"),
+  onboardedAt: timestamp("onboarded_at"),
+
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())

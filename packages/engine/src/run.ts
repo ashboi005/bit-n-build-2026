@@ -22,6 +22,8 @@ import {
 } from "@bit-n-build-2026/contracts";
 import { type Llm, checkNoRecommendation, enforceCitations } from "@bit-n-build-2026/llm";
 
+import type { Retriever } from "@bit-n-build-2026/rag";
+
 import type { ProfilePort, SourcesPort } from "./ports";
 import {
   challengePrompt,
@@ -39,6 +41,8 @@ export interface EngineDeps {
   llm: Llm;
   /** Cheap model for short, high-volume rewrites. Falls back to the default. */
   fastModel?: string;
+  /** Vector retrieval. Falls back to the sources layer's keyword search. */
+  retriever?: Retriever;
   sources: SourcesPort;
   profile: ProfilePort;
   /** Optional: log dropped claims so we can see the citation guard working. */
@@ -57,7 +61,7 @@ export async function* runThesis(
   deps: EngineDeps,
   opts: RunOptions,
 ): AsyncGenerator<ThesisEvent> {
-  const { llm, sources, profile, fastModel } = deps;
+  const { llm, sources, profile, fastModel, retriever } = deps;
   const runId = nextId("run");
   const startedAt = Date.now();
 
@@ -162,13 +166,45 @@ export async function* runThesis(
     yield { type: "claim.parsed", claim };
   });
 
+  /**
+   * No company named — "I want to invest long term". There is no thesis to
+   * test yet, so hand off to discovery rather than failing six stages in a row.
+   */
+  if (!claim || (claim as ParsedClaim).asset === null) {
+    yield { type: "run.needs_discovery", query: opts.query };
+    return;
+  }
+
   // --------------------------------------------------------------- gather
   yield* stage("gather", async function* () {
     const ticker = claim?.asset?.ticker;
-    const hits = sources.searchSources(claim?.trigger?.text ?? opts.query, {
-      tickers: ticker ? [ticker] : undefined,
-      limit: 8,
-    });
+    const query = claim?.trigger?.text ?? opts.query;
+
+    /**
+     * Vector retrieval first, keyword as the fallback. The fallback is not
+     * dead code — it is what runs if the vector store is unreachable, and it
+     * keeps the investigation working rather than failing.
+     */
+    let hits: { docId: string; text: string }[] = [];
+    if (retriever) {
+      try {
+        const results = await retriever.search(query, {
+          limit: 8,
+          filter: { kinds: ["source"], tickers: ticker ? [ticker] : undefined },
+        });
+        hits = results.map((r) => ({ docId: r.payload.docId, text: r.payload.text }));
+      } catch (error) {
+        console.warn(
+          "[engine] vector search failed, using keyword search:",
+          error instanceof Error ? error.message : error,
+        );
+      }
+    }
+    if (!hits.length) {
+      hits = sources
+        .searchSources(query, { tickers: ticker ? [ticker] : undefined, limit: 8 })
+        .map((h) => ({ docId: h.docId, text: h.text }));
+    }
 
     const seen = new Set<string>();
     for (const hit of hits) {

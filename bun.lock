@@ -22,6 +22,7 @@
         "@bit-n-build-2026/db": "workspace:*",
         "@bit-n-build-2026/engine": "workspace:*",
         "@bit-n-build-2026/llm": "workspace:*",
+        "@bit-n-build-2026/rag": "workspace:*",
         "@bit-n-build-2026/sources": "workspace:*",
         "@elysiajs/cors": "^1.4.2",
         "@sinclair/typebox": "^0.34.52",
@@ -114,6 +115,7 @@
       "dependencies": {
         "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/llm": "workspace:*",
+        "@bit-n-build-2026/rag": "workspace:*",
         "zod": "catalog:",
       },
       "devDependencies": {
@@ -126,6 +128,18 @@
       "version": "0.0.0",
       "dependencies": {
         "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@bit-n-build-2026/config": "workspace:*",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/rag": {
+      "name": "@bit-n-build-2026/rag",
+      "version": "0.0.0",
+      "dependencies": {
+        "@bit-n-build-2026/contracts": "workspace:*",
+        "@bit-n-build-2026/llm": "workspace:*",
       },
       "devDependencies": {
         "@bit-n-build-2026/config": "workspace:*",
@@ -283,6 +297,8 @@
     "@bit-n-build-2026/engine": ["@bit-n-build-2026/engine@workspace:packages/engine"],
 
     "@bit-n-build-2026/llm": ["@bit-n-build-2026/llm@workspace:packages/llm"],
+
+    "@bit-n-build-2026/rag": ["@bit-n-build-2026/rag@workspace:packages/rag"],
 
     "@bit-n-build-2026/sources": ["@bit-n-build-2026/sources@workspace:packages/sources"],
 
