@@ -6,9 +6,7 @@ import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
 
 import { DEMO_PERSONAS } from "./demo-personas";
 import { env } from "./env.server";
-// TODO: replace with `packages/sources` when Tushar's snapshot lands.
-// This is the only line that needs to change.
-import { sourcesStub as sources } from "./sources-stub";
+import { sources } from "@bit-n-build-2026/sources";
 
 const db = createDb(env);
 

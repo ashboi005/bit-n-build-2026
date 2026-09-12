@@ -1,0 +1,23 @@
+{
+  "id": "pib_budget_defence",
+  "title": "Union Budget 2026-27: Defence allocation raised",
+  "publisher": "PIB",
+  "tier": "official",
+  "url": "https://www.pib.gov.in/",
+  "pdfUrl": null,
+  "publishedAt": "2026-02-01",
+  "tickers": [
+    "HAL",
+    "BEL"
+  ],
+  "sectors": [
+    "defence"
+  ],
+  "text": "The allocation to the Ministry of Defence has been increased over the previous financial year, with a higher share directed to capital acquisition.",
+  "chunks": [
+    {
+      "id": "pib_budget_defence_0",
+      "text": "The allocation to the Ministry of Defence has been increased over the previous financial year, with a higher share directed to capital acquisition."
+    }
+  ]
+}

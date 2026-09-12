@@ -1,0 +1,104 @@
+[
+  {
+    "key": "pe",
+    "term": "P/E ratio",
+    "oneLiner": "What you pay for each ₹1 the company earns.",
+    "byLevel": {
+      "new": "P/E means price-to-earnings. At a P/E of 28.4, investors are paying ₹28.40 for every ₹1 the company earns in a year. A high number can mean people expect strong growth — or that the stock is simply expensive.",
+      "learning": "A P/E well above the sector median means the market expects this company to grow faster than its peers. That expectation has to be met.",
+      "practicing": "P/E relative to sector median is the comparison that matters, not the absolute number.",
+      "independent": "P/E vs sector median."
+    },
+    "related": [
+      "eps"
+    ]
+  },
+  {
+    "key": "eps",
+    "term": "EPS",
+    "oneLiner": "Profit earned per share over the last year.",
+    "byLevel": {
+      "new": "EPS means earnings per share — the company's profit divided by the number of shares. It tells you how much profit sits behind each share you own.",
+      "learning": "EPS growth matters more than the absolute figure. Rising EPS is what justifies a rising price.",
+      "practicing": "Track EPS growth against price growth.",
+      "independent": "EPS trend."
+    },
+    "related": [
+      "pe"
+    ]
+  },
+  {
+    "key": "priced_in",
+    "term": "Priced in",
+    "oneLiner": "News everyone already knows is usually already reflected in the price.",
+    "byLevel": {
+      "new": "'Priced in' means the market already knows something, so the price has already moved. If a budget increase was announced months ago and everyone read it, buying today doesn't get you the surprise — you're paying a price that already includes the good news.",
+      "learning": "Public news is usually priced in. Ask what would be new information from here.",
+      "practicing": "Ask what is not yet priced in — that is where the edge would have to come from.",
+      "independent": "Largely priced in."
+    },
+    "related": []
+  },
+  {
+    "key": "order_book",
+    "term": "Order book",
+    "oneLiner": "Work the company has already won but not yet delivered.",
+    "byLevel": {
+      "new": "An order book is the work a company has already won but hasn't delivered yet. A big order book means revenue is fairly predictable for a while — one of the most useful numbers for a manufacturer.",
+      "learning": "A high order book supports future revenue, but check how fast it converts.",
+      "practicing": "Order book value matters less than conversion rate.",
+      "independent": "Order book conversion."
+    },
+    "related": []
+  },
+  {
+    "key": "debt_to_equity",
+    "term": "Debt to equity",
+    "oneLiner": "How much the company has borrowed against what it owns.",
+    "byLevel": {
+      "new": "Debt to equity compares what a company has borrowed with what the owners have put in. A low number means it isn't relying much on borrowed money, which makes it steadier when times are hard.",
+      "learning": "Compare debt to equity against the sector — what counts as high differs by industry.",
+      "practicing": "D/E vs sector median; check interest coverage too.",
+      "independent": "D/E vs sector."
+    },
+    "related": []
+  },
+  {
+    "key": "week52_range",
+    "term": "52-week range",
+    "oneLiner": "The highest and lowest price over the past year.",
+    "byLevel": {
+      "new": "The 52-week range is the highest and lowest the share has traded in the past year. Being near the high doesn't automatically mean expensive, and near the low doesn't mean cheap — you still have to check the business.",
+      "learning": "Position in the 52-week range is context, not a signal on its own.",
+      "practicing": "Range position tells you about sentiment, not value.",
+      "independent": "Range position."
+    },
+    "related": []
+  },
+  {
+    "key": "valuation",
+    "term": "Valuation",
+    "oneLiner": "Whether the price is reasonable for what the company earns.",
+    "byLevel": {
+      "new": "Valuation is about whether the price makes sense for what the company actually earns and owns. A good company can still be a bad buy if you pay too much for it.",
+      "learning": "Valuation is always relative — to peers, to the sector, and to the company's own history.",
+      "practicing": "Compare against peers and own history simultaneously.",
+      "independent": "Relative valuation."
+    },
+    "related": [
+      "pe"
+    ]
+  },
+  {
+    "key": "gmp",
+    "term": "GMP (grey market premium)",
+    "oneLiner": "An unofficial, unregulated price quoted before listing.",
+    "byLevel": {
+      "new": "GMP is the grey market premium — an unofficial price some dealers quote before a share is listed. It is not an exchange price, nobody regulates it, and it can change a lot in days. It reflects demand for the allotment, not whether the company is any good.",
+      "learning": "GMP measures short-term allotment demand, not business quality, and it is unregulated.",
+      "practicing": "GMP is an unregulated demand signal, not a valuation input.",
+      "independent": "GMP: unregulated demand signal."
+    },
+    "related": []
+  }
+]

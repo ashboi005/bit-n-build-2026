@@ -22,6 +22,7 @@
         "@bit-n-build-2026/db": "workspace:*",
         "@bit-n-build-2026/engine": "workspace:*",
         "@bit-n-build-2026/llm": "workspace:*",
+        "@bit-n-build-2026/sources": "workspace:*",
         "@elysiajs/cors": "^1.4.2",
         "@sinclair/typebox": "^0.34.52",
         "better-auth": "catalog:",
@@ -122,6 +123,18 @@
       "name": "@bit-n-build-2026/llm",
       "version": "0.0.0",
       "dependencies": {
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@bit-n-build-2026/config": "workspace:*",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/sources": {
+      "name": "@bit-n-build-2026/sources",
+      "version": "0.0.0",
+      "dependencies": {
+        "@bit-n-build-2026/contracts": "workspace:*",
         "zod": "catalog:",
       },
       "devDependencies": {
@@ -268,6 +281,8 @@
     "@bit-n-build-2026/engine": ["@bit-n-build-2026/engine@workspace:packages/engine"],
 
     "@bit-n-build-2026/llm": ["@bit-n-build-2026/llm@workspace:packages/llm"],
+
+    "@bit-n-build-2026/sources": ["@bit-n-build-2026/sources@workspace:packages/sources"],
 
     "@bit-n-build-2026/ui": ["@bit-n-build-2026/ui@workspace:packages/ui"],
 

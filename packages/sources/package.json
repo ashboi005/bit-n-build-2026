@@ -1,0 +1,23 @@
+{
+  "name": "@bit-n-build-2026/sources",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": { "default": "./src/index.ts" },
+    "./*": { "default": "./src/*.ts" }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "build:snapshot": "bun run src/build-snapshot.ts",
+    "verify:endpoints": "bun run src/verify-endpoints.ts"
+  },
+  "dependencies": {
+    "@bit-n-build-2026/contracts": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@bit-n-build-2026/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
