@@ -2,7 +2,8 @@ import { createAuthClient } from "better-auth/react";
 
 import { ENV as env } from "../env";
 
-function getServerUrl(url: string) {
+function getServerUrl(url?: string) {
+  if (!url) url = "";
   const processEnv = (
     globalThis as {
       process?: { env?: Record<string, string | undefined> };
@@ -16,7 +17,7 @@ function getServerUrl(url: string) {
 
   const normalized = url.endsWith("/") ? url.slice(0, -1) : url;
 
-  if (!normalized.startsWith("/")) {
+  if (!normalized.startsWith("/") && normalized !== "") {
     return normalized;
   }
 
