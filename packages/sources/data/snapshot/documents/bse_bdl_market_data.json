@@ -1,0 +1,20 @@
+{
+  "id": "bse_bdl_market_data",
+  "title": "BDL — BSE market data",
+  "publisher": "BSE",
+  "tier": "market_data",
+  "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=541143&seriesid=",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:29.108Z",
+  "tickers": [
+    "BDL"
+  ],
+  "sectors": [],
+  "text": "BSE market-data response for BDL. Fetched at: 2026-09-12T17:55:29.108Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1190.50; change -0.50; change percent -0.04; previous close ₹1191.00; open ₹1186.25; high ₹1191.50; low ₹1165.00.",
+  "chunks": [
+    {
+      "id": "bse_bdl_market_data_0",
+      "text": "BSE market-data response for BDL. Fetched at: 2026-09-12T17:55:29.108Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1190.50; change -0.50; change percent -0.04; previous close ₹1191.00; open ₹1186.25; high ₹1191.50; low ₹1165.00."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "bse_idea_market_data",
+  "title": "IDEA — BSE market data",
+  "publisher": "BSE",
+  "tier": "market_data",
+  "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=532822&seriesid=",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:42.887Z",
+  "tickers": [
+    "IDEA"
+  ],
+  "sectors": [],
+  "text": "BSE market-data response for IDEA. Fetched at: 2026-09-12T17:55:42.887Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹14.96; change 0.00; change percent 0.00; previous close ₹14.96; open ₹15.10; high ₹15.20; low ₹14.85.",
+  "chunks": [
+    {
+      "id": "bse_idea_market_data_0",
+      "text": "BSE market-data response for IDEA. Fetched at: 2026-09-12T17:55:42.887Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹14.96; change 0.00; change percent 0.00; previous close ₹14.96; open ₹15.10; high ₹15.20; low ₹14.85."
+    }
+  ]
+}

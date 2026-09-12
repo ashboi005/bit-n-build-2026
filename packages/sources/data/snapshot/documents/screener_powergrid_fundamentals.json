@@ -1,0 +1,20 @@
+{
+  "id": "screener_powergrid_fundamentals",
+  "title": "POWERGRID — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/POWERGRID/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:36.449Z",
+  "tickers": [
+    "POWERGRID"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for POWERGRID. Fetched at: 2026-09-12T17:55:36.449Z. Returned values: Market Cap (₹ Cr): 250279; Stock P/E: 15.8; Book Value: 108; ROCE (%): 9.1; ROE (%): 15.3; Dividend Yield (%): 3.34.",
+  "chunks": [
+    {
+      "id": "screener_powergrid_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for POWERGRID. Fetched at: 2026-09-12T17:55:36.449Z. Returned values: Market Cap (₹ Cr): 250279; Stock P/E: 15.8; Book Value: 108; ROCE (%): 9.1; ROE (%): 15.3; Dividend Yield (%): 3.34."
+    }
+  ]
+}

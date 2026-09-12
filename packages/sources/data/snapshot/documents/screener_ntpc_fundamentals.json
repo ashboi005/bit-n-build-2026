@@ -1,0 +1,20 @@
+{
+  "id": "screener_ntpc_fundamentals",
+  "title": "NTPC — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/NTPC/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:35.460Z",
+  "tickers": [
+    "NTPC"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for NTPC. Fetched at: 2026-09-12T17:55:35.460Z. Returned values: Market Cap (₹ Cr): 323287; Stock P/E: 11.6; Book Value: 210; ROCE (%): 8.92; ROE (%): 15.1; Dividend Yield (%): 2.7.",
+  "chunks": [
+    {
+      "id": "screener_ntpc_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for NTPC. Fetched at: 2026-09-12T17:55:35.460Z. Returned values: Market Cap (₹ Cr): 323287; Stock P/E: 11.6; Book Value: 210; ROCE (%): 8.92; ROE (%): 15.1; Dividend Yield (%): 2.7."
+    }
+  ]
+}

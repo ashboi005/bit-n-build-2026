@@ -1,0 +1,20 @@
+{
+  "id": "screener_eternal_fundamentals",
+  "title": "ETERNAL — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/ETERNAL/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:41.887Z",
+  "tickers": [
+    "ETERNAL"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for ETERNAL. Fetched at: 2026-09-12T17:55:41.887Z. Returned values: Market Cap (₹ Cr): 312189; Stock P/E: 721; Book Value: 32.1; ROCE (%): 2.48; ROE (%): 0.38; Dividend Yield (%): 0.",
+  "chunks": [
+    {
+      "id": "screener_eternal_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for ETERNAL. Fetched at: 2026-09-12T17:55:41.887Z. Returned values: Market Cap (₹ Cr): 312189; Stock P/E: 721; Book Value: 32.1; ROCE (%): 2.48; ROE (%): 0.38; Dividend Yield (%): 0."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "screener_icicibank_fundamentals",
+  "title": "ICICIBANK — Screener fundamentals",
+  "publisher": "Screener.in",
+  "tier": "market_data",
+  "url": "https://www.screener.in/company/ICICIBANK/consolidated/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-12T17:55:40.796Z",
+  "tickers": [
+    "ICICIBANK"
+  ],
+  "sectors": [],
+  "text": "Screener.in consolidated fundamentals for ICICIBANK. Fetched at: 2026-09-12T17:55:40.796Z. Returned values: Market Cap (₹ Cr): 990020; Stock P/E: 17.6; Book Value: 527; ROCE (%): 7.18; ROE (%): 15.9; Dividend Yield (%): 0.87.",
+  "chunks": [
+    {
+      "id": "screener_icicibank_fundamentals_0",
+      "text": "Screener.in consolidated fundamentals for ICICIBANK. Fetched at: 2026-09-12T17:55:40.796Z. Returned values: Market Cap (₹ Cr): 990020; Stock P/E: 17.6; Book Value: 527; ROCE (%): 7.18; ROE (%): 15.9; Dividend Yield (%): 0.87."
+    }
+  ]
+}

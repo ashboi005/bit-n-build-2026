@@ -1,0 +1,22 @@
+{
+  "ticker": "HAL",
+  "bseCode": "541154",
+  "isin": "INE066F01020",
+  "name": "Hindustan Aeronautics Ltd",
+  "sector": "Defence",
+  "business": "Hindustan Aeronautics designs and builds aircraft, helicopters and aero-engines. Almost all of its work comes from Indian defence programmes.",
+  "price": {"last": 4898.75, "change": -56.25, "changePct": -1.14, "dayHigh": 4930, "dayLow": 4861.65, "week52High": null, "week52Low": null, "asOf": "2026-09-11T10:30:00.000Z", "sourceId": "bse_hal_quote"},
+  "metrics": [
+    {"key":"previous_close","label":"Previous close","value":4955,"display":"4,955 INR","unit":"INR","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["bse_hal_quote"]},
+    {"key":"market_cap","label":"Market capitalization","value":328034,"display":"3,28,034 Cr","unit":"INR crore","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]},
+    {"key":"pe","label":"P/E ratio","value":35.2,"display":"35.2","unit":null,"sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]},
+    {"key":"book_value","label":"Book value","value":614,"display":"614","unit":"INR","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]},
+    {"key":"roce","label":"ROCE","value":32,"display":"32%","unit":"%","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]},
+    {"key":"roe","label":"ROE","value":24,"display":"24%","unit":"%","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]},
+    {"key":"dividend_yield","label":"Dividend yield","value":0.92,"display":"0.92%","unit":"%","sectorMedian":null,"direction":"unknown","explanation":"","sourceIds":["screener_hal_fundamentals"]}
+  ],
+  "history": [], "sectorMedians": {},
+  "risk": [{"key":"stability","label":"Business stability","level":"medium","reason":"A majority of its order book comes from domestic defence programmes.","sourceIds":["hal_q2_presentation"]}],
+  "documentIds": ["pib_budget_defence","hal_q2_presentation","bs_defence_priced_in","bse_hal_quote","screener_hal_fundamentals"],
+  "newsIds": []
+}

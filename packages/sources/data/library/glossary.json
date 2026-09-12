@@ -170,3 +170,5 @@
     "byLevel": {"new": "Volatility describes how much prices fluctuate; higher means larger or more frequent moves.", "learning": "Historical volatility describes past movement, not a guaranteed future move.", "practicing": "Compare matching periods and note major events.", "independent": "Volatility: dispersion of price returns."}, "related": ["week52_range"]
   }
 ]
+
+

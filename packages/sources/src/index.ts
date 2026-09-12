@@ -18,25 +18,22 @@ import type {
   StockSummary,
 } from "@bit-n-build-2026/contracts";
 
-import { loadSnapshot } from "./snapshot";
-
-const snapshot = loadSnapshot();
-
-/** Name/alias -> ticker. Extend as stocks are added. */
-const ALIASES: Record<string, string> = {};
-for (const [ticker, stock] of snapshot.stocks) {
-  ALIASES[ticker.toLowerCase()] = ticker;
-  ALIASES[stock.name.toLowerCase()] = ticker;
-  // "Hindustan Aeronautics Ltd" -> also match "hindustan aeronautics"
-  ALIASES[stock.name.toLowerCase().replace(/\s+(ltd|limited)\.?$/, "")] = ticker;
-}
+import { loadSnapshot, type Snapshot } from "./snapshot";
 
 const STOPWORDS = new Set([
   "the", "and", "for", "that", "this", "with", "from", "will", "should", "have",
   "because", "about", "into", "than", "then", "they", "there", "want", "buy",
 ]);
 
-export const sources: SourcesApi = {
+export function createSources(snapshot: Snapshot = loadSnapshot()): SourcesApi {
+  const aliases: Record<string, string> = {};
+  for (const [ticker, stock] of snapshot.stocks) {
+    aliases[ticker.toLowerCase()] = ticker;
+    aliases[stock.name.toLowerCase()] = ticker;
+    aliases[stock.name.toLowerCase().replace(/\s+(ltd|limited)\.?$/, "")] = ticker;
+  }
+
+  return {
   listStocks(): StockSummary[] {
     return [...snapshot.stocks.values()].map((s) => ({
       ticker: s.ticker,
@@ -68,27 +65,39 @@ export const sources: SourcesApi = {
       .split(/\W+/)
       .filter((t) => t.length > 3 && !STOPWORDS.has(t));
 
-    const hits: SearchHit[] = [];
+    const searchLayer = (documents: Iterable<SourceDocument>): SearchHit[] => {
+      const hits: SearchHit[] = [];
 
-    for (const doc of snapshot.documents.values()) {
-      if (opts.tickers?.length && !opts.tickers.some((t) => doc.tickers.includes(t))) continue;
-      if (opts.sectors?.length && !opts.sectors.some((s) => doc.sectors.includes(s))) continue;
-      if (opts.tiers?.length && !opts.tiers.includes(doc.tier)) continue;
+      for (const doc of documents) {
+        if (opts.tickers?.length && !opts.tickers.some((t) => doc.tickers.includes(t))) continue;
+        if (opts.sectors?.length && !opts.sectors.some((s) => doc.sectors.includes(s))) continue;
+        if (opts.tiers?.length && !opts.tiers.includes(doc.tier)) continue;
 
-      for (const chunk of doc.chunks) {
-        const haystack = `${doc.title} ${chunk.text}`.toLowerCase();
-        const score = terms.reduce((acc, t) => acc + (haystack.includes(t) ? 1 : 0), 0);
+        for (const chunk of doc.chunks) {
+          const haystack = `${doc.title} ${chunk.text}`.toLowerCase();
+          const score = terms.reduce((acc, t) => acc + (haystack.includes(t) ? 1 : 0), 0);
 
-        // A company's own filings are always relevant context, even on a zero
-        // keyword score — otherwise a vaguely-worded thesis retrieves nothing.
-        const tickerMatch = opts.tickers?.some((t) => doc.tickers.includes(t)) ?? false;
-        if (score > 0 || tickerMatch) {
-          hits.push({ chunkId: chunk.id, docId: doc.id, text: chunk.text, score: score + 0.1 });
+          // A company's own filings are always relevant context, even on a zero
+          // keyword score — otherwise a vaguely-worded thesis retrieves nothing.
+          const tickerMatch = opts.tickers?.some((t) => doc.tickers.includes(t)) ?? false;
+          if (score > 0 || tickerMatch) {
+            hits.push({ chunkId: chunk.id, docId: doc.id, text: chunk.text, score: score + 0.1 });
+          }
         }
       }
-    }
 
-    return hits.sort((a, b) => b.score - a.score).slice(0, opts.limit ?? 8);
+      return hits.sort((a, b) => b.score - a.score);
+    };
+
+    const libraryIds = new Set(snapshot.libraryDocuments.keys());
+    const libraryHits = searchLayer(snapshot.libraryDocuments.values());
+    const fallbackHits = searchLayer(
+      [...snapshot.documents.values()].filter((doc) => !libraryIds.has(doc.id)),
+    );
+
+    // Curated library evidence takes precedence, while preserving the
+    // existing score ordering within each layer.
+    return [...libraryHits, ...fallbackHits].slice(0, opts.limit ?? 8);
   },
 
   getGlossary(term: string): GlossaryEntry | null {
@@ -101,7 +110,7 @@ export const sources: SourcesApi = {
     const direct = snapshot.stocks.get(text.toUpperCase());
     if (direct) return { ticker: direct.ticker, name: direct.name };
 
-    for (const [alias, ticker] of Object.entries(ALIASES)) {
+    for (const [alias, ticker] of Object.entries(aliases)) {
       if (lower.includes(alias)) {
         const stock = snapshot.stocks.get(ticker);
         if (stock) return { ticker: stock.ticker, name: stock.name };
@@ -109,7 +118,10 @@ export const sources: SourcesApi = {
     }
     return null;
   },
-};
+  };
+}
+
+export const sources: SourcesApi = createSources();
 
 export { loadSnapshot } from "./snapshot";
 

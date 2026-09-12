@@ -197,7 +197,7 @@ export async function* runThesis(
     }
 
     if (sourceRefs.length === 0) {
-      throw new Error("No sources found for this claim.");
+      throw new Error("We don't have verified coverage for this company or claim yet.");
     }
   });
 

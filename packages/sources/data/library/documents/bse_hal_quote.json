@@ -1,0 +1,6 @@
+{
+  "id":"bse_hal_quote","title":"HAL — BSE market data","publisher":"BSE","tier":"market_data",
+  "url":"https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=541154&seriesid=","pdfUrl":null,"publishedAt":"2026-09-12T16:59:15.166Z","tickers":["HAL"],"sectors":[],
+  "text":"BSE market-data response for HAL. Fetched at: 2026-09-12T16:59:15.166Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹4898.75; change -56.25; change percent -1.14; previous close ₹4955.00; open ₹4906.45; high ₹4930.00; low ₹4861.65.",
+  "chunks":[{"id":"bse_hal_quote_0","text":"BSE market-data response for HAL. Fetched at: 2026-09-12T16:59:15.166Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹4898.75; change -56.25; change percent -1.14; previous close ₹4955.00; open ₹4906.45; high ₹4930.00; low ₹4861.65."}]
+}

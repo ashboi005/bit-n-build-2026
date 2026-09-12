@@ -1,1126 +1,1113 @@
 {
-  "ticker": "HAL",
-  "bseCode": "541154",
-  "isin": "INE066F01020",
-  "name": "Hindustan Aeronautics Ltd",
-  "sector": "Defence",
-  "business": "Hindustan Aeronautics designs and builds aircraft, helicopters and aero-engines. Almost all of its work comes from Indian defence programmes.",
+  "ticker": "INFY",
+  "bseCode": "500209",
+  "isin": "INE009A01021",
+  "name": "Infosys Ltd",
+  "sector": "Unclassified",
+  "business": "This committed fallback covers the BSE-listed company named Infosys Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 4898.75,
-    "change": -56.25,
-    "changePct": -1.14,
-    "dayHigh": 4930,
-    "dayLow": 4861.65,
+    "last": 1038.2,
+    "change": 6.65,
+    "changePct": 0.64,
+    "dayHigh": 1047.5,
+    "dayLow": 1029.05,
     "week52High": null,
     "week52Low": null,
     "asOf": "2026-09-11T10:30:00.000Z",
-    "sourceId": "bse_hal_quote"
+    "sourceId": "bse_infy_market_data"
   },
   "metrics": [
     {
       "key": "previous_close",
       "label": "Previous close",
-      "value": 4955,
-      "display": "4,955 INR",
+      "value": 1031.55,
+      "display": "1,031.55 INR",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "bse_hal_quote"
+        "bse_infy_market_data"
       ]
     },
     {
       "key": "market_cap",
       "label": "Market capitalization",
-      "value": 328034,
-      "display": "3,28,034 Cr",
+      "value": 421123,
+      "display": "4,21,123 Cr",
       "unit": "INR crore",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     },
     {
       "key": "pe",
       "label": "P/E ratio",
-      "value": 35.2,
-      "display": "35.2",
+      "value": 13.5,
+      "display": "13.5",
       "unit": null,
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     },
     {
       "key": "book_value",
       "label": "Book value",
-      "value": 614,
-      "display": "614",
+      "value": 225,
+      "display": "225",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     },
     {
       "key": "roce",
       "label": "ROCE",
-      "value": 32,
-      "display": "32%",
+      "value": 40,
+      "display": "40%",
       "unit": "%",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     },
     {
       "key": "roe",
       "label": "ROE",
-      "value": 24,
-      "display": "24%",
+      "value": 31.9,
+      "display": "31.9%",
       "unit": "%",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     },
     {
       "key": "dividend_yield",
       "label": "Dividend yield",
-      "value": 0.92,
-      "display": "0.92%",
+      "value": 4.63,
+      "display": "4.63%",
       "unit": "%",
       "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
-        "screener_hal_fundamentals"
+        "screener_infy_fundamentals"
       ]
     }
   ],
   "history": [
     {
       "date": "2025-09-12",
-      "close": 4745.6
+      "close": 1525.6
     },
     {
       "date": "2025-09-15",
-      "close": 4795.2
+      "close": 1508.4
     },
     {
       "date": "2025-09-16",
-      "close": 4840
+      "close": 1511.3
     },
     {
       "date": "2025-09-17",
-      "close": 4890.2
+      "close": 1522.4
     },
     {
       "date": "2025-09-18",
-      "close": 4856.8
+      "close": 1540.6
     },
     {
       "date": "2025-09-19",
-      "close": 4916.2
+      "close": 1540.2
     },
     {
       "date": "2025-09-22",
-      "close": 4808.7
+      "close": 1499.5
     },
     {
       "date": "2025-09-23",
-      "close": 4799.9
+      "close": 1497.5
     },
     {
       "date": "2025-09-24",
-      "close": 4723.9
+      "close": 1494.6
     },
     {
       "date": "2025-09-25",
-      "close": 4775.2
+      "close": 1484.8
     },
     {
       "date": "2025-09-26",
-      "close": 4736.1
+      "close": 1448.9
     },
     {
       "date": "2025-09-29",
-      "close": 4740
+      "close": 1441.8
     },
     {
       "date": "2025-09-30",
-      "close": 4746.5
+      "close": 1441.8
     },
     {
       "date": "2025-10-01",
-      "close": 4803.4
+      "close": 1445.8
     },
     {
       "date": "2025-10-03",
-      "close": 4870.4
+      "close": 1446.6
     },
     {
       "date": "2025-10-06",
-      "close": 4845.2
+      "close": 1476
     },
     {
       "date": "2025-10-07",
-      "close": 4837.6
+      "close": 1458.5
     },
     {
       "date": "2025-10-08",
-      "close": 4789.1
+      "close": 1495
     },
     {
       "date": "2025-10-09",
-      "close": 4846.3
+      "close": 1509.3
     },
     {
       "date": "2025-10-10",
-      "close": 4832.9
+      "close": 1514.9
     },
     {
       "date": "2025-10-13",
-      "close": 4745.4
+      "close": 1493.2
     },
     {
       "date": "2025-10-14",
-      "close": 4746.8
+      "close": 1489.9
     },
     {
       "date": "2025-10-15",
-      "close": 4845.2
+      "close": 1474.4
     },
     {
       "date": "2025-10-16",
-      "close": 4861.3
+      "close": 1471.5
     },
     {
       "date": "2025-10-17",
-      "close": 4878.5
+      "close": 1441.1
     },
     {
       "date": "2025-10-20",
-      "close": 4860
+      "close": 1460.9
     },
     {
       "date": "2025-10-21",
-      "close": 4858.2
+      "close": 1472.4
     },
     {
       "date": "2025-10-23",
-      "close": 4810.2
+      "close": 1528.5
     },
     {
       "date": "2025-10-24",
-      "close": 4814.2
+      "close": 1525.4
     },
     {
       "date": "2025-10-27",
-      "close": 4756.8
+      "close": 1504.5
     },
     {
       "date": "2025-10-28",
-      "close": 4724.5
+      "close": 1500.2
     },
     {
       "date": "2025-10-29",
-      "close": 4695.1
+      "close": 1510.4
     },
     {
       "date": "2025-10-30",
-      "close": 4650.2
+      "close": 1493.8
     },
     {
       "date": "2025-10-31",
-      "close": 4679.8
+      "close": 1482.3
     },
     {
       "date": "2025-11-03",
-      "close": 4694.7
+      "close": 1485.5
     },
     {
       "date": "2025-11-04",
-      "close": 4685.8
+      "close": 1467.9
     },
     {
       "date": "2025-11-06",
-      "close": 4593.6
+      "close": 1466.7
     },
     {
       "date": "2025-11-07",
-      "close": 4626.6
+      "close": 1476.8
     },
     {
       "date": "2025-11-10",
-      "close": 4789.8
+      "close": 1513.5
     },
     {
       "date": "2025-11-11",
-      "close": 4862.6
+      "close": 1530.3
     },
     {
       "date": "2025-11-12",
-      "close": 4748.5
+      "close": 1551.7
     },
     {
       "date": "2025-11-13",
-      "close": 4751
+      "close": 1541.8
     },
     {
       "date": "2025-11-14",
-      "close": 4729.8
+      "close": 1502.8
     },
     {
       "date": "2025-11-17",
-      "close": 4795.2
+      "close": 1507.6
     },
     {
       "date": "2025-11-18",
-      "close": 4807.9
+      "close": 1486.4
     },
     {
       "date": "2025-11-19",
-      "close": 4744.2
+      "close": 1541.1
     },
     {
       "date": "2025-11-20",
-      "close": 4716.6
+      "close": 1536.5
     },
     {
       "date": "2025-11-21",
-      "close": 4595
+      "close": 1545
     },
     {
       "date": "2025-11-24",
-      "close": 4445.1
+      "close": 1548
     },
     {
       "date": "2025-11-25",
-      "close": 4441.6
+      "close": 1530.6
     },
     {
       "date": "2025-11-26",
-      "close": 4517.8
+      "close": 1557.9
     },
     {
       "date": "2025-11-27",
-      "close": 4483.2
+      "close": 1566.4
     },
     {
       "date": "2025-11-28",
-      "close": 4542.4
+      "close": 1560.1
     },
     {
       "date": "2025-12-01",
-      "close": 4530.7
+      "close": 1564
     },
     {
       "date": "2025-12-02",
-      "close": 4508.5
+      "close": 1561
     },
     {
       "date": "2025-12-03",
-      "close": 4436.3
+      "close": 1578.7
     },
     {
       "date": "2025-12-04",
-      "close": 4496.8
+      "close": 1597.6
     },
     {
       "date": "2025-12-05",
-      "close": 4443
+      "close": 1616.2
     },
     {
       "date": "2025-12-08",
-      "close": 4287.1
+      "close": 1610.8
     },
     {
       "date": "2025-12-09",
-      "close": 4303
+      "close": 1599
     },
     {
       "date": "2025-12-10",
-      "close": 4294.1
+      "close": 1584.8
     },
     {
       "date": "2025-12-11",
-      "close": 4320.8
+      "close": 1598
     },
     {
       "date": "2025-12-12",
-      "close": 4302.5
+      "close": 1598.2
     },
     {
       "date": "2025-12-15",
-      "close": 4321.6
+      "close": 1606.8
     },
     {
       "date": "2025-12-16",
-      "close": 4261.4
+      "close": 1592.9
     },
     {
       "date": "2025-12-17",
-      "close": 4228.4
+      "close": 1602
     },
     {
       "date": "2025-12-18",
-      "close": 4259.5
+      "close": 1626.8
     },
     {
       "date": "2025-12-19",
-      "close": 4305.3
+      "close": 1638.7
     },
     {
       "date": "2025-12-22",
-      "close": 4386.1
+      "close": 1689.6
     },
     {
       "date": "2025-12-23",
-      "close": 4407.4
+      "close": 1668.3
     },
     {
       "date": "2025-12-24",
-      "close": 4421.3
+      "close": 1663.4
     },
     {
       "date": "2025-12-26",
-      "close": 4409.2
+      "close": 1656.1
     },
     {
       "date": "2025-12-29",
-      "close": 4374.3
+      "close": 1644.7
     },
     {
       "date": "2025-12-30",
-      "close": 4325.5
+      "close": 1621.6
     },
     {
       "date": "2025-12-31",
-      "close": 4388.7
+      "close": 1615.4
     },
     {
       "date": "2026-01-01",
-      "close": 4397.9
+      "close": 1629.8
     },
     {
       "date": "2026-01-02",
-      "close": 4417.8
+      "close": 1640.4
     },
     {
       "date": "2026-01-05",
-      "close": 4526.1
+      "close": 1606.4
     },
     {
       "date": "2026-01-06",
-      "close": 4516
+      "close": 1612.2
     },
     {
       "date": "2026-01-07",
-      "close": 4525.1
+      "close": 1639
     },
     {
       "date": "2026-01-08",
-      "close": 4479.8
+      "close": 1613.3
     },
     {
       "date": "2026-01-09",
-      "close": 4462.1
+      "close": 1614.1
     },
     {
       "date": "2026-01-12",
-      "close": 4518.4
+      "close": 1595.9
     },
     {
       "date": "2026-01-13",
-      "close": 4452.4
+      "close": 1599
     },
     {
       "date": "2026-01-14",
-      "close": 4461.4
+      "close": 1599.8
     },
     {
       "date": "2026-01-16",
-      "close": 4428.7
+      "close": 1689.8
     },
     {
       "date": "2026-01-19",
-      "close": 4504.3
+      "close": 1681.2
     },
     {
       "date": "2026-01-20",
-      "close": 4355.2
+      "close": 1658.9
     },
     {
       "date": "2026-01-21",
-      "close": 4259.4
+      "close": 1654.4
     },
     {
       "date": "2026-01-22",
-      "close": 4353.2
+      "close": 1663.5
     },
     {
       "date": "2026-01-23",
-      "close": 4305.7
+      "close": 1670.8
     },
     {
       "date": "2026-01-27",
-      "close": 4348.5
+      "close": 1682.7
     },
     {
       "date": "2026-01-28",
-      "close": 4624
+      "close": 1666.5
     },
     {
       "date": "2026-01-29",
-      "close": 4601
+      "close": 1659.5
     },
     {
       "date": "2026-01-30",
-      "close": 4619.4
+      "close": 1641
     },
     {
       "date": "2026-02-01",
-      "close": 4376.9
+      "close": 1654.5
     },
     {
       "date": "2026-02-02",
-      "close": 4338.7
+      "close": 1629.4
     },
     {
       "date": "2026-02-03",
-      "close": 4470.4
+      "close": 1656
     },
     {
       "date": "2026-02-04",
-      "close": 4217.1
+      "close": 1535.8
     },
     {
       "date": "2026-02-05",
-      "close": 4035.5
+      "close": 1520.2
     },
     {
       "date": "2026-02-06",
-      "close": 4067.5
+      "close": 1507.1
     },
     {
       "date": "2026-02-09",
-      "close": 4131
+      "close": 1497.2
     },
     {
       "date": "2026-02-10",
-      "close": 4168.3
+      "close": 1497.8
     },
     {
       "date": "2026-02-11",
-      "close": 4133
+      "close": 1471.9
     },
     {
       "date": "2026-02-12",
-      "close": 4158.9
+      "close": 1386
     },
     {
       "date": "2026-02-13",
-      "close": 4212.4
+      "close": 1369.1
     },
     {
       "date": "2026-02-16",
-      "close": 4226.1
+      "close": 1365.6
     },
     {
       "date": "2026-02-17",
-      "close": 4247.6
+      "close": 1391.2
     },
     {
       "date": "2026-02-18",
-      "close": 4251.1
+      "close": 1373.7
     },
     {
       "date": "2026-02-19",
-      "close": 4132.6
+      "close": 1370.5
     },
     {
       "date": "2026-02-20",
-      "close": 4170
+      "close": 1353.2
     },
     {
       "date": "2026-02-23",
-      "close": 4025.4
+      "close": 1327.5
     },
     {
       "date": "2026-02-24",
-      "close": 3952.6
+      "close": 1275.5
     },
     {
       "date": "2026-02-25",
-      "close": 3985
+      "close": 1290.1
     },
     {
       "date": "2026-02-26",
-      "close": 4008.9
+      "close": 1289.1
     },
     {
       "date": "2026-02-27",
-      "close": 3913.2
+      "close": 1300.1
     },
     {
       "date": "2026-03-02",
-      "close": 3951.6
+      "close": 1288.9
     },
     {
       "date": "2026-03-04",
-      "close": 3876.8
+      "close": 1307.4
     },
     {
       "date": "2026-03-05",
-      "close": 3891.8
+      "close": 1305.8
     },
     {
       "date": "2026-03-06",
-      "close": 4023.7
+      "close": 1308.4
     },
     {
       "date": "2026-03-09",
-      "close": 3989.9
+      "close": 1315
     },
     {
       "date": "2026-03-10",
-      "close": 4040.1
+      "close": 1295.6
     },
     {
       "date": "2026-03-11",
-      "close": 4005.1
+      "close": 1276.3
     },
     {
       "date": "2026-03-12",
-      "close": 4013.5
+      "close": 1265.8
     },
     {
       "date": "2026-03-13",
-      "close": 3914.4
+      "close": 1248.3
     },
     {
       "date": "2026-03-16",
-      "close": 3913.1
+      "close": 1249.8
     },
     {
       "date": "2026-03-17",
-      "close": 3963.1
+      "close": 1232.9
     },
     {
       "date": "2026-03-18",
-      "close": 3961.6
+      "close": 1267.1
     },
     {
       "date": "2026-03-19",
-      "close": 3802.5
+      "close": 1220.8
     },
     {
       "date": "2026-03-20",
-      "close": 3782.4
+      "close": 1255.9
     },
     {
       "date": "2026-03-23",
-      "close": 3634.6
+      "close": 1256.8
     },
     {
       "date": "2026-03-24",
-      "close": 3654
+      "close": 1278.3
     },
     {
       "date": "2026-03-25",
-      "close": 3669.4
+      "close": 1279.1
     },
     {
       "date": "2026-03-27",
-      "close": 3588.6
+      "close": 1269.7
     },
     {
       "date": "2026-03-30",
-      "close": 3487.2
+      "close": 1250.6
     },
     {
       "date": "2026-04-01",
-      "close": 3670.8
+      "close": 1275.7
     },
     {
       "date": "2026-04-02",
-      "close": 3687
+      "close": 1300.8
     },
     {
       "date": "2026-04-06",
-      "close": 3752.1
+      "close": 1306.2
     },
     {
       "date": "2026-04-07",
-      "close": 3796.2
+      "close": 1339.4
     },
     {
       "date": "2026-04-08",
-      "close": 3907.5
+      "close": 1346.2
     },
     {
       "date": "2026-04-09",
-      "close": 4032.9
+      "close": 1331.6
     },
     {
       "date": "2026-04-10",
-      "close": 4112.2
+      "close": 1292.5
     },
     {
       "date": "2026-04-13",
-      "close": 4099.9
+      "close": 1276.8
     },
     {
       "date": "2026-04-15",
-      "close": 4239.2
+      "close": 1305.3
     },
     {
       "date": "2026-04-16",
-      "close": 4363.4
+      "close": 1319.2
     },
     {
       "date": "2026-04-17",
-      "close": 4388.1
+      "close": 1318.7
     },
     {
       "date": "2026-04-20",
-      "close": 4344.5
+      "close": 1312.6
     },
     {
       "date": "2026-04-21",
-      "close": 4358.4
+      "close": 1313.2
     },
     {
       "date": "2026-04-22",
-      "close": 4400.6
+      "close": 1268.6
     },
     {
       "date": "2026-04-23",
-      "close": 4352.5
+      "close": 1240.6
     },
     {
       "date": "2026-04-24",
-      "close": 4265.8
+      "close": 1154.6
     },
     {
       "date": "2026-04-27",
-      "close": 4310.3
+      "close": 1170.3
     },
     {
       "date": "2026-04-28",
-      "close": 4341.4
+      "close": 1152.1
     },
     {
       "date": "2026-04-29",
-      "close": 4351.6
+      "close": 1167.5
     },
     {
       "date": "2026-04-30",
-      "close": 4338.8
+      "close": 1181.8
     },
     {
       "date": "2026-05-04",
-      "close": 4559.5
+      "close": 1168.4
     },
     {
       "date": "2026-05-05",
-      "close": 4610.4
+      "close": 1178.1
     },
     {
       "date": "2026-05-06",
-      "close": 4626.9
+      "close": 1167.2
     },
     {
       "date": "2026-05-07",
-      "close": 4782.1
+      "close": 1162.7
     },
     {
       "date": "2026-05-08",
-      "close": 4788.1
+      "close": 1179.2
     },
     {
       "date": "2026-05-11",
-      "close": 4756.3
+      "close": 1177
     },
     {
       "date": "2026-05-12",
-      "close": 4572.5
+      "close": 1140.3
     },
     {
       "date": "2026-05-13",
-      "close": 4618.5
+      "close": 1123.1
     },
     {
       "date": "2026-05-14",
-      "close": 4608
+      "close": 1095
     },
     {
       "date": "2026-05-15",
-      "close": 4386.2
+      "close": 1119
     },
     {
       "date": "2026-05-18",
-      "close": 4326.5
+      "close": 1142.5
     },
     {
       "date": "2026-05-19",
-      "close": 4333.2
+      "close": 1196.9
     },
     {
       "date": "2026-05-20",
-      "close": 4326.5
+      "close": 1193.7
     },
     {
       "date": "2026-05-21",
-      "close": 4370.4
+      "close": 1181.2
     },
     {
       "date": "2026-05-22",
-      "close": 4368.4
+      "close": 1174.5
     },
     {
       "date": "2026-05-25",
-      "close": 4425.9
+      "close": 1168.5
     },
     {
       "date": "2026-05-26",
-      "close": 4427.7
+      "close": 1167.7
     },
     {
       "date": "2026-05-27",
-      "close": 4413
+      "close": 1159.9
     },
     {
       "date": "2026-05-29",
-      "close": 4303.8
+      "close": 1160.9
     },
     {
       "date": "2026-06-01",
-      "close": 4254.1
+      "close": 1202.5
     },
     {
       "date": "2026-06-02",
-      "close": 4278.5
+      "close": 1270.8
     },
     {
       "date": "2026-06-03",
-      "close": 4264.1
+      "close": 1222.6
     },
     {
       "date": "2026-06-04",
-      "close": 4191
+      "close": 1201.3
     },
     {
       "date": "2026-06-05",
-      "close": 4216.9
+      "close": 1197.5
     },
     {
       "date": "2026-06-08",
-      "close": 4238
+      "close": 1187.6
     },
     {
       "date": "2026-06-09",
-      "close": 4263.8
+      "close": 1180.3
     },
     {
       "date": "2026-06-10",
-      "close": 4219.2
+      "close": 1145.3
     },
     {
       "date": "2026-06-11",
-      "close": 4172.3
+      "close": 1114.6
     },
     {
       "date": "2026-06-12",
-      "close": 4192.3
+      "close": 1116.4
     },
     {
       "date": "2026-06-15",
-      "close": 4284.7
+      "close": 1134.9
     },
     {
       "date": "2026-06-16",
-      "close": 4255.8
+      "close": 1143.6
     },
     {
       "date": "2026-06-17",
-      "close": 4460.5
+      "close": 1157.7
     },
     {
       "date": "2026-06-18",
-      "close": 4411.5
+      "close": 1127.5
     },
     {
       "date": "2026-06-19",
-      "close": 4408.1
+      "close": 1051.4
     },
     {
       "date": "2026-06-22",
-      "close": 4515.2
+      "close": 1065.4
     },
     {
       "date": "2026-06-23",
-      "close": 4500.2
+      "close": 1029.3
     },
     {
       "date": "2026-06-24",
-      "close": 4368.9
+      "close": 1056.6
     },
     {
       "date": "2026-06-25",
-      "close": 4368.7
+      "close": 1041.2
     },
     {
       "date": "2026-06-29",
-      "close": 4342.8
+      "close": 1036.7
     },
     {
       "date": "2026-06-30",
-      "close": 4381.2
+      "close": 1000.4
     },
     {
       "date": "2026-07-01",
-      "close": 4434.4
+      "close": 985.3
     },
     {
       "date": "2026-07-02",
-      "close": 4434
+      "close": 1040.9
     },
     {
       "date": "2026-07-03",
-      "close": 4428.9
+      "close": 1047.2
     },
     {
       "date": "2026-07-06",
-      "close": 4440.6
+      "close": 1042.2
     },
     {
       "date": "2026-07-07",
-      "close": 4400.3
+      "close": 1071.8
     },
     {
       "date": "2026-07-08",
-      "close": 4364.7
+      "close": 1069.3
     },
     {
       "date": "2026-07-09",
-      "close": 4378.9
+      "close": 1050.8
     },
     {
       "date": "2026-07-10",
-      "close": 4506.8
+      "close": 1068
     },
     {
       "date": "2026-07-13",
-      "close": 4511.3
+      "close": 1102.6
     },
     {
       "date": "2026-07-14",
-      "close": 4442.4
+      "close": 1092.9
     },
     {
       "date": "2026-07-15",
-      "close": 4420.5
+      "close": 1076.3
     },
     {
       "date": "2026-07-16",
-      "close": 4433.8
+      "close": 1082.4
     },
     {
       "date": "2026-07-17",
-      "close": 4500.7
+      "close": 1096.5
     },
     {
       "date": "2026-07-20",
-      "close": 4491
+      "close": 1087.1
     },
     {
       "date": "2026-07-21",
-      "close": 4581.7
+      "close": 1073.5
     },
     {
       "date": "2026-07-22",
-      "close": 4574.8
+      "close": 1052.1
     },
     {
       "date": "2026-07-23",
-      "close": 4592.5
+      "close": 1047.4
     },
     {
       "date": "2026-07-24",
-      "close": 4573.4
+      "close": 1040.9
     },
     {
       "date": "2026-07-27",
-      "close": 4619
+      "close": 1079.2
     },
     {
       "date": "2026-07-28",
-      "close": 4600.1
+      "close": 1105.7
     },
     {
       "date": "2026-07-29",
-      "close": 4592
+      "close": 1155.6
     },
     {
       "date": "2026-07-30",
-      "close": 4581.4
+      "close": 1155.1
     },
     {
       "date": "2026-07-31",
-      "close": 4646.5
+      "close": 1130.1
     },
     {
       "date": "2026-08-03",
-      "close": 4690
+      "close": 1180
     },
     {
       "date": "2026-08-04",
-      "close": 4635
+      "close": 1167.5
     },
     {
       "date": "2026-08-05",
-      "close": 4645
+      "close": 1174
     },
     {
       "date": "2026-08-06",
-      "close": 4920
+      "close": 1165
     },
     {
       "date": "2026-08-07",
-      "close": 4910
+      "close": 1175.1
     },
     {
       "date": "2026-08-10",
-      "close": 4928
+      "close": 1183
     },
     {
       "date": "2026-08-11",
-      "close": 4909
+      "close": 1190.7
     },
     {
       "date": "2026-08-12",
-      "close": 4995
+      "close": 1176.1
     },
     {
       "date": "2026-08-13",
-      "close": 4945
+      "close": 1175
     },
     {
       "date": "2026-08-14",
-      "close": 5029.9
+      "close": 1169.2
     },
     {
       "date": "2026-08-17",
-      "close": 5059
+      "close": 1139.9
     },
     {
       "date": "2026-08-18",
-      "close": 5099
+      "close": 1115
     },
     {
       "date": "2026-08-19",
-      "close": 5017
+      "close": 1119.8
     },
     {
       "date": "2026-08-20",
-      "close": 4998
+      "close": 1130
     },
     {
       "date": "2026-08-21",
-      "close": 5000
+      "close": 1121
     },
     {
       "date": "2026-08-24",
-      "close": 4906
+      "close": 1130
     },
     {
       "date": "2026-08-25",
-      "close": 4900
+      "close": 1144
     },
     {
       "date": "2026-08-26",
-      "close": 4865.5
+      "close": 1120
     },
     {
       "date": "2026-08-27",
-      "close": 4899
+      "close": 1110.8
     },
     {
       "date": "2026-08-28",
-      "close": 4861.1
+      "close": 1144
     },
     {
       "date": "2026-08-31",
-      "close": 4801.6
+      "close": 1133.8
     },
     {
       "date": "2026-09-01",
-      "close": 4807.6
+      "close": 1156
     },
     {
       "date": "2026-09-02",
-      "close": 4780
+      "close": 1140
     },
     {
       "date": "2026-09-03",
-      "close": 4765.6
+      "close": 1130.3
     },
     {
       "date": "2026-09-04",
-      "close": 4856
+      "close": 1130
     },
     {
       "date": "2026-09-07",
-      "close": 4855.2
+      "close": 1087.5
     },
     {
       "date": "2026-09-08",
-      "close": 5031.1
+      "close": 1082
     },
     {
       "date": "2026-09-09",
-      "close": 5000.5
+      "close": 1035
     },
     {
       "date": "2026-09-10",
-      "close": 4950
+      "close": 1036.5
     },
     {
       "date": "2026-09-11",
-      "close": 4905
+      "close": 1037.7
     }
   ],
   "sectorMedians": {},
-  "risk": [
-    {
-      "key": "stability",
-      "label": "Business stability",
-      "level": "medium",
-      "reason": "A majority of its order book comes from domestic defence programmes.",
-      "sourceIds": [
-        "hal_q2_presentation"
-      ]
-    }
-  ],
+  "risk": [],
   "documentIds": [
-    "pib_budget_defence",
-    "hal_q2_presentation",
-    "bs_defence_priced_in",
-    "bse_hal_quote",
-    "screener_hal_fundamentals"
+    "bse_infy_market_data",
+    "screener_infy_fundamentals"
   ],
   "newsIds": []
 }
