@@ -1165,7 +1165,12 @@
   ],
   "documentIds": [
     "bse_suzlon_market_data",
-    "screener_suzlon_fundamentals"
+    "screener_suzlon_fundamentals",
+    "nse_suzlon_2026_08_15_shareholders_meeting",
+    "nse_suzlon_2026_09_08_bagging_receiving_of_orders_contracts",
+    "nse_suzlon_2026_09_11_shareholders_meeting",
+    "nse_suzlon_2026_08_25_bagging_receiving_of_orders_contracts",
+    "nse_suzlon_2026_09_04_appointment"
   ],
   "newsIds": []
 }

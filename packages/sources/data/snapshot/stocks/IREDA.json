@@ -1165,7 +1165,12 @@
   ],
   "documentIds": [
     "bse_ireda_market_data",
-    "screener_ireda_fundamentals"
+    "screener_ireda_fundamentals",
+    "nse_ireda_2026_09_02_updates",
+    "nse_ireda_2026_08_03_updates",
+    "nse_ireda_2026_07_23_general_updates",
+    "nse_ireda_2026_08_13_updates",
+    "nse_ireda_2026_08_22_record_date"
   ],
   "newsIds": []
 }

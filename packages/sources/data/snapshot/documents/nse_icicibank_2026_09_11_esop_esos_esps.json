@@ -1,0 +1,22 @@
+{
+  "id": "nse_icicibank_2026_09_11_esop_esos_esps",
+  "title": "ICICI Bank Ltd — ESOP/ESOS/ESPS",
+  "publisher": "ICICI Bank Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/ICICIBANK1_11092026101659_Lettertoexchange.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/ICICIBANK1_11092026101659_Lettertoexchange.pdf",
+  "publishedAt": "2026-09-11",
+  "tickers": [
+    "ICICIBANK"
+  ],
+  "sectors": [
+    "Banking"
+  ],
+  "text": "ICICI Bank Limited has informed the Exchange regarding Allotment of 336265 Shares.",
+  "chunks": [
+    {
+      "id": "nse_icicibank_2026_09_11_esop_esos_esps_0",
+      "text": "ICICI Bank Limited has informed the Exchange regarding Allotment of 336265 Shares."
+    }
+  ]
+}

@@ -1181,7 +1181,12 @@
   ],
   "documentIds": [
     "bse_powergrid_market_data",
-    "screener_powergrid_fundamentals"
+    "screener_powergrid_fundamentals",
+    "nse_powergrid_2026_09_02_general_updates",
+    "nse_powergrid_2026_09_03_general_updates",
+    "nse_powergrid_2026_08_31_change_in_management",
+    "nse_powergrid_2026_08_28_acquisition",
+    "nse_powergrid_2026_08_26_general_updates"
   ],
   "newsIds": []
 }

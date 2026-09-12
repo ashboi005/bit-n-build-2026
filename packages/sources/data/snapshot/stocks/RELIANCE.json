@@ -1190,7 +1190,13 @@
   ],
   "documentIds": [
     "bse_reliance_market_data",
-    "screener_reliance_fundamentals"
+    "screener_reliance_fundamentals",
+    "nse_reliance_2026_09_09_credit_rating",
+    "nse_reliance_2026_09_07_analysts_institutional_investor_meet_con_call_updates",
+    "nse_reliance_2026_09_10_updates",
+    "nse_reliance_2026_09_11_analysts_institutional_investor_meet_con_call_updates",
+    "nse_reliance_2026_09_05_other_restructuring",
+    "hindu_businessline_as_nse_reliance_jio_eye_listings_what_are_india_s_biggest_share_"
   ],
   "newsIds": []
 }

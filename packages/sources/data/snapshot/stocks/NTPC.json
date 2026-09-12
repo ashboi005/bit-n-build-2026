@@ -1190,7 +1190,13 @@
   ],
   "documentIds": [
     "bse_ntpc_market_data",
-    "screener_ntpc_fundamentals"
+    "screener_ntpc_fundamentals",
+    "nse_ntpc_2026_08_31_change_in_management",
+    "nse_ntpc_2026_08_27_shareholders_meeting",
+    "business_standard_ntpc_green_energy_adds_6_3_mw_capacity",
+    "nse_ntpc_2026_09_08_general_updates",
+    "nse_ntpc_2026_09_03_general_updates",
+    "nse_ntpc_2026_09_12_general_updates"
   ],
   "newsIds": []
 }

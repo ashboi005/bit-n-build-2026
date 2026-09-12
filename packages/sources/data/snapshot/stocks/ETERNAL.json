@@ -1165,7 +1165,12 @@
   ],
   "documentIds": [
     "bse_eternal_market_data",
-    "screener_eternal_fundamentals"
+    "screener_eternal_fundamentals",
+    "nse_eternal_2026_08_27_shareholders_meeting",
+    "nse_eternal_2026_07_30_general_updates",
+    "nse_eternal_2026_09_11_analysts_institutional_investor_meet_con_call_updates",
+    "nse_eternal_2026_09_03_general_updates",
+    "nse_eternal_2026_08_26_shareholders_meeting"
   ],
   "newsIds": []
 }

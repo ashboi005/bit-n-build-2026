@@ -1,0 +1,22 @@
+{
+  "id": "nse_itc_2026_08_14_esop_esos_esps",
+  "title": "ITC Ltd — ESOP/ESOS/ESPS",
+  "publisher": "ITC Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/ITC_14082026162931_StockExchangeletter.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/ITC_14082026162931_StockExchangeletter.pdf",
+  "publishedAt": "2026-08-14",
+  "tickers": [
+    "ITC"
+  ],
+  "sectors": [
+    "FMCG"
+  ],
+  "text": "ITC Limited has informed the Exchange regarding of 313800 Options.",
+  "chunks": [
+    {
+      "id": "nse_itc_2026_08_14_esop_esos_esps_0",
+      "text": "ITC Limited has informed the Exchange regarding of 313800 Options."
+    }
+  ]
+}

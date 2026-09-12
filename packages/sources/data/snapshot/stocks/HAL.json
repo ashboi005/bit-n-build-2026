@@ -1185,7 +1185,12 @@
     "bs_defence_priced_in",
     "bse_hal_quote",
     "screener_hal_fundamentals",
-    "screener_hal_snapshot_fundamentals"
+    "screener_hal_snapshot_fundamentals",
+    "nse_hal_2026_08_28_shareholders_meeting",
+    "nse_hal_2026_09_08_general_updates",
+    "nse_hal_2026_09_04_updates",
+    "nse_hal_2026_08_31_shareholders_meeting",
+    "nse_hal_2026_08_31_general_updates"
   ],
   "newsIds": []
 }

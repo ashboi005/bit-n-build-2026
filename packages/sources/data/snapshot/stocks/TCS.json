@@ -1172,7 +1172,12 @@
   ],
   "documentIds": [
     "bse_tcs_market_data",
-    "screener_tcs_fundamentals"
+    "screener_tcs_fundamentals",
+    "nse_tcs_2026_09_03_updates",
+    "nse_tcs_2026_09_09_updates",
+    "nse_tcs_2026_09_08_updates",
+    "nse_tcs_2026_09_05_general_updates",
+    "nse_tcs_2026_09_07_updates"
   ],
   "newsIds": []
 }

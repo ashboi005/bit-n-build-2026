@@ -1181,7 +1181,12 @@
   ],
   "documentIds": [
     "bse_bdl_market_data",
-    "screener_bdl_fundamentals"
+    "screener_bdl_fundamentals",
+    "nse_bdl_2026_08_21_change_in_management",
+    "nse_bdl_2026_08_26_updates",
+    "nse_bdl_2026_09_03_record_date",
+    "nse_bdl_2026_09_01_cessation",
+    "nse_bdl_2026_09_03_updates"
   ],
   "newsIds": []
 }

@@ -1165,7 +1165,12 @@
   ],
   "documentIds": [
     "bse_trent_market_data",
-    "screener_trent_fundamentals"
+    "screener_trent_fundamentals",
+    "nse_trent_2026_08_31_analysts_institutional_investor_meet_con_call_updates",
+    "nse_trent_2026_08_06_general_updates",
+    "nse_trent_2026_08_06_press_release",
+    "nse_trent_2026_09_11_press_release",
+    "nse_trent_2026_08_07_analysts_institutional_investor_meet_con_call_updates"
   ],
   "newsIds": []
 }
