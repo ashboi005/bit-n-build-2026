@@ -45,16 +45,27 @@ export interface Persona {
   decisions: PersonaDecision[];
   /** Onboarding answers, so the AI knows who it is talking to from the start. */
   onboarding: {
-    ageBand: string;
-    primaryGoal: string;
-    riskComfort: string;
-    experience: string;
-    monthlyBudget: number;
-    horizon: string;
+    ageBand: string | null;
+    primaryGoal: string | null;
+    riskComfort: string | null;
+    experience: string | null;
+    monthlyBudget: number | null;
+    horizon: string | null;
     notes: string | null;
   };
 }
 
+/**
+ * ⚠️ NEVER put a biographical claim in `notes`.
+ *
+ * This once read "My father trades occasionally and I want to understand what he
+ * does." Seeding writes it into the real `user_profile` row, so the assistant
+ * then told a live tester about a father who does not exist and a budget they
+ * never chose. Inventing facts about the user is the single worst failure this
+ * product can have — it is the exact opposite of what we promise.
+ *
+ * Keep notes to a stated preference, or null.
+ */
 const ONBOARDING_BASE = {
   ageBand: "25-34",
   primaryGoal: "learn_first",
@@ -62,7 +73,24 @@ const ONBOARDING_BASE = {
   experience: "never",
   monthlyBudget: 10000,
   horizon: "over_5y",
-  notes: "My father trades occasionally and I want to understand what he does.",
+  notes: null as string | null,
+};
+
+/**
+ * Day 0 is a genuine blank slate: no onboarding answers at all.
+ *
+ * Anything non-null here gets asserted back at whoever is using the app, so a
+ * "reset" that quietly installs opinions is worse than no reset. A real tester
+ * who hits Day 0 should find the assistant knows nothing about them.
+ */
+const ONBOARDING_BLANK = {
+  ageBand: null,
+  primaryGoal: null,
+  riskComfort: null,
+  experience: null,
+  monthlyBudget: null,
+  horizon: null,
+  notes: null,
 };
 
 export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
@@ -73,7 +101,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
     knownConcepts: [],
     pastTheses: [],
     decisions: [],
-    onboarding: { ...ONBOARDING_BASE, experience: "never" },
+    onboarding: ONBOARDING_BLANK,
   },
 
   /** Has had P/E explained once, and made one cautious purchase. */

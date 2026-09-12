@@ -151,7 +151,11 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
     monthlyBudget: persona.onboarding.monthlyBudget,
     horizon: persona.onboarding.horizon,
     notes: persona.onboarding.notes,
-    onboardedAt: new Date(now - persona.dayIndex * dayMs),
+    // Day 0 has no answers, so it must not look onboarded — otherwise the app
+    // skips onboarding and the assistant claims to know things it does not.
+    onboardedAt: persona.onboarding.experience
+      ? new Date(now - persona.dayIndex * dayMs)
+      : null,
   };
 
   await db
@@ -178,15 +182,21 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
     }));
 
     const o = persona.onboarding;
-    entries.push({
+    if (o.primaryGoal || o.horizon || o.riskComfort) entries.push({
       id: "onboarding",
       kind: "profile",
       tickers: [],
       text:
-        `Their goal: ${o.primaryGoal}. They may need the money: ${o.horizon}. ` +
-        `If down 20% they would: ${o.riskComfort}. Experience: ${o.experience}. ` +
-        `About ₹${o.monthlyBudget} a month to invest.` +
-        (o.notes ? ` In their words: ${o.notes}` : ""),
+        [
+          o.primaryGoal && `Their goal: ${o.primaryGoal}`,
+          o.horizon && `They may need the money: ${o.horizon}`,
+          o.riskComfort && `If down 20% they would: ${o.riskComfort}`,
+          o.experience && `Experience: ${o.experience}`,
+          o.monthlyBudget && `About ₹${o.monthlyBudget} a month to invest`,
+          o.notes && `In their words: ${o.notes}`,
+        ]
+          .filter(Boolean)
+          .join(". "),
     });
 
     if (entries.length) await retriever.indexPersonal(userId, entries);
