@@ -24,7 +24,8 @@
     "react-dom": "catalog:",
     "sonner": "catalog:",
     "varlock": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "motion": "^12.0.0"
   },
   "devDependencies": {
     "@bit-n-build-2026/config": "workspace:*",
