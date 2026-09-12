@@ -96,6 +96,19 @@ Two notes:
 - **`skeleton` matters a lot to you.** Every pending stage on the thesis screen is a skeleton.
 - `message`/`bubble`/`message-scroller` exist, but **the thesis screen is not a chat UI.** It's a report that builds itself. Resist the pull toward chat bubbles.
 
+### `@bit-n-build-2026/contracts` — already wired up for you
+
+Every type in §8, the event reducer, and the mock generator are installed and
+importable right now:
+
+```ts
+import { initialThesisState, reduceThesis, STAGE_LABELS } from "@bit-n-build-2026/contracts";
+import type { ThesisEvent, SourceRef, Finding, Metric } from "@bit-n-build-2026/contracts";
+import { mockThesisRun, MOCK_EXAMPLE_QUERIES } from "@bit-n-build-2026/contracts/mock";
+```
+
+Nothing to install. `bun install` has already been run.
+
 ### Need a component that doesn't exist?
 The kit is shadcn-based. Add one with:
 ```bash
@@ -232,8 +245,8 @@ The reducer is **the only place in your app that knows events exist.** Every com
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import type { ThesisEvent, StageId, /* ... */ } from "@bit-n-build-2026/contracts";
-import { mockThesisRun } from "@bit-n-build-2026/contracts/mock";
+import { initialThesisState, reduceThesis } from "@bit-n-build-2026/contracts";
+import { mockThesisRun, pickScenario } from "@bit-n-build-2026/contracts/mock";
 import { streamThesis } from "@/lib/thesis-client";
 
 // ⬇️ FLIP THIS ONE LINE when Ashwath's backend is ready
@@ -242,17 +255,17 @@ const USE_MOCK = true;
 const MIN_STAGE_MS = 450;   // see the pacing note below
 
 export function useThesisRun() {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(initialThesisState);
   const abortRef = useRef<AbortController>(null);
 
   const run = useCallback(async (query: string) => {
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
-    setState({ ...initialState, status: "running" });
+    setState({ ...initialThesisState(), status: "running" });
 
     const source = USE_MOCK
-      ? mockThesisRun("hal_defense", "new")
+      ? mockThesisRun(pickScenario(query), "new")   // picks the right demo scenario from the text
       : streamThesis(query, ac.signal);
 
     let last = Date.now();
@@ -264,7 +277,7 @@ export function useThesisRun() {
           await new Promise((r) => setTimeout(r, MIN_STAGE_MS - elapsed));
         }
         last = Date.now();
-        setState((s) => reduce(s, event));
+        setState((s) => reduceThesis(s, event));   // reducer ships in contracts
       }
     } catch (err) {
       if (!ac.signal.aborted) setState((s) => ({ ...s, status: "failed" }));
@@ -280,6 +293,9 @@ export function useThesisRun() {
 If the backend streams faster than ~250ms between events, **slow it down.** A 1.5-second investigation reads as "cached and fake." A 6–8 second one you can *watch reason* reads as real work.
 
 Keep `MIN_STAGE_MS` as a named constant so you can tune it live during the demo rehearsal. This is not a hack — pacing is part of the product.
+
+> ✅ **You do not write the reducer.** `reduceThesis` and `initialThesisState` are already
+> written, typed and tested in `@bit-n-build-2026/contracts`. Just call them.
 
 ### The state shape every component reads
 
@@ -392,13 +408,23 @@ type ThesisEvent =
 ### The mock
 
 ```ts
-import { mockThesisRun } from "@bit-n-build-2026/contracts/mock";
+import {
+  mockThesisRun,          // the stream
+  pickScenario,           // free text -> scenario, so the input routes itself
+  MOCK_EXAMPLE_QUERIES,   // the 3 example chips, ready to render
+  collectMockRun,         // whole run as an array, for static previews
+} from "@bit-n-build-2026/contracts/mock";
 
 mockThesisRun(
   scenario: 'hal_defense' | 'instagram_hype' | 'ipo_gmp',
   level: Level,
-): AsyncIterable<ThesisEvent>
+  opts?: { speed?: number },   // speed: 2 = twice as fast, handy while iterating
+): AsyncGenerator<ThesisEvent>
 ```
+
+All three scenarios are verified end to end: 35–41 events each, all 8 stages complete,
+a verdict, and **zero unsourced findings**. Levels really do differ — the `new`
+explanation of P/E is 208 characters, the `independent` one is 31.
 
 Realistic delays baked in. **Start here today, before the backend exists.** All three scenarios are also our demo scripts — so building against them is literally building the demo.
 
@@ -476,10 +502,10 @@ Do these in order. One chat per task, or at least one clear message per task.
 > Create `apps/web/src/components/thesis/stage-card.tsx`. Props: `title`, `status` ('pending' | 'running' | 'done' | 'failed'), and children. Pending renders a Skeleton from `@bit-n-build-2026/ui/components/skeleton`. Running shows an animated indicator. Done shows the children with a check. Failed shows the message but keeps the card visible — never blank the screen. Use `motion` from the `motion` package so content fades and slides up slightly as it appears.
 
 **Task 4 — the hook**
-> Create `apps/web/src/hooks/use-thesis-run.ts` following §7 of `docs/handoff-frontend.md` exactly, including the `MIN_STAGE_MS` pacing and the `USE_MOCK` flag. Write the full reducer handling every `ThesisEvent` variant into the state shape described at the end of §7.
+> Create `apps/web/src/hooks/use-thesis-run.ts` following §7 of `docs/handoff-frontend.md` exactly, including the `MIN_STAGE_MS` pacing and the `USE_MOCK` flag. Do NOT write a reducer — import `reduceThesis` and `initialThesisState` from `@bit-n-build-2026/contracts`, they already exist. Also create `apps/web/src/lib/thesis-client.ts` exactly as shown in §7.
 
 **Task 5 — the input**
-> Create `apps/web/src/components/thesis/thesis-input.tsx`. A large textarea with the placeholder "Government increased defense spending, so I want to buy HAL", a submit button, and three clickable example chips using the exact example theses in §11 of the handoff doc. Plain `useState` — do not use @tanstack/react-form. On submit, call an `onSubmit(query)` prop.
+> Create `apps/web/src/components/thesis/thesis-input.tsx`. A large textarea with the placeholder "Government increased defense spending, so I want to buy HAL", a submit button, and three clickable example chips rendered from `MOCK_EXAMPLE_QUERIES` exported by `@bit-n-build-2026/contracts/mock`. Plain `useState` — do not use @tanstack/react-form. On submit, call an `onSubmit(query)` prop.
 
 **Task 6 — the page**
 > Create `apps/web/src/app/thesis/page.tsx`. Wire `ThesisInput` to `useThesisRun`. Before a run, show the input centred and large. After submit, collapse the input to a compact header and render the stage timeline below using StageCard, following the ASCII layout in §11. Build the remaining stage components as separate files under `components/thesis/`.

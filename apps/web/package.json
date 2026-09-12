@@ -10,6 +10,7 @@
     "env:generate": "varlock codegen"
   },
   "dependencies": {
+    "@bit-n-build-2026/contracts": "workspace:*",
     "@bit-n-build-2026/ui": "workspace:*",
     "@swc/helpers": "^0.5.23",
     "@tanstack/react-form": "^1.33.5",

@@ -18,6 +18,7 @@
       "name": "server",
       "dependencies": {
         "@bit-n-build-2026/auth": "workspace:*",
+        "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/db": "workspace:*",
         "@elysiajs/cors": "^1.4.2",
         "@sinclair/typebox": "^0.34.52",
@@ -37,6 +38,7 @@
       "name": "web",
       "version": "0.1.0",
       "dependencies": {
+        "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/ui": "workspace:*",
         "@swc/helpers": "^0.5.23",
         "@tanstack/react-form": "^1.33.5",
@@ -77,6 +79,14 @@
     "packages/config": {
       "name": "@bit-n-build-2026/config",
       "version": "0.0.0",
+    },
+    "packages/contracts": {
+      "name": "@bit-n-build-2026/contracts",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@bit-n-build-2026/config": "workspace:*",
+        "typescript": "catalog:",
+      },
     },
     "packages/db": {
       "name": "@bit-n-build-2026/db",
@@ -224,6 +234,8 @@
     "@bit-n-build-2026/auth": ["@bit-n-build-2026/auth@workspace:packages/auth"],
 
     "@bit-n-build-2026/config": ["@bit-n-build-2026/config@workspace:packages/config"],
+
+    "@bit-n-build-2026/contracts": ["@bit-n-build-2026/contracts@workspace:packages/contracts"],
 
     "@bit-n-build-2026/db": ["@bit-n-build-2026/db@workspace:packages/db"],
 

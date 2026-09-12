@@ -21,7 +21,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@bit-n-build-2026/ui/*": ["../../packages/ui/src/*"]
+      "@bit-n-build-2026/ui/*": ["../../packages/ui/src/*"],
+      "@bit-n-build-2026/contracts": ["../../packages/contracts/src/index.ts"],
+      "@bit-n-build-2026/contracts/*": ["../../packages/contracts/src/*"]
     }
   },
   "include": [
