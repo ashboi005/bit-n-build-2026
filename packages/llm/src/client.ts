@@ -118,11 +118,22 @@ export function createLlm(env: LlmConfig) {
     );
 
     const json = (await res.json()) as {
-      choices?: { message?: { content?: string } }[];
+      model?: string;
+      choices?: { message?: { content?: string | null }; finish_reason?: string }[];
     };
-    const content = json.choices?.[0]?.message?.content;
-    if (typeof content !== "string") {
-      throw new LlmError("No content in response", res.status, JSON.stringify(json).slice(0, 500));
+    const choice = json.choices?.[0];
+    const content = choice?.message?.content;
+
+    if (typeof content !== "string" || content === "") {
+      // Reasoning models can spend the whole budget on an internal `thinking`
+      // field and return null content. Say so plainly — a silent "" would show
+      // up as a blank explanation on screen with no clue why.
+      throw new LlmError(
+        `Empty content from ${json.model ?? "unknown model"} ` +
+          `(finish_reason: ${choice?.finish_reason ?? "none"}). ` +
+          `If this is a reasoning model, raise max_tokens or use a non-reasoning one.`,
+        res.status,
+      );
     }
     return content;
   }

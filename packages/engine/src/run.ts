@@ -256,7 +256,7 @@ export async function* runThesis(
               },
             ],
             model: fastModel,
-            maxTokens: 120,
+            maxTokens: 200,
             temperature: 0.3,
             signal: opts.signal,
           });
