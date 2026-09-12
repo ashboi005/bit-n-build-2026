@@ -1,0 +1,22 @@
+{
+  "id": "bse_hal_quote",
+  "title": "HAL - market data snapshot",
+  "publisher": "BSE",
+  "tier": "market_data",
+  "url": "https://www.bseindia.com/",
+  "pdfUrl": null,
+  "publishedAt": "2026-09-11",
+  "tickers": [
+    "HAL"
+  ],
+  "sectors": [
+    "defence"
+  ],
+  "text": "Last traded price, 52-week range and valuation ratios as of close.",
+  "chunks": [
+    {
+      "id": "bse_hal_quote_0",
+      "text": "Last traded price, 52-week range and valuation ratios as of close."
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "ticker": "HAL",
+  "bseCode": "541154",
+  "isin": "INE066F01020",
+  "name": "Hindustan Aeronautics Ltd",
+  "sector": "Defence",
+  "business": "Hindustan Aeronautics designs and builds aircraft, helicopters and aero-engines. Almost all of its work comes from Indian defence programmes.",
+  "price": {
+    "last": 2104.5,
+    "change": 12.3,
+    "changePct": 0.59,
+    "dayHigh": 2128,
+    "dayLow": 2081,
+    "week52High": 2310,
+    "week52Low": 1420,
+    "asOf": "2026-09-11T10:00:00.000Z",
+    "sourceId": "bse_hal_quote"
+  },
+  "metrics": [
+    {
+      "key": "pe",
+      "label": "P/E ratio",
+      "value": 28.4,
+      "display": "28.4",
+      "unit": null,
+      "sectorMedian": 19.2,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 62.5,
+      "display": "₹62.50",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "normal",
+      "explanation": "",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹1,420 – ₹2,310",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 0.12,
+      "display": "0.12",
+      "unit": null,
+      "sectorMedian": 0.35,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    }
+  ],
+  "history": [],
+  "sectorMedians": {
+    "pe": 19.2,
+    "debt_to_equity": 0.35
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "high",
+      "reason": "The share has moved across a wide range over the past year.",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "debt",
+      "label": "Debt",
+      "level": "low",
+      "reason": "Carries very little debt compared with peers.",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "high",
+      "reason": "Trades well above the defence sector's median price-to-earnings ratio.",
+      "sourceIds": [
+        "bse_hal_quote"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business stability",
+      "level": "medium",
+      "reason": "Revenue depends heavily on government defence programmes.",
+      "sourceIds": [
+        "hal_q2_presentation"
+      ]
+    }
+  ],
+  "documentIds": [
+    "pib_budget_defence",
+    "hal_q2_presentation",
+    "bs_defence_priced_in",
+    "bse_hal_quote"
+  ],
+  "newsIds": []
+}

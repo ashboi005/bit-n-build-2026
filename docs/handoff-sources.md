@@ -165,7 +165,103 @@ No key, no headers. Returns `PE`, `P_C`, `BV`, `MKTCAP`, 52W high/low, price. Go
 
 ---
 
-## 5. What you actually ship
+## 5. Your scaffold — it already exists, go fill it in
+
+`packages/sources` is scaffolded and type-checks. **You are not starting from a
+blank page.** Here is what's there and what you do to each file.
+
+```
+packages/sources/
+  src/
+    verify-endpoints.ts   ✅ DONE — RUN THIS FIRST (see below)
+    http.ts               ✅ DONE — caching, rate limiting, per-host headers
+    cache.ts              ✅ DONE — disk cache, so we never get rate-limited
+    snapshot.ts           ✅ DONE — loads the committed snapshot
+    index.ts              ✅ DONE — the SourcesApi the engine calls
+    fetchers/
+      bse.ts              🟡 mostly done — scrip master, quote, announcements
+      screener.ts         🟡 search + price history done; fundamentals regex = YOUR JOB
+      nse.ts              ✅ DONE — announcements, NIFTY list, bhavcopy
+      rss.ts              ✅ DONE — SEBI/RBI/PIB + 4 news feeds, parsed
+    build-snapshot.ts     🔴 YOUR MAIN JOB — 4 steps, each marked TODO
+  data/snapshot/
+    _TEMPLATE.stock.json     ← copy this per company
+    _TEMPLATE.document.json  ← copy this per document
+    stocks/HAL.json          ✅ seeded, use as a worked example
+    documents/*.json         ✅ 4 seeded
+    glossary.json            ✅ 8 terms done, add ~17 more
+```
+
+### Step 0 — before anything else, run this
+
+```bash
+bun run --filter @bit-n-build-2026/sources verify:endpoints
+```
+
+Hits all 11 endpoints and prints which work **today**. These are undocumented and
+two previously well-documented ones are already dead. 30 seconds now saves you an
+hour at 3am. Anything red: don't fight it, use the snapshot, move on.
+
+### Step 1 — hand-write the demo-critical files FIRST
+
+Before writing any fetching code. Copy `_TEMPLATE.stock.json` and fill in BEL and
+BDL by reading screener.in in your browser. Copy `_TEMPLATE.document.json` for the
+PIB budget document and the "already priced in" article.
+
+**Commit that.** At that point the demo works and nobody is blocked on you, ever.
+Everything after this is upgrade.
+
+### Step 2 — then automate, in `build-snapshot.ts`
+
+Four steps, each independent, each marked `TODO(tushar)`. Commit after each.
+
+1. `step1_symbolMap` — ✅ already written. BSE scrip master → ticker/ISIN/BSE-code map
+2. `step2_stocks` — screener fundamentals + price history + BSE quote per ticker
+3. `step3_officialDocs` — the citation moat. **Highest value step in the file.**
+   NSE `attchmntText` gives you official filing text already in plain English
+4. `step4_news` — publisher RSS, filtered to covered tickers
+
+### The rules baked into the scaffold
+
+- **`writeIfAbsent` never clobbers a hand-written file.** A failed fetch can't
+  destroy your work.
+- **Every request goes through `http.ts`** — it caches to disk and rate-limits
+  screener.in to 1 req/sec. Don't bypass it.
+- **BSE needs `Referer` + `Origin`** or it 301s to an HTML page and you get a
+  silent wrong answer. Already handled; the fetchers assert on response shape.
+- **Never guess a number.** `null` renders as an honest dash. A guessed figure
+  breaks the one promise the whole product is built on.
+
+### Prompts you can paste to your AI
+
+Start each with: *"Read `docs/handoff-sources.md` and the existing files in
+`packages/sources/src/`. Follow the existing patterns exactly — use `getJson`/
+`getText` from `http.ts`, never raw fetch."*
+
+1. > Implement `fetchFundamentals` in `packages/sources/src/fetchers/screener.ts`.
+   > It fetches the company page HTML (already wired) and extracts Market Cap,
+   > Stock P/E, Book Value, ROCE, ROE and Dividend Yield from the ratios list at
+   > the top using regex. Return `null` for anything not found — never guess.
+   > Add a small test that runs it against RELIANCE and prints the result.
+
+2. > Implement `step2_stocks` in `build-snapshot.ts`. For each ticker in COVERED:
+   > screener `searchCompany` for the id, `fetchFundamentals`, `fetchPriceHistory`,
+   > and BSE `fetchQuote` using the bseCode from the symbol map. Assemble a
+   > `StockRecord` matching `_TEMPLATE.stock.json` and call `writeIfAbsent`.
+   > Leave `business` and the risk `reason` fields as TODO strings — those are
+   > hand-written.
+
+3. > Implement `step3_officialDocs`. For each covered ticker call NSE
+   > `fetchAnnouncements`, convert each into a `SourceDocument` with tier
+   > "filing", using `attchmntText` as `text` and `attchmntFile` as `pdfUrl`.
+   > Chunk `text` into ~500-token pieces. Also filter the SEBI/RBI/PIB feeds to
+   > items mentioning our sectors and write those with tier "official".
+
+---
+
+## 6. What the data has to look like
+
+### Reference: schemas
 
 ### 5.1 The snapshot — hour 1
 
@@ -282,7 +378,7 @@ This is pure content work and needs zero code — **good task to hand the PM** i
 
 ---
 
-## 6. Suggested first 90 minutes
+## 7. Suggested first 90 minutes
 
 1. BSE `ListofScripData` once → ISIN ↔ BSE code ↔ NSE symbol table.
 2. Hand-pick the 20 tickers. Commit `index.json` immediately.
@@ -295,7 +391,7 @@ This is pure content work and needs zero code — **good task to hand the PM** i
 
 ---
 
-## 7. Two warnings
+## 8. Two warnings
 
 1. **These endpoints are undocumented and change without notice.** BSE's `ComprehensiveInd` and NSE's `equity-stockIndices` were working in widely-cited guides and are dead today. **Re-verify each URL at the start of the build** rather than trusting this document — and wrap every fetch in try/catch with a cached fallback. A live fetcher that fails must fall back to the snapshot silently, never crash a stage.
 2. **Cache everything to disk on first fetch.** During development we'll hit these endpoints hundreds of times. Don't get us rate-limited on screener.in the hour before judging.

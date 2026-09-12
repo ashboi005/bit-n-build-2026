@@ -1,0 +1,26 @@
+{
+  "_README": "COPY THIS to documents/<id>.json. One file per filing, announcement, government release or article. This is what the AI cites — the snippet shown on screen comes from chunks[].text, so make the text accurate and quotable.",
+
+  "_id": "lowercase_with_underscores, must match the filename",
+  "id": "pib_defence_budget_2026",
+
+  "title": "Union Budget 2026-27: Defence allocation raised",
+  "publisher": "PIB",
+
+  "_tier": "official = PIB/SEBI/RBI/Budget/exchange circulars | filing = company announcements, results, investor presentations | press = ET/Mint/BS/BusinessLine/Moneycontrol | market_data = prices, ratios, bhavcopy, screener | social = social media. We ingest social ONLY so the AI can argue against it, never as evidence.",
+  "tier": "official",
+
+  "url": "https://www.pib.gov.in/...",
+  "pdfUrl": null,
+  "publishedAt": "2026-02-01",
+
+  "_tickers": "Which of our covered companies this touches. Drives retrieval — get this right or the document will never be found.",
+  "tickers": ["HAL", "BEL"],
+  "sectors": ["defence"],
+
+  "_text": "Full plain text. For NSE/BSE announcements, attchmntText gives you this directly — no PDF parsing needed.",
+  "text": "Full plain text of the document goes here.",
+
+  "_chunks": "Split text into ~500-token pieces. For short documents, one chunk holding the whole text is fine. chunk.text is what gets embedded AND what the user sees as the quoted snippet.",
+  "chunks": [{ "id": "pib_defence_budget_2026_0", "text": "The quotable sentence goes here." }]
+}

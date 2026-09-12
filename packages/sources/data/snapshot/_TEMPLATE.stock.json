@@ -1,0 +1,60 @@
+{
+  "_README": "COPY THIS to stocks/<TICKER>.json and fill it in. Delete these _ fields. Every number must come from a real source — if you cannot find one, use null. A null renders as an honest dash in the UI; a guessed number breaks the entire product promise.",
+
+  "ticker": "BEL",
+  "bseCode": "500049",
+  "isin": "INE263A01024",
+  "name": "Bharat Electronics Ltd",
+  "sector": "Defence",
+
+  "_business": "TWO plain sentences. No jargon. Write it as if explaining to someone who has never bought a share. Hand-write this — do not paste the company's own marketing copy.",
+  "business": "Bharat Electronics makes radar, communications and electronic warfare systems. Most of its customers are Indian defence services.",
+
+  "_price": "sourceId must match a file in documents/. Usually your BSE market-data doc.",
+  "price": {
+    "last": 0,
+    "change": 0,
+    "changePct": 0,
+    "dayHigh": null,
+    "dayLow": null,
+    "week52High": null,
+    "week52Low": null,
+    "asOf": "2026-09-11T10:00:00.000Z",
+    "sourceId": "bse_bel_quote"
+  },
+
+  "_metrics": "key must be one of: pe, eps, market_cap, book_value, debt_to_equity, roe, roce, dividend_yield, promoter_holding, week52_range. Leave explanation as \"\" — the AI writes it at the user's level at runtime. direction is high|low|normal|unknown compared to sectorMedian.",
+  "metrics": [
+    {
+      "key": "pe",
+      "label": "P/E ratio",
+      "value": 0,
+      "display": "0.0",
+      "unit": null,
+      "sectorMedian": 19.2,
+      "direction": "normal",
+      "explanation": "",
+      "sourceIds": ["bse_bel_quote"]
+    }
+  ],
+
+  "_history": "Daily closes, 1 year is plenty. From screener.in chart API. Can be [] initially.",
+  "history": [],
+
+  "_sectorMedians": "Needed for every 'compared to its sector' line in the product. Compute across the stocks you have in the same sector.",
+  "sectorMedians": { "pe": 19.2, "debt_to_equity": 0.35 },
+
+  "_risk": "NEVER a bare level. Every row needs a plain-English reason AND sources. key must be one of: volatility, debt, valuation, stability.",
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "medium",
+      "reason": "Write the actual reason here, in one sentence.",
+      "sourceIds": ["bse_bel_quote"]
+    }
+  ],
+
+  "documentIds": [],
+  "newsIds": []
+}
