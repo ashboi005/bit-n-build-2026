@@ -44,9 +44,9 @@ export function ComparePicker() {
     }
     
     if (newTickers.length > 0) {
-      router.replace(`/compare?tickers=${newTickers.join(",")}`);
+      router.replace(`/compare?tickers=${newTickers.join(",")}` as any);
     } else {
-      router.replace(`/compare`);
+      router.replace(`/compare` as any);
     }
   };
 

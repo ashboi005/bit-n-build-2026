@@ -120,11 +120,11 @@ export function CompareChart({ records }: CompareChartProps) {
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                 color: 'var(--foreground)'
               }}
-              formatter={(value: number, name: string) => [
+              formatter={(value: any, name: any) => [
                 <span key={name} className="font-mono font-medium">{value > 0 ? '+' : ''}{value}%</span>,
                 <span key={name+"_label"} className="font-semibold">{name}</span>
               ]}
-              labelFormatter={(label) => new Date(label).toLocaleDateString('en-US', { 
+              labelFormatter={(label: any) => new Date(label).toLocaleDateString('en-US', { 
                 month: 'long', day: 'numeric', year: 'numeric' 
               })}
             />
