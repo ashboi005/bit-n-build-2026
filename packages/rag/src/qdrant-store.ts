@@ -144,6 +144,13 @@ export function createQdrantStore(config: QdrantConfig): VectorStore {
       await call(`/collections/${collection}`, { method: "DELETE" });
       await ensureCollection();
     },
+
+    async deleteOwner(owner: string) {
+      await call(`/collections/${collection}/points/delete?wait=true`, {
+        method: "POST",
+        body: JSON.stringify({ filter: { must: [{ key: "owner", match: { value: owner } }] } }),
+      });
+    },
   };
 }
 

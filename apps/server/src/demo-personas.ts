@@ -1,69 +1,116 @@
 /**
  * The Time Machine.
  *
- * Four snapshots of the same user at different points in their learning. Hitting
- * a button reseeds the profile, and re-running the same thesis produces visibly
- * different output — which is how personalisation becomes something a judge can
- * see in four seconds instead of something we claim.
- */
-
-import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
-
-/**
- * What this user would plausibly ask at each stage. The UI prefills it.
+ * Four snapshots of the same person at different points in their learning.
+ * Seeding a stage rewrites that user's state so the next investigation or chat
+ * genuinely behaves like day 0, 5, 15 or 25 — the pipeline itself is untouched.
  *
- * ⚠️ These are questions, not answers. The pipeline runs for real every time —
- * nothing here is a canned response. See docs/demo.md.
+ * ⚠️ Personas define DECISIONS, not holdings. The portfolio is derived from
+ * decisions everywhere else in the product, so if a persona listed holdings
+ * separately the two could disagree — and a demo where the profile says "3
+ * positions" while the portfolio says "you hold nothing" is worse than no demo.
  */
-export const DEMO_PROMPTS: Record<DemoStage, string> = {
-  day0: "Government increased defense spending, so I want to buy HAL",
-  day5: "Everyone on Instagram is saying this stock will explode",
-  day15: "Defence spending is up, so HAL should benefit",
-  day25: "HAL's P/E looks high against the sector — is the order book enough to justify it?",
+
+import type { DecisionAction, DemoStage, PastThesis, UserProfile } from "@bit-n-build-2026/contracts";
+
+export interface PersonaDecision {
+  ticker: string;
+  companyName: string;
+  action: DecisionAction;
+  quantity: number | null;
+  pricePerShare: number | null;
+  thesis: string | null;
+  reasoning: string | null;
+  outcome: "held_up" | "broke" | "unresolved";
+  outcomeNote: string | null;
+  /** How long before "today" this happened. Dates are computed at seed time. */
+  daysAgo: number;
+}
+
+export interface Persona {
+  dayIndex: number;
+  level: UserProfile["level"];
+  knownConcepts: string[];
+  pastTheses: PastThesis[];
+  decisions: PersonaDecision[];
+  /** Onboarding answers, so the AI knows who it is talking to from the start. */
+  onboarding: {
+    ageBand: string;
+    primaryGoal: string;
+    riskComfort: string;
+    experience: string;
+    monthlyBudget: number;
+    horizon: string;
+    notes: string | null;
+  };
+}
+
+const ONBOARDING_BASE = {
+  ageBand: "25-34",
+  primaryGoal: "learn_first",
+  riskComfort: "worry_hold",
+  experience: "never",
+  monthlyBudget: 10000,
+  horizon: "over_5y",
+  notes: "My father trades occasionally and I want to understand what he does.",
 };
 
-export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
+export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
+  /** Knows nothing, holds nothing. Every explanation starts from scratch. */
   day0: {
+    dayIndex: 0,
     level: "new",
     knownConcepts: [],
-    holdings: [],
     pastTheses: [],
-    startedAt: "2026-09-12",
-    dayIndex: 0,
+    decisions: [],
+    onboarding: { ...ONBOARDING_BASE, experience: "never" },
   },
 
+  /** Has had P/E explained once, and made one cautious purchase. */
   day5: {
+    dayIndex: 5,
     level: "learning",
     knownConcepts: ["pe"],
-    holdings: [
-      { ticker: "ITC", name: "ITC Ltd", quantity: 20, avgPrice: 412, weight: 1 },
-    ],
     pastTheses: [
       {
         id: "pt1",
-        at: "2026-09-14",
+        at: "day-3",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "unresolved",
         lesson: "Size is not the same as safety — you wanted a reason, not a reputation.",
       },
     ],
-    startedAt: "2026-09-12",
-    dayIndex: 5,
+    decisions: [
+      {
+        ticker: "ITC",
+        companyName: "ITC Ltd",
+        action: "bought",
+        quantity: 20,
+        pricePerShare: 412,
+        thesis: "ITC is a big company so it must be safe",
+        reasoning: "Everyone knows the brand and my father owns it too.",
+        outcome: "unresolved",
+        outcomeNote: null,
+        daysAgo: 3,
+      },
+    ],
+    onboarding: { ...ONBOARDING_BASE, experience: "tried_a_bit" },
   },
 
+  /**
+   * The important one. Holds three things, and has ONE thesis that broke —
+   * which is what lets the AI say "this is the same reasoning that failed for
+   * you before" at day 25.
+   */
   day15: {
+    dayIndex: 15,
     level: "practicing",
     knownConcepts: ["pe", "eps", "week52_range", "order_book"],
-    holdings: [
-      { ticker: "ITC", name: "ITC Ltd", quantity: 20, avgPrice: 412, weight: 0.42 },
-      { ticker: "TATAMOTORS", name: "Tata Motors Ltd", quantity: 8, avgPrice: 980, weight: 0.38 },
-      { ticker: "BEL", name: "Bharat Electronics Ltd", quantity: 15, avgPrice: 290, weight: 0.2 },
-    ],
     pastTheses: [
       {
         id: "pt1",
-        at: "2026-09-14",
+        at: "day-13",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "held_up",
@@ -71,7 +118,7 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
       },
       {
         id: "pt2",
-        at: "2026-09-22",
+        at: "day-4",
         query: "Everyone is talking about this defence stock so it will keep rising",
         ticker: "BEL",
         outcome: "broke",
@@ -79,11 +126,55 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
           "You bought on attention, not on a mechanism. The move had already happened before you heard about it.",
       },
     ],
-    startedAt: "2026-09-12",
-    dayIndex: 15,
+    decisions: [
+      {
+        ticker: "ITC",
+        companyName: "ITC Ltd",
+        action: "bought",
+        quantity: 20,
+        pricePerShare: 412,
+        thesis: "ITC is a big company so it must be safe",
+        reasoning: "Everyone knows the brand and my father owns it too.",
+        outcome: "held_up",
+        outcomeNote: "Still holding. The reasoning was weak but the company was fine.",
+        daysAgo: 13,
+      },
+      {
+        ticker: "TATAMOTORS",
+        companyName: "Tata Motors Ltd",
+        action: "bought",
+        quantity: 8,
+        pricePerShare: 980,
+        thesis: "Car sales are recovering",
+        reasoning: "I checked quarterly results before buying this time.",
+        outcome: "unresolved",
+        outcomeNote: null,
+        daysAgo: 9,
+      },
+      {
+        ticker: "BEL",
+        companyName: "Bharat Electronics Ltd",
+        action: "bought",
+        quantity: 15,
+        pricePerShare: 445,
+        thesis: "Everyone is talking about this defence stock so it will keep rising",
+        reasoning: "I saw it on three different reels in one day.",
+        outcome: "broke",
+        outcomeNote:
+          "Bought after the move had already happened. The budget news was months old by then.",
+        daysAgo: 4,
+      },
+    ],
+    onboarding: { ...ONBOARDING_BASE, experience: "tried_a_bit" },
   },
 
+  /**
+   * Increasingly self-reliant: four positions, and crucially a company they
+   * investigated and deliberately DIDN'T buy, with their reasoning recorded.
+   * That "skipped" decision is the product thesis in one row.
+   */
   day25: {
+    dayIndex: 25,
     level: "independent",
     knownConcepts: [
       "pe",
@@ -94,16 +185,10 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
       "debt_to_equity",
       "valuation",
     ],
-    holdings: [
-      { ticker: "ITC", name: "ITC Ltd", quantity: 20, avgPrice: 412, weight: 0.28 },
-      { ticker: "TATAMOTORS", name: "Tata Motors Ltd", quantity: 8, avgPrice: 980, weight: 0.26 },
-      { ticker: "BEL", name: "Bharat Electronics Ltd", quantity: 15, avgPrice: 290, weight: 0.16 },
-      { ticker: "INFY", name: "Infosys Ltd", quantity: 12, avgPrice: 1560, weight: 0.3 },
-    ],
     pastTheses: [
       {
         id: "pt1",
-        at: "2026-09-14",
+        at: "day-23",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "held_up",
@@ -111,7 +196,7 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
       },
       {
         id: "pt2",
-        at: "2026-09-22",
+        at: "day-14",
         query: "Everyone is talking about this defence stock so it will keep rising",
         ticker: "BEL",
         outcome: "broke",
@@ -120,7 +205,7 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
       },
       {
         id: "pt3",
-        at: "2026-10-02",
+        at: "day-5",
         query: "Infosys looks cheap compared to its own history",
         ticker: "INFY",
         outcome: "held_up",
@@ -128,7 +213,84 @@ export const DEMO_PERSONAS: Record<DemoStage, UserProfile> = {
           "You compared valuation to peers and to its own past, and checked whether earnings justified it.",
       },
     ],
-    startedAt: "2026-09-12",
-    dayIndex: 25,
+    decisions: [
+      {
+        ticker: "ITC",
+        companyName: "ITC Ltd",
+        action: "bought",
+        quantity: 20,
+        pricePerShare: 412,
+        thesis: "ITC is a big company so it must be safe",
+        reasoning: "Everyone knows the brand and my father owns it too.",
+        outcome: "held_up",
+        outcomeNote: "Still holding. The reasoning was weak but the company was fine.",
+        daysAgo: 23,
+      },
+      {
+        ticker: "TATAMOTORS",
+        companyName: "Tata Motors Ltd",
+        action: "bought",
+        quantity: 8,
+        pricePerShare: 980,
+        thesis: "Car sales are recovering",
+        reasoning: "I checked quarterly results before buying this time.",
+        outcome: "unresolved",
+        outcomeNote: null,
+        daysAgo: 19,
+      },
+      {
+        ticker: "BEL",
+        companyName: "Bharat Electronics Ltd",
+        action: "bought",
+        quantity: 15,
+        pricePerShare: 445,
+        thesis: "Everyone is talking about this defence stock so it will keep rising",
+        reasoning: "I saw it on three different reels in one day.",
+        outcome: "broke",
+        outcomeNote:
+          "Bought after the move had already happened. The budget news was months old by then.",
+        daysAgo: 14,
+      },
+      {
+        ticker: "NESTLEIND",
+        companyName: "Nestle India Ltd",
+        action: "skipped",
+        quantity: null,
+        pricePerShare: null,
+        thesis: "Nestle is a safe household name",
+        reasoning:
+          "Its P/E was far above the rest of the sector and I couldn't find a reason the earnings justified it.",
+        outcome: "held_up",
+        outcomeNote: "Chose not to buy after checking the valuation. First time I've done that.",
+        daysAgo: 8,
+      },
+      {
+        ticker: "INFY",
+        companyName: "Infosys Ltd",
+        action: "bought",
+        quantity: 12,
+        pricePerShare: 1560,
+        thesis: "Infosys looks cheap compared to its own history",
+        reasoning:
+          "Compared its P/E to TCS and Wipro and to its own past, then checked earnings were still growing.",
+        outcome: "held_up",
+        outcomeNote: null,
+        daysAgo: 5,
+      },
+    ],
+    onboarding: { ...ONBOARDING_BASE, experience: "invest_regularly", monthlyBudget: 15000 },
   },
+};
+
+/**
+ * What this user would plausibly ask at each stage. The UI prefills it.
+ *
+ * ⚠️ These are QUESTIONS, not answers. The pipeline runs for real every time —
+ * nothing here is a canned response. See docs/demo.md.
+ */
+export const DEMO_PROMPTS: Record<DemoStage, string> = {
+  day0: "Government increased defense spending, so I want to buy HAL",
+  day5: "Everyone on Instagram is saying this stock will explode",
+  day15: "Defence spending is up, so HAL should benefit",
+  day25: "HAL's P/E looks high against the sector — is the order book enough to justify it?",
 };

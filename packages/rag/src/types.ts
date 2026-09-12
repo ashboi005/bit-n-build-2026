@@ -42,6 +42,12 @@ export interface VectorStore {
   search(vector: number[], limit: number, filter?: SearchFilter): Promise<VectorHit[]>;
   count(): Promise<number>;
   reset(): Promise<void>;
+  /**
+   * Remove every point belonging to one owner. Used when the Time Machine
+   * reseeds a user — otherwise the previous persona's decisions stay
+   * retrievable and the AI cites memories that no longer exist.
+   */
+  deleteOwner(owner: string): Promise<void>;
 }
 
 export const PUBLIC_OWNER = "public";

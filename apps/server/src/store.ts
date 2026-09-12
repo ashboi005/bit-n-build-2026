@@ -20,7 +20,6 @@ import { chatMessage, userDecision, userProfile } from "@bit-n-build-2026/db/sch
 import type { UserContext } from "@bit-n-build-2026/engine";
 import { and, asc, desc, eq } from "drizzle-orm";
 
-import { DEMO_PERSONAS } from "./demo-personas";
 import { getDb, sources } from "./services";
 
 const db = () => getDb();
@@ -44,17 +43,19 @@ async function ensureRow(userId: string): Promise<typeof userProfile.$inferSelec
   const [existing] = await db().select().from(userProfile).where(eq(userProfile.userId, userId));
   if (existing) return existing;
 
-  const seed = structuredClone(DEMO_PERSONAS.day0);
+  // A brand new user starts blank: no level assumptions, no holdings, no
+  // history. Onboarding fills in who they are; the Time Machine can overwrite
+  // all of it with a scripted persona.
   const [created] = await db()
     .insert(userProfile)
     .values({
       userId,
-      level: seed.level,
-      knownConcepts: seed.knownConcepts,
-      holdings: seed.holdings,
-      pastTheses: seed.pastTheses,
-      startedAt: seed.startedAt,
-      dayIndex: seed.dayIndex,
+      level: "new",
+      knownConcepts: [],
+      holdings: [],
+      pastTheses: [],
+      startedAt: new Date().toISOString().slice(0, 10),
+      dayIndex: 0,
     })
     .onConflictDoNothing()
     .returning();

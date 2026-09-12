@@ -68,5 +68,10 @@ export function createMemoryStore(): VectorStore {
     async reset() {
       points.clear();
     },
+    async deleteOwner(owner) {
+      for (const [id, point] of points) {
+        if (point.payload.owner === owner) points.delete(id);
+      }
+    },
   };
 }
