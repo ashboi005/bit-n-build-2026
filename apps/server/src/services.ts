@@ -41,11 +41,22 @@ export function getRetriever(): Promise<Retriever> {
     });
     const retriever = createRetriever(llm, store);
 
-    if (await retriever.isEmpty()) {
-      // Everything we hold. Tushar shipped listDocuments() so a document that
-      // no stock happens to link to is still retrievable.
-      const docs = sources.listDocuments();
+    /**
+     * Reindex whenever the store's contents don't match what's on disk.
+     *
+     * Checking only for "empty" meant a persistent store (Qdrant) kept whatever
+     * it had from an older, smaller dataset forever — it had 53 chunks while
+     * disk held 233 documents, and nothing ever noticed.
+     */
+    const docs = sources.listDocuments();
+    const expected = docs.reduce((sum, d) => sum + d.chunks.length, 0);
+    const stored = await retriever.store.count().catch(() => 0);
 
+    if (stored !== expected) {
+      if (stored > 0) {
+        console.log(`[rag] store has ${stored} chunks, disk has ${expected} — reindexing`);
+        await retriever.store.reset().catch(() => undefined);
+      }
       try {
         const count = await retriever.indexDocuments(docs);
         console.log(`[rag] indexed ${count} chunks from ${docs.length} documents`);
@@ -55,6 +66,8 @@ export function getRetriever(): Promise<Retriever> {
           error instanceof Error ? error.message : error,
         );
       }
+    } else {
+      console.log(`[rag] ${stored} chunks already indexed and current`);
     }
     return retriever;
   })();

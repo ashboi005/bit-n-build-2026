@@ -1190,7 +1190,12 @@
   ],
   "documentIds": [
     "bse_tatapower_market_data",
-    "screener_tatapower_fundamentals"
+    "screener_tatapower_fundamentals",
+    "nse_tatapower_2026_09_04_analysts_institutional_investor_meet_con_call_updates",
+    "nse_tatapower_2026_08_27_press_release",
+    "nse_tatapower_2026_09_03_press_release",
+    "nse_tatapower_2026_08_31_press_release",
+    "nse_tatapower_2026_09_11_analysts_institutional_investor_meet_con_call_updates"
   ],
   "newsIds": []
 }

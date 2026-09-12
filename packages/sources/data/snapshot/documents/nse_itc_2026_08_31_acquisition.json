@@ -1,0 +1,22 @@
+{
+  "id": "nse_itc_2026_08_31_acquisition",
+  "title": "ITC Ltd — Acquisition",
+  "publisher": "ITC Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/ITC_31082026191614_SE.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/ITC_31082026191614_SE.pdf",
+  "publishedAt": "2026-08-31",
+  "tickers": [
+    "ITC"
+  ],
+  "sectors": [
+    "FMCG"
+  ],
+  "text": "ITC Limited has informed the Exchange about Strategic combination of ITC Infotech India Limited and Happiest Minds Technologies Limited",
+  "chunks": [
+    {
+      "id": "nse_itc_2026_08_31_acquisition_0",
+      "text": "ITC Limited has informed the Exchange about Strategic combination of ITC Infotech India Limited and Happiest Minds Technologies Limited"
+    }
+  ]
+}

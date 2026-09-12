@@ -1,0 +1,22 @@
+{
+  "id": "nse_trent_2026_08_06_press_release",
+  "title": "Trent Ltd — Press Release",
+  "publisher": "Trent Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/TRENT_06082026134903_PressRelease06082026.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/TRENT_06082026134903_PressRelease06082026.pdf",
+  "publishedAt": "2026-08-06",
+  "tickers": [
+    "TRENT"
+  ],
+  "sectors": [
+    "Retail"
+  ],
+  "text": "Trent Limited has informed the Exchange regarding a press release dated August 06, 2026, titled \"Press Release on Unaudited Financial Results (Standalone and Consolidated) for the quarter ended 30th June 2026\".",
+  "chunks": [
+    {
+      "id": "nse_trent_2026_08_06_press_release_0",
+      "text": "Trent Limited has informed the Exchange regarding a press release dated August 06, 2026, titled \"Press Release on Unaudited Financial Results (Standalone and Consolidated) for the quarter ended 30th June 2026\"."
+    }
+  ]
+}

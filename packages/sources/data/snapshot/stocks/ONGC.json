@@ -1190,7 +1190,12 @@
   ],
   "documentIds": [
     "bse_ongc_market_data",
-    "screener_ongc_fundamentals"
+    "screener_ongc_fundamentals",
+    "nse_ongc_2026_09_01_general_updates",
+    "nse_ongc_2026_08_31_shareholders_meeting",
+    "nse_ongc_2026_09_10_general_updates",
+    "nse_ongc_2026_08_31_updates",
+    "nse_ongc_2026_09_01_shareholders_meeting"
   ],
   "newsIds": []
 }

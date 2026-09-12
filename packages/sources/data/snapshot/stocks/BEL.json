@@ -1172,7 +1172,13 @@
   ],
   "documentIds": [
     "bse_bel_market_data",
-    "screener_bel_fundamentals"
+    "screener_bel_fundamentals",
+    "pib_budget_defence",
+    "nse_bel_2026_08_28_shareholders_meeting",
+    "nse_bel_2026_08_26_bagging_receiving_of_orders_contracts",
+    "nse_bel_2026_09_11_appointment",
+    "nse_bel_2026_09_08_updates",
+    "bs_defence_priced_in"
   ],
   "newsIds": []
 }

@@ -1,0 +1,22 @@
+{
+  "id": "nse_powergrid_2026_08_28_acquisition",
+  "title": "Power Grid Corporation of India Ltd — Acquisition",
+  "publisher": "Power Grid Corporation of India Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/POWERGRID1_28082026181534_BSENSEReg30dt28082026Acq_v1.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/POWERGRID1_28082026181534_BSENSEReg30dt28082026Acq_v1.pdf",
+  "publishedAt": "2026-08-28",
+  "tickers": [
+    "POWERGRID"
+  ],
+  "sectors": [
+    "Power"
+  ],
+  "text": "Power Grid Corporation of India Limited has informed the Exchange about Acquisition of Fatehgarh II Transmission Limited by POWERGRID under TBCB route.",
+  "chunks": [
+    {
+      "id": "nse_powergrid_2026_08_28_acquisition_0",
+      "text": "Power Grid Corporation of India Limited has informed the Exchange about Acquisition of Fatehgarh II Transmission Limited by POWERGRID under TBCB route."
+    }
+  ]
+}

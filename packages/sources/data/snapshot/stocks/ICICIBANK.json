@@ -1180,7 +1180,12 @@
   ],
   "documentIds": [
     "bse_icicibank_market_data",
-    "screener_icicibank_fundamentals"
+    "screener_icicibank_fundamentals",
+    "nse_icicibank_2026_09_07_general_updates",
+    "nse_icicibank_2026_09_09_general_updates",
+    "nse_icicibank_2026_09_08_esop_esos_esps",
+    "nse_icicibank_2026_09_11_esop_esos_esps",
+    "nse_icicibank_2026_09_05_general_updates"
   ],
   "newsIds": []
 }

@@ -1156,7 +1156,12 @@
   ],
   "documentIds": [
     "bse_idea_market_data",
-    "screener_idea_fundamentals"
+    "screener_idea_fundamentals",
+    "nse_idea_2026_09_01_press_release",
+    "nse_idea_2026_08_28_shareholders_meeting",
+    "nse_idea_2026_08_31_general_updates",
+    "nse_idea_2026_08_27_shareholders_meeting",
+    "nse_idea_2026_09_01_general_updates"
   ],
   "newsIds": []
 }

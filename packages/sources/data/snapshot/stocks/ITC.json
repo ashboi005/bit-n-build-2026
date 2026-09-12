@@ -1165,7 +1165,13 @@
   ],
   "documentIds": [
     "bse_itc_market_data",
-    "screener_itc_fundamentals"
+    "screener_itc_fundamentals",
+    "nse_itc_2026_08_31_acquisition",
+    "nse_itc_2026_08_14_esop_esos_esps",
+    "nse_itc_2026_08_01_general_updates",
+    "nse_itc_2026_08_14_analysts_institutional_investor_meet_con_call_updates",
+    "economic_times_bitcoin_trades_at_77_000_mark_as_profit_taking_weighs_on_market_",
+    "nse_itc_2026_09_01_general_updates"
   ],
   "newsIds": []
 }
