@@ -11,7 +11,7 @@ export function SourceCard({ source, stance }: SourceCardProps) {
   const isLink = Boolean(source.url);
 
   const inner = (
-    <div className="flex flex-col gap-2 p-3 rounded-lg border bg-card text-card-foreground shadow-sm hover:bg-muted/50 transition-colors h-full text-sm">
+    <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-border/70 bg-card text-card-foreground shadow-xs hover:bg-muted/50 transition-colors h-full text-xs sm:text-sm">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <SourceTierBadge tier={source.tier} className="shrink-0" />
@@ -23,7 +23,7 @@ export function SourceCard({ source, stance }: SourceCardProps) {
       </div>
       
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <span className="font-medium text-foreground/70">{source.publisher}</span>
+        <span className="font-medium text-foreground/80">{source.publisher}</span>
         {source.publishedAt && (
           <>
             <span>&middot;</span>
@@ -38,8 +38,8 @@ export function SourceCard({ source, stance }: SourceCardProps) {
         )}
       </div>
 
-      <blockquote className="border-l-2 border-muted-foreground/30 pl-2.5 text-muted-foreground italic line-clamp-2 mt-0.5">
-        "{source.snippet}"
+      <blockquote className="border-l-2 border-muted-foreground/30 pl-2.5 text-muted-foreground italic line-clamp-2 mt-0.5 text-xs">
+        &ldquo;{source.snippet}&rdquo;
       </blockquote>
     </div>
   );
@@ -50,7 +50,7 @@ export function SourceCard({ source, stance }: SourceCardProps) {
         href={source.url!}
         target="_blank"
         rel="noopener noreferrer"
-        className="block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg"
+        className="block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-xl transition-transform active:scale-[0.99]"
       >
         {inner}
       </a>

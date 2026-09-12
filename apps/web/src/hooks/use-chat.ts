@@ -17,11 +17,18 @@ export function useChat(initialThreadId?: string) {
   const [messages, setMessages] = useState<UIStateMessage[]>([]);
   const [threadId, setThreadId] = useState<string | undefined>(initialThreadId);
   const [status, setStatus] = useState<"idle" | "streaming" | "failed">("idle");
+  const [prevInitial, setPrevInitial] = useState(initialThreadId);
+
+  if (initialThreadId !== prevInitial) {
+    setPrevInitial(initialThreadId);
+    setThreadId(initialThreadId);
+    if (!initialThreadId) {
+      setMessages([]);
+    }
+  }
 
   useEffect(() => {
     if (!initialThreadId) {
-      setMessages([]);
-      setThreadId(undefined);
       return;
     }
     
@@ -38,7 +45,6 @@ export function useChat(initialThreadId?: string) {
               status: "done",
             }))
           );
-          setThreadId(initialThreadId);
         }
       } catch (err) {
         console.error("Failed to load thread", err);

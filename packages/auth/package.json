@@ -13,6 +13,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@better-auth/oauth-provider": "1.7.3",
     "@bit-n-build-2026/db": "workspace:*",
     "better-auth": "catalog:",
     "zod": "catalog:"

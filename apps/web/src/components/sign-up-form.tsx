@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { authClient } from "@/lib/auth-client";
+import { oauthAuthorizationReturn } from "@/lib/oauth-return";
+import { ENV } from "@/env";
 
 import Loader from "./loader";
 
@@ -29,6 +31,11 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
         },
         {
           onSuccess: () => {
+            const oauthReturn = oauthAuthorizationReturn(window.location.href, ENV.NEXT_PUBLIC_SERVER_URL);
+            if (oauthReturn) {
+              window.location.assign(oauthReturn);
+              return;
+            }
             router.push("/");
             toast.success("Sign up successful");
           },

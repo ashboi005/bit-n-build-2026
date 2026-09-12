@@ -177,6 +177,12 @@ export interface StageState {
   message?: string;
 }
 
+export interface NotCoveredData {
+  ticker: string | null;
+  name: string | null;
+  covered: { ticker: string; name: string; sector: string }[];
+}
+
 export interface ThesisState {
   status: RunStatus;
   runId: string | null;
@@ -189,6 +195,7 @@ export interface ThesisState {
   concepts: Concept[];
   verdict: Verdict | null;
   error: string | null;
+  notCovered: NotCoveredData | null;
 }
 
 export function initialThesisState(): ThesisState {
@@ -208,6 +215,7 @@ export function initialThesisState(): ThesisState {
     concepts: [],
     verdict: null,
     error: null,
+    notCovered: null,
   };
 }
 
@@ -302,7 +310,15 @@ export function reduceThesis(state: ThesisState, event: ThesisEvent): ThesisStat
       return { ...state, status: "failed", error: event.message };
 
     case "run.not_covered":
-      return { ...state, status: "done" };
+      return { 
+        ...state, 
+        status: "done",
+        notCovered: {
+          ticker: event.ticker,
+          name: event.name,
+          covered: event.covered
+        }
+      };
 
     case "run.needs_discovery":
       // The stream continues with discovery events, which this reducer does not

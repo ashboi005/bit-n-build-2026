@@ -6,26 +6,21 @@ import { authClient } from "@/lib/auth-client";
 import { useThesisRun } from "@/hooks/use-thesis-run";
 import { ThesisInput } from "@/components/thesis/thesis-input";
 import { Investigation } from "@/components/thesis/investigation";
-import { Discovery } from "@/components/thesis/discovery";
+import { DiscoveryView } from "@/components/discovery/discovery-view";
 import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 import Loader from "@/components/loader";
+import { LandingPage } from "@/components/landing-page";
 
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
   const { 
-    status, claim, stages, sources, metrics, concepts, verdict,
+    status, claim, stages, sources, metrics, concepts, verdict, notCovered,
     discoveryState, mode,
     run 
   } = useThesisRun();
   const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
-
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.push("/login");
-    }
-  }, [isPending, session, router]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -38,8 +33,12 @@ export default function Home() {
     return () => window.removeEventListener("thwip-seed-demo", handler);
   }, []);
 
-  if (isPending || !session) {
+  if (isPending) {
     return <Loader />;
+  }
+
+  if (!session) {
+    return <LandingPage />;
   }
 
   const isIdle = status === "idle";
@@ -78,12 +77,13 @@ export default function Home() {
             metrics={metrics}
             concepts={concepts}
             verdict={verdict}
+            notCovered={notCovered}
           />
         )}
 
         {/* Discovery UI */}
         {!isIdle && mode === "discovery" && discoveryState && (
-          <Discovery state={discoveryState} />
+          <DiscoveryView state={discoveryState} />
         )}
       </div>
       <OnboardingFlow />

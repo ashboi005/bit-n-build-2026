@@ -1,4 +1,5 @@
 import { createAuth as createConfiguredAuth } from "@bit-n-build-2026/auth";
+import { oauthProviderResourceClient } from "@better-auth/oauth-provider/resource-client";
 import { type Database, createDb } from "@bit-n-build-2026/db";
 import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
 import type { ProfilePort } from "@bit-n-build-2026/engine";
@@ -20,6 +21,14 @@ export function getDb(): Database {
 }
 
 export const auth = createConfiguredAuth(env, db);
+const extensionResourceClient = oauthProviderResourceClient(auth);
+
+export async function verifyExtensionAccessToken(token: string) {
+  return extensionResourceClient.getActions().verifyBearerToken(token, {
+    verifyOptions: { audience: env.EXTENSION_API_AUDIENCE },
+    requiredScopes: ["thesis:run"],
+  });
+}
 export const llm = createLlm(env);
 export const fastModel = env.MERGE_MODEL_FAST;
 export { sources };
