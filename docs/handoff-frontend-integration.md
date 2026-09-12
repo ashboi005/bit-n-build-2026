@@ -822,6 +822,12 @@ we'll tell you whether your reasoning held up."* Link to the thesis screen.
   A separate, AI-free page: pick 2-3 companies, see their figures against their
   sector, with citations. Build it after the tasks above.
 
+# Related docs
+
+- **`docs/handoff-comparison-tool.md`** — the side-by-side comparison tool. A
+  separate, deliberately AI-free page: pick 2-3 companies and see their figures
+  against their sector median, with citations. Build it after the tasks above.
+
 # Endpoint reference
 
 | Method | Path | Notes |
