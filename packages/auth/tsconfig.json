@@ -1,0 +1,6 @@
+{
+  "extends": "@bit-n-build-2026/config/tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  }
+}
