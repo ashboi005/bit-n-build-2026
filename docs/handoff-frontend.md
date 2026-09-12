@@ -402,7 +402,12 @@ type ThesisEvent =
   | { type: 'stage.failed';     stage: StageId; message: string }
   | { type: 'verdict.ready';    verdict: Verdict }
   | { type: 'run.completed';    runId: string; durationMs: number }
-  | { type: 'run.failed';       message: string };
+  | { type: 'run.failed';       message: string }
+  // Two early exits — both stop the stage timeline before it finishes.
+  // See docs/handoff-frontend-integration.md TASK 2 for how to render them.
+  | { type: 'run.needs_discovery'; query: string }
+  | { type: 'run.not_covered';     ticker: string | null; name: string | null;
+                                   covered: { ticker: string; name: string; sector: string }[] };
 ```
 
 ### The mock

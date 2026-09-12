@@ -3,17 +3,17 @@
   "bseCode": "500180",
   "isin": "INE040A01034",
   "name": "HDFC Bank Ltd",
-  "sector": "Unclassified",
+  "sector": "Banking",
   "business": "This committed fallback covers the BSE-listed company named HDFC Bank Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 708,
-    "change": 14,
-    "changePct": 2.02,
+    "change": 0,
+    "changePct": 0,
     "dayHigh": 708.9,
     "dayLow": 682,
     "week52High": 1020,
     "week52Low": 682,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:51.341Z",
     "sourceId": "bse_hdfcbank_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 1091709,
-      "display": "10,91,709 Cr",
+      "display": "₹10,91,709 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 1040864.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -49,8 +49,8 @@
       "value": 13.8,
       "display": "13.8",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "low",
+      "sectorMedian": 15.7,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 390,
-      "display": "390",
+      "display": "₹390",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 7.02,
       "display": "7.02%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": 7.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -88,7 +88,7 @@
       "value": 13.6,
       "display": "13.6%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 14.75,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": 1.84,
       "display": "1.84%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 1.36,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,11 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.7,
+    "roe": 14.75,
+    "roce": 7.1,
+    "dividend_yield": 1.36,
+    "market_cap": 1040864.5
   },
   "risk": [
     {
@@ -1164,7 +1163,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "medium",
-      "reason": "P/E is 13.8, compared with a sector median of 17.05.",
+      "reason": "P/E is 13.8, compared with the Banking sector median of 15.7. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
       ]
@@ -1181,7 +1180,16 @@
   ],
   "documentIds": [
     "bse_hdfcbank_market_data",
-    "screener_hdfcbank_fundamentals"
+    "screener_hdfcbank_fundamentals",
+    "economic_times_hdfc_bank_submits_two_candidates_to_rbi_for_next_ceo",
+    "nse_hdfcbank_2026_09_10_analysts_institutional_investor_meet_con_call_updates",
+    "nse_hdfcbank_2026_09_06_updates",
+    "nse_hdfcbank_2026_09_11_general_updates",
+    "hindu_businessline_sensex_nifty_fall_even_as_easing_oil_prices_buying_in_hdfc_bank_",
+    "nse_hdfcbank_2026_09_12_disclosure_of_material_issue",
+    "nse_hdfcbank_2026_09_01_general_updates",
+    "hindu_businessline_sensex_today_stock_market_highlights_sensex_down_120_pts_nifty_c",
+    "hindu_businessline_hdfc_bank_shares_under_pressure_hits_fresh_52_week_low"
   ],
   "newsIds": []
 }

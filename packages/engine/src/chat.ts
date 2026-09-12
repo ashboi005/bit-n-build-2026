@@ -15,7 +15,7 @@ import type {
   ChatMessage,
   SourceRef,
 } from "@bit-n-build-2026/contracts";
-import { GROUND_RULES, checkNoRecommendation, type Llm } from "@bit-n-build-2026/llm";
+import { GROUND_RULES, auditCitations, checkNoRecommendation, type Llm } from "@bit-n-build-2026/llm";
 import type { Retriever } from "@bit-n-build-2026/rag";
 
 import { fullContextBlock, type UserContext } from "./context";
@@ -189,6 +189,35 @@ export async function* runChat(deps: ChatDeps, opts: ChatOptions): AsyncGenerato
     };
     return;
   }
+
+  /**
+   * Validate citations.
+   *
+   * The investigation pipeline drops a badly-cited finding outright, but chat
+   * streams prose so nothing can be withheld mid-flight. Instead we audit the
+   * finished answer: invented source ids are stripped, and any sentence stating
+   * a figure its cited source does not contain is reported.
+   *
+   * The audited text is what `chat.completed` carries and what gets persisted —
+   * the raw deltas are only for the typing effect.
+   */
+  const sourceText = new Map(sourceRefs.map((s) => [s.id.toLowerCase(), `${s.title} ${s.snippet}`]));
+  const audit = auditCitations(full, sourceText);
+  full = audit.text;
+
+  if (audit.removed.length || audit.unsupported.length) {
+    console.log(
+      `[guard] chat audit — removed invented ids: ${audit.removed.join(", ") || "none"}` +
+        ` | unsupported figures: ${audit.unsupported.length}`,
+    );
+  }
+
+  yield {
+    type: "chat.audit",
+    valid: audit.valid,
+    removed: audit.removed,
+    unsupported: audit.unsupported,
+  };
 
   // Law 2, checked after the fact for chat: we stream, so we can't withhold
   // tokens. If it slipped through, append the correction rather than pretend.

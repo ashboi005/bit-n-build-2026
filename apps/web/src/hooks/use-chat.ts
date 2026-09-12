@@ -17,13 +17,24 @@ export function useChat(initialThreadId?: string) {
   const [messages, setMessages] = useState<UIStateMessage[]>([]);
   const [threadId, setThreadId] = useState<string | undefined>(initialThreadId);
   const [status, setStatus] = useState<"idle" | "streaming" | "failed">("idle");
+  const [prevInitial, setPrevInitial] = useState(initialThreadId);
+
+  if (initialThreadId !== prevInitial) {
+    setPrevInitial(initialThreadId);
+    setThreadId(initialThreadId);
+    if (!initialThreadId) {
+      setMessages([]);
+    }
+  }
 
   useEffect(() => {
-    if (!initialThreadId) return;
+    if (!initialThreadId) {
+      return;
+    }
     
     async function fetchThread() {
       try {
-        const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/chat/${initialThreadId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/${initialThreadId}`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -45,7 +56,7 @@ export function useChat(initialThreadId?: string) {
 
   const sendMessage = useCallback(
     async (content: string) => {
-      const userMsgId = crypto.randomUUID();
+      const userMsgId = `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
       const userMsg: UIStateMessage = {
         id: userMsgId,
         role: "user",
@@ -54,7 +65,7 @@ export function useChat(initialThreadId?: string) {
         createdAt: new Date().toISOString(),
       };
 
-      const assistantMsgId = crypto.randomUUID();
+      const assistantMsgId = `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
       const assistantMsg: UIStateMessage = {
         id: assistantMsgId,
         role: "assistant",

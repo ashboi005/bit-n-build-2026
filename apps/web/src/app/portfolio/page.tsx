@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ENV } from "@/env";
 import type { Portfolio } from "@bit-n-build-2026/contracts";
 import { Card } from "@bit-n-build-2026/ui/components/card";
 import Loader from "@/components/loader";
+import { ChangesSection } from "@/components/portfolio/changes-section";
 
 export default function PortfolioPage() {
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
@@ -14,7 +14,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     async function fetchPortfolio() {
       try {
-        const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/portfolio`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/portfolio`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -29,6 +29,12 @@ export default function PortfolioPage() {
       }
     }
     fetchPortfolio();
+
+    const handleDemoSeeded = () => {
+      fetchPortfolio();
+    };
+    window.addEventListener("thwip-seed-demo", handleDemoSeeded);
+    return () => window.removeEventListener("thwip-seed-demo", handleDemoSeeded);
   }, []);
 
   if (error) {
@@ -44,13 +50,15 @@ export default function PortfolioPage() {
   }
 
   return (
-    <main className="max-w-5xl mx-auto p-4 md:p-8 space-y-8">
+    <main className="max-w-5xl mx-auto p-4 md:p-8 space-y-8 h-full overflow-y-auto w-full">
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-2">Portfolio</h1>
         <p className="text-muted-foreground">
           Your current holdings, watched assets, and past decisions.
         </p>
       </div>
+
+      <ChangesSection />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-6 bg-card border-border shadow-sm flex flex-col justify-center">

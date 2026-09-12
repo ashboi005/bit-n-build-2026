@@ -28,6 +28,13 @@ export const userDecision = pgTable(
     quantity: real("quantity"),
     pricePerShare: real("price_per_share"),
 
+    /**
+     * The market price when they decided — needed for "what changed since".
+     * Distinct from pricePerShare: a "skipped" or "watching" decision has no
+     * purchase price but still has a reference point to measure against.
+     */
+    priceAtDecision: real("price_at_decision"),
+
     /** The thesis that led here, in the user's own words. */
     thesis: text("thesis"),
     /** What the investigation concluded, so we can compare later. */

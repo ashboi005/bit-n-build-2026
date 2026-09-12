@@ -3,17 +3,17 @@
   "bseCode": "532555",
   "isin": "INE733E01010",
   "name": "NTPC Ltd",
-  "sector": "Unclassified",
+  "sector": "Power",
   "business": "This committed fallback covers the BSE-listed company named NTPC Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 333.3,
-    "change": -3.7,
-    "changePct": -1.1,
+    "last": 333,
+    "change": 0,
+    "changePct": 0,
     "dayHigh": 336.25,
     "dayLow": 332,
     "week52High": 414,
     "week52Low": 316,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:37:04.420Z",
     "sourceId": "bse_ntpc_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 323287,
-      "display": "3,23,287 Cr",
+      "display": "₹3,23,287 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "normal",
+      "sectorMedian": 250279,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_ntpc_fundamentals"
@@ -49,7 +49,7 @@
       "value": 11.6,
       "display": "11.6",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 15.8,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 210,
-      "display": "210",
+      "display": "₹210",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,7 +75,7 @@
       "value": 8.92,
       "display": "8.92%",
       "unit": "%",
-      "sectorMedian": 10.3,
+      "sectorMedian": 9.1,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": 15.1,
       "display": "15.1%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 15.1,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 2.7,
       "display": "2.7%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "high",
+      "sectorMedian": 2.7,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_ntpc_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 1.2455477866835578,
+      "value": 1.25,
       "display": "1.25",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "high",
+      "sectorMedian": 2.5,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_ntpc_fundamentals"
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.8,
+    "roe": 15.1,
+    "roce": 9.1,
+    "dividend_yield": 2.7,
+    "market_cap": 250279,
+    "debt_to_equity": 2.5
   },
   "risk": [
     {
@@ -1164,7 +1164,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "low",
-      "reason": "P/E is 11.6, compared with a sector median of 17.05.",
+      "reason": "P/E is 11.6, compared with the Power sector median of 15.8. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_ntpc_fundamentals"
       ]
@@ -1172,8 +1172,8 @@
     {
       "key": "debt",
       "label": "Debt",
-      "level": "high",
-      "reason": "Debt to equity is 1.25, compared with a sector median of 0.30.",
+      "level": "low",
+      "reason": "Debt to equity is 1.25, compared with the Power sector median of 2.5.",
       "sourceIds": [
         "screener_ntpc_fundamentals"
       ]
@@ -1190,7 +1190,13 @@
   ],
   "documentIds": [
     "bse_ntpc_market_data",
-    "screener_ntpc_fundamentals"
+    "screener_ntpc_fundamentals",
+    "nse_ntpc_2026_08_31_change_in_management",
+    "nse_ntpc_2026_08_27_shareholders_meeting",
+    "business_standard_ntpc_green_energy_adds_6_3_mw_capacity",
+    "nse_ntpc_2026_09_08_general_updates",
+    "nse_ntpc_2026_09_03_general_updates",
+    "nse_ntpc_2026_09_12_general_updates"
   ],
   "newsIds": []
 }

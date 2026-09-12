@@ -138,7 +138,21 @@ export type ThesisEvent =
    * switches to discovery events from here. Additive: a client that ignores
    * this still behaves correctly, it just shows nothing further.
    */
-  | { type: "run.needs_discovery"; query: string };
+  | { type: "run.needs_discovery"; query: string }
+  /**
+   * They named a real company we hold no verified sources for.
+   *
+   * Emitted instead of grinding through five failed stages. Saying "we don't
+   * have sources for this yet, here is what we do cover" is both better UX and
+   * a demonstration of the core promise: we would rather say nothing than make
+   * something up.
+   */
+  | {
+      type: "run.not_covered";
+      ticker: string | null;
+      name: string | null;
+      covered: { ticker: string; name: string; sector: string }[];
+    };
 
 export type ThesisEventType = ThesisEvent["type"];
 
@@ -163,6 +177,12 @@ export interface StageState {
   message?: string;
 }
 
+export interface NotCoveredData {
+  ticker: string | null;
+  name: string | null;
+  covered: { ticker: string; name: string; sector: string }[];
+}
+
 export interface ThesisState {
   status: RunStatus;
   runId: string | null;
@@ -175,6 +195,7 @@ export interface ThesisState {
   concepts: Concept[];
   verdict: Verdict | null;
   error: string | null;
+  notCovered: NotCoveredData | null;
 }
 
 export function initialThesisState(): ThesisState {
@@ -194,6 +215,7 @@ export function initialThesisState(): ThesisState {
     concepts: [],
     verdict: null,
     error: null,
+    notCovered: null,
   };
 }
 
@@ -286,6 +308,17 @@ export function reduceThesis(state: ThesisState, event: ThesisEvent): ThesisStat
 
     case "run.failed":
       return { ...state, status: "failed", error: event.message };
+
+    case "run.not_covered":
+      return { 
+        ...state, 
+        status: "done",
+        notCovered: {
+          ticker: event.ticker,
+          name: event.name,
+          covered: event.covered
+        }
+      };
 
     case "run.needs_discovery":
       // The stream continues with discovery events, which this reducer does not

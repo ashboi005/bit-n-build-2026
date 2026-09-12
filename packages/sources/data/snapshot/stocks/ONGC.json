@@ -3,17 +3,17 @@
   "bseCode": "500312",
   "isin": "INE213A01029",
   "name": "Oil and Natural Gas Corporation Ltd",
-  "sector": "Unclassified",
+  "sector": "Oil & Gas",
   "business": "This committed fallback covers the BSE-listed company named Oil and Natural Gas Corporation Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 232.55,
-    "change": -4.45,
-    "changePct": -1.88,
+    "last": 232,
+    "change": -0.55,
+    "changePct": -0.24,
     "dayHigh": 243,
     "dayLow": 232.55,
     "week52High": 308,
     "week52Low": 228,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:47.298Z",
     "sourceId": "bse_ongc_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 292491,
-      "display": "2,92,491 Cr",
+      "display": "₹2,92,491 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "normal",
+      "sectorMedian": 997103.5,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_ongc_fundamentals"
@@ -49,7 +49,7 @@
       "value": 6.69,
       "display": "6.69",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 14.75,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 296,
-      "display": "296",
+      "display": "₹296",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,7 +75,7 @@
       "value": 14.2,
       "display": "14.2%",
       "unit": "%",
-      "sectorMedian": 10.3,
+      "sectorMedian": 12.25,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -88,8 +88,8 @@
       "value": 11.6,
       "display": "11.6%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "low",
+      "sectorMedian": 10.26,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_ongc_fundamentals"
@@ -101,7 +101,7 @@
       "value": 5.7,
       "display": "5.7%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 3.09,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.2989332520572996,
+      "value": 0.2989,
       "display": "0.3",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "normal",
+      "sectorMedian": 0.5345,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_ongc_fundamentals"
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 14.75,
+    "roe": 10.26,
+    "roce": 12.25,
+    "dividend_yield": 3.09,
+    "market_cap": 997103.5,
+    "debt_to_equity": 0.5345
   },
   "risk": [
     {
@@ -1164,7 +1164,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "low",
-      "reason": "P/E is 6.69, compared with a sector median of 17.05.",
+      "reason": "P/E is 6.69, compared with the Oil & Gas sector median of 14.75. Investors are paying less for its earnings than for its peers'.",
       "sourceIds": [
         "screener_ongc_fundamentals"
       ]
@@ -1172,8 +1172,8 @@
     {
       "key": "debt",
       "label": "Debt",
-      "level": "medium",
-      "reason": "Debt to equity is 0.30, compared with a sector median of 0.30.",
+      "level": "low",
+      "reason": "Debt to equity is 0.2989, compared with the Oil & Gas sector median of 0.5345.",
       "sourceIds": [
         "screener_ongc_fundamentals"
       ]
@@ -1190,7 +1190,12 @@
   ],
   "documentIds": [
     "bse_ongc_market_data",
-    "screener_ongc_fundamentals"
+    "screener_ongc_fundamentals",
+    "nse_ongc_2026_09_01_general_updates",
+    "nse_ongc_2026_08_31_shareholders_meeting",
+    "nse_ongc_2026_09_10_general_updates",
+    "nse_ongc_2026_08_31_updates",
+    "nse_ongc_2026_09_01_shareholders_meeting"
   ],
   "newsIds": []
 }

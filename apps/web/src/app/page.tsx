@@ -1,31 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useThesisRun } from "@/hooks/use-thesis-run";
 import { ThesisInput } from "@/components/thesis/thesis-input";
 import { Investigation } from "@/components/thesis/investigation";
-import { Discovery } from "@/components/thesis/discovery";
-import { TimeMachineBar } from "@/components/demo/time-machine-bar";
+import { DiscoveryView } from "@/components/discovery/discovery-view";
 import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 import Loader from "@/components/loader";
 
 export default function Home() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
   const { 
-    status, claim, stages, sources, metrics, concepts, verdict,
+    status, claim, stages, sources, metrics, concepts, verdict, notCovered,
     discoveryState, mode,
     run 
   } = useThesisRun();
-  const [suggestedQuery, setSuggestedQuery] = useState("");
+  const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
 
   useEffect(() => {
     if (!isPending && !session) {
       router.push("/login");
     }
   }, [isPending, session, router]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent<{ suggestedPrompt?: string }>;
+      if (customEvent.detail?.suggestedPrompt) {
+        setSuggestedQuery(customEvent.detail.suggestedPrompt);
+      }
+    };
+    window.addEventListener("thwip-seed-demo", handler);
+    return () => window.removeEventListener("thwip-seed-demo", handler);
+  }, []);
 
   if (isPending || !session) {
     return <Loader />;
@@ -37,7 +48,6 @@ export default function Home() {
   return (
     <main className="min-h-[calc(100vh-4rem)] p-4 md:p-8 bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
-        <TimeMachineBar onSeed={(prompt) => setSuggestedQuery(prompt)} />
         {/* Header Title section */}
         {isIdle && (
           <div className="text-center space-y-2 py-8">
@@ -68,12 +78,13 @@ export default function Home() {
             metrics={metrics}
             concepts={concepts}
             verdict={verdict}
+            notCovered={notCovered}
           />
         )}
 
         {/* Discovery UI */}
         {!isIdle && mode === "discovery" && discoveryState && (
-          <Discovery state={discoveryState} />
+          <DiscoveryView state={discoveryState} />
         )}
       </div>
       <OnboardingFlow />

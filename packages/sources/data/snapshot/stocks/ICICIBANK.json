@@ -3,17 +3,17 @@
   "bseCode": "532174",
   "isin": "INE090A01021",
   "name": "ICICI Bank Ltd",
-  "sector": "Unclassified",
+  "sector": "Banking",
   "business": "This committed fallback covers the BSE-listed company named ICICI Bank Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 1379.15,
-    "change": -4.85,
-    "changePct": -0.35,
+    "last": 1379,
+    "change": -0.15,
+    "changePct": -0.01,
     "dayHigh": 1389,
     "dayLow": 1367.15,
     "week52High": 1480,
     "week52Low": 1188,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:37:01.196Z",
     "sourceId": "bse_icicibank_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 990020,
-      "display": "9,90,020 Cr",
+      "display": "₹9,90,020 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 1040864.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -49,7 +49,7 @@
       "value": 17.6,
       "display": "17.6",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 15.7,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 527,
-      "display": "527",
+      "display": "₹527",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 7.18,
       "display": "7.18%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": 7.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -88,7 +88,7 @@
       "value": 15.9,
       "display": "15.9%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 14.75,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 0.87,
       "display": "0.87%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "normal",
+      "sectorMedian": 1.36,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_icicibank_fundamentals"
@@ -127,7 +127,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,11 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.7,
+    "roe": 14.75,
+    "roce": 7.1,
+    "dividend_yield": 1.36,
+    "market_cap": 1040864.5
   },
   "risk": [
     {
@@ -1164,7 +1163,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "medium",
-      "reason": "P/E is 17.6, compared with a sector median of 17.05.",
+      "reason": "P/E is 17.6, compared with the Banking sector median of 15.7. Investors are paying more for its earnings than for its peers'.",
       "sourceIds": [
         "screener_icicibank_fundamentals"
       ]
@@ -1181,7 +1180,12 @@
   ],
   "documentIds": [
     "bse_icicibank_market_data",
-    "screener_icicibank_fundamentals"
+    "screener_icicibank_fundamentals",
+    "nse_icicibank_2026_09_07_general_updates",
+    "nse_icicibank_2026_09_09_general_updates",
+    "nse_icicibank_2026_09_08_esop_esos_esps",
+    "nse_icicibank_2026_09_11_esop_esos_esps",
+    "nse_icicibank_2026_09_05_general_updates"
   ],
   "newsIds": []
 }

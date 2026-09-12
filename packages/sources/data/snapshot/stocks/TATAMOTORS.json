@@ -3,7 +3,7 @@
   "bseCode": "500570",
   "isin": "INE155A01022",
   "name": "Tata Motors Passenger Vehicles Ltd",
-  "sector": "Unclassified",
+  "sector": "Automobile",
   "business": "This committed fallback covers the BSE-listed company named Tata Motors Passenger Vehicles Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 302,
@@ -36,8 +36,8 @@
       "value": 110892,
       "display": "1,10,892 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": 88285,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -49,8 +49,8 @@
       "value": 111,
       "display": "111",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -75,8 +75,8 @@
       "value": 2.73,
       "display": "2.73%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -88,8 +88,8 @@
       "value": 75.7,
       "display": "75.7%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -101,8 +101,8 @@
       "value": 1,
       "display": "1%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "normal",
+      "sectorMedian": 0.5,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 1.3083431090256301,
+      "value": 1.31,
       "display": "1.31",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
@@ -1143,12 +1143,8 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "dividend_yield": 0.5,
+    "market_cap": 88285
   },
   "risk": [
     {
@@ -1156,24 +1152,6 @@
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹294 and ₹447 over 52 weeks — a swing of about 52% from its low.",
-      "sourceIds": [
-        "screener_tatamotors_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "high",
-      "reason": "P/E is 111, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_tatamotors_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "high",
-      "reason": "Debt to equity is 1.31, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_tatamotors_fundamentals"
       ]

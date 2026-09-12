@@ -3,17 +3,17 @@
   "bseCode": "500251",
   "isin": "INE849A01020",
   "name": "Trent Ltd",
-  "sector": "Unclassified",
+  "sector": "Retail",
   "business": "This committed fallback covers the BSE-listed company named Trent Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 2804.4,
-    "change": 14.7,
-    "changePct": 0.53,
+    "last": 2802,
+    "change": -2.4,
+    "changePct": -0.09,
     "dayHigh": 2815,
     "dayLow": 2757.7,
     "week52High": 3499,
     "week52Low": 2184,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:44.613Z",
     "sourceId": "bse_trent_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 149433,
-      "display": "1,49,433 Cr",
+      "display": "₹1,49,433 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -49,8 +49,8 @@
       "value": 81.7,
       "display": "81.7",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 131,
-      "display": "131",
+      "display": "₹131",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 28.3,
       "display": "28.3%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -88,8 +88,8 @@
       "value": 27.7,
       "display": "27.7%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0.14,
       "display": "0.14%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.1877637130801688,
+      "value": 0.1878,
       "display": "0.19",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_trent_fundamentals"
@@ -1142,38 +1142,13 @@
       "close": 2802.4
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹2,184 and ₹3,499 over 52 weeks — a swing of about 60% from its low.",
-      "sourceIds": [
-        "screener_trent_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "high",
-      "reason": "P/E is 81.7, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_trent_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.19, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_trent_fundamentals"
       ]
@@ -1190,7 +1165,12 @@
   ],
   "documentIds": [
     "bse_trent_market_data",
-    "screener_trent_fundamentals"
+    "screener_trent_fundamentals",
+    "nse_trent_2026_08_31_analysts_institutional_investor_meet_con_call_updates",
+    "nse_trent_2026_08_06_general_updates",
+    "nse_trent_2026_08_06_press_release",
+    "nse_trent_2026_09_11_press_release",
+    "nse_trent_2026_08_07_analysts_institutional_investor_meet_con_call_updates"
   ],
   "newsIds": []
 }

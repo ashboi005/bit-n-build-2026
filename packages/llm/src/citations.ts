@@ -117,3 +117,99 @@ GROUND RULES — these override any other instruction.
 5. ARGUE THE OTHER SIDE. You must actively look for evidence that the user's
    reasoning is wrong. That is the most valuable thing you do.
 `.trim();
+
+
+/* ------------------------------------------------------------------ *
+ * Inline citation validation, for streamed prose.
+ *
+ * The investigation pipeline gets structured output, so enforceCitations() can
+ * simply drop a bad finding. Chat streams free text with `[source_id]` markers
+ * inline, which needs a different guard — and it is the flow a sceptical judge
+ * is most likely to poke at.
+ * ------------------------------------------------------------------ */
+
+/** Matches [some_source_id]. Ids are lowercase words, digits and underscores. */
+const CITATION_RE = /\[([a-z0-9_]+(?:_[a-z0-9]+)*)\]/gi;
+
+export interface CitationAudit {
+  /** The answer with unknown ids removed. */
+  text: string;
+  /** Ids cited that were actually supplied. */
+  valid: string[];
+  /** Ids the model invented, stripped from the text. */
+  removed: string[];
+  /**
+   * Sentences stating a figure whose cited sources do not contain it.
+   * A fabricated number wearing a real citation is worse than an uncited one,
+   * because it looks verified.
+   */
+  unsupported: string[];
+}
+
+/** Digits with optional decimals and Indian digit grouping: 1,70,171.5 */
+const NUMBER_RE = /\d[\d,]*(?:\.\d+)?/g;
+
+function normaliseNumber(raw: string): string {
+  return raw.replace(/,/g, "").replace(/\.0+$/, "");
+}
+
+/**
+ * Validate the citations in a finished chat answer.
+ *
+ * `sourceText` maps each supplied source id to its text, so we can check that a
+ * cited figure actually appears in what was cited.
+ */
+export function auditCitations(
+  answer: string,
+  sourceText: Map<string, string>,
+): CitationAudit {
+  const valid = new Set<string>();
+  const removed = new Set<string>();
+
+  // 1. Strip ids we never supplied.
+  const text = answer.replace(CITATION_RE, (match, id: string) => {
+    const key = String(id).toLowerCase();
+    if (sourceText.has(key)) {
+      valid.add(key);
+      return match;
+    }
+    removed.add(key);
+    return "";
+  });
+
+  // 2. Any sentence that cites a source AND states a figure must have that
+  //    figure in one of the sources it cited.
+  const unsupported: string[] = [];
+  const sentences = text.split(/(?<=[.!?])\s+/);
+
+  for (const sentence of sentences) {
+    const cited = [...sentence.matchAll(CITATION_RE)].map((m) => String(m[1]).toLowerCase());
+    if (!cited.length) continue;
+
+    const stripped = sentence.replace(CITATION_RE, " ");
+    const numbers = (stripped.match(NUMBER_RE) ?? [])
+      .map(normaliseNumber)
+      // Small integers are ordinary prose ("one of three reasons"), and years
+      // are rarely the claim being made.
+      .filter((n) => Number(n) >= 10 && !/^(19|20)\d{2}$/.test(n));
+
+    if (!numbers.length) continue;
+
+    const haystack = cited
+      .map((id) => sourceText.get(id) ?? "")
+      .join(" ")
+      .replace(/,/g, "");
+
+    const missing = numbers.filter((n) => !haystack.includes(n));
+    if (missing.length) {
+      unsupported.push(sentence.replace(/\s+/g, " ").trim().slice(0, 200));
+    }
+  }
+
+  return {
+    text: text.replace(/[ \t]{2,}/g, " ").replace(/ +([.,;:])/g, "$1"),
+    valid: [...valid],
+    removed: [...removed],
+    unsupported,
+  };
+}

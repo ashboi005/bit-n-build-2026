@@ -6,6 +6,7 @@
  */
 
 import {
+  type ChatThread,
   type Decision,
   type DecisionAction,
   type OnboardingAnswers,
@@ -137,7 +138,7 @@ function rowToDecision(row: typeof userDecision.$inferSelect): Decision {
     companyName: row.companyName,
     action: row.action as DecisionAction,
     quantity: row.quantity,
-    pricePerShare: row.pricePerShare,
+    pricePerShare: row.pricePerShare ?? row.priceAtDecision,
     thesis: row.thesis,
     investigationSummary: row.investigationSummary,
     reasoning: row.reasoning,
@@ -173,6 +174,9 @@ export async function recordDecision(
       action: input.action,
       quantity: input.quantity ?? null,
       pricePerShare: input.pricePerShare ?? null,
+      // Reference point for "what changed since" — a skipped or watched
+      // decision has no purchase price but still needs something to measure from.
+      priceAtDecision: stock?.price?.last ?? null,
       thesis: input.thesis ?? null,
       investigationSummary: input.investigationSummary ?? null,
       reasoning: input.reasoning ?? null,
@@ -290,6 +294,48 @@ export async function listMessages(userId: string, threadId: string, limit = 20)
     conceptKeys: r.conceptKeys,
     createdAt: r.createdAt.toISOString(),
   }));
+}
+
+/**
+ * The user's conversations, most recently active first.
+ *
+ * Grouped in application code rather than SQL: the volume is tiny (a demo user
+ * has a handful of threads) and it keeps the query portable.
+ */
+export async function listThreads(userId: string, limit = 30): Promise<ChatThread[]> {
+  const rows = await db()
+    .select()
+    .from(chatMessage)
+    .where(eq(chatMessage.userId, userId))
+    .orderBy(asc(chatMessage.createdAt));
+
+  const byThread = new Map<string, typeof rows>();
+  for (const row of rows) {
+    byThread.set(row.threadId, [...(byThread.get(row.threadId) ?? []), row]);
+  }
+
+  const threads: ChatThread[] = [];
+  for (const [threadId, messages] of byThread) {
+    const first = messages[0]!;
+    const last = messages[messages.length - 1]!;
+    // Title from the first thing the USER said — an assistant greeting makes a
+    // useless title.
+    const firstUser = messages.find((m) => m.role === "user") ?? first;
+
+    threads.push({
+      threadId,
+      title: firstUser.content.replace(/\s+/g, " ").trim().slice(0, 80),
+      lastMessage: last.content.replace(/\s+/g, " ").trim().slice(0, 140),
+      lastRole: last.role as "user" | "assistant",
+      messageCount: messages.length,
+      createdAt: first.createdAt.toISOString(),
+      updatedAt: last.createdAt.toISOString(),
+    });
+  }
+
+  return threads
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    .slice(0, limit);
 }
 
 export async function saveMessage(args: {

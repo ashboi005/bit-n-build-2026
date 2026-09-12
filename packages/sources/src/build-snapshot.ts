@@ -7,6 +7,7 @@ import type { Metric, SourceDocument, StockRecord } from "@bit-n-build-2026/cont
 
 import { fetchScripMaster } from "./fetchers/bse";
 import { fetchFundamentals, fetchPriceHistory, searchCompany } from "./fetchers/screener";
+import { deriveAll } from "./derive";
 import { getJson, getText } from "./http";
 
 const DATA = join(import.meta.dir, "../data/snapshot");
@@ -323,123 +324,36 @@ function screenerDocument(
   };
 }
 
-const MEDIAN_KEYS = ["pe", "roe", "roce", "dividend_yield", "market_cap", "debt_to_equity"] as const;
 
-function median(values: number[]): number | null {
-  if (values.length < 2) return null;
-  const sorted = [...values].sort((a, b) => a - b);
-  const middle = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0
-    ? (sorted[middle - 1]! + sorted[middle]!) / 2
-    : sorted[middle]!;
-}
 
-function metricValue(stock: StockRecord, key: string): Metric | undefined {
-  return stock.metrics.find((entry) => entry.key === key);
-}
 
-function sourceIdsFor(stock: StockRecord, key: string): string[] {
-  return metricValue(stock, key)?.sourceIds ?? [];
-}
 
-function relativeRiskLevel(value: number, medianValue: number): "low" | "medium" | "high" {
-  if (value > medianValue * 1.3) return "high";
-  if (value < medianValue * 0.8) return "low";
-  return "medium";
-}
-
-function derivedRisk(stock: StockRecord): StockRecord["risk"] {
-  const risks: StockRecord["risk"] = [];
-  const { week52High: high, week52Low: low } = stock.price;
-  const screenerSources = sourceIdsFor(stock, "week52_range");
-  if (high !== null && low !== null && low > 0 && screenerSources.length) {
-    const swing = (high - low) / low;
-    risks.push({
-      key: "volatility",
-      label: "Price volatility",
-      level: swing > 0.7 ? "high" : swing > 0.35 ? "medium" : "low",
-      reason: `The price moved between ₹${low.toLocaleString("en-IN")} and ₹${high.toLocaleString("en-IN")} over 52 weeks — a swing of about ${Math.round(swing * 100)}% from its low.`,
-      sourceIds: screenerSources,
-    });
-  }
-
-  const pe = metricValue(stock, "pe");
-  const peMedian = stock.sectorMedians.pe;
-  if (pe?.value !== null && pe?.value !== undefined && peMedian !== undefined && pe.sourceIds.length) {
-    risks.push({
-      key: "valuation",
-      label: "Valuation",
-      level: relativeRiskLevel(pe.value, peMedian),
-      reason: `P/E is ${pe.value}, compared with a sector median of ${peMedian}.`,
-      sourceIds: pe.sourceIds,
-    });
-  }
-
-  const debt = metricValue(stock, "debt_to_equity");
-  const debtMedian = stock.sectorMedians.debt_to_equity;
-  if (debt?.value !== null && debt?.value !== undefined && debtMedian !== undefined && debt.sourceIds.length) {
-    risks.push({
-      key: "debt",
-      label: "Debt",
-      level: relativeRiskLevel(debt.value, debtMedian),
-      reason: `Debt to equity is ${debt.value.toFixed(2)}, compared with a sector median of ${debtMedian.toFixed(2)}.`,
-      sourceIds: debt.sourceIds,
-    });
-  }
-
-  const roe = metricValue(stock, "roe");
-  if (roe?.value !== null && roe?.value !== undefined && roe.sourceIds.length) {
-    risks.push({
-      key: "stability",
-      label: "Business returns",
-      level: roe.value > 18 ? "low" : roe.value > 10 ? "medium" : "high",
-      reason: `Return on equity is ${roe.value}%, showing how much profit the business earned from shareholders' money.`,
-      sourceIds: roe.sourceIds,
-    });
-  }
-
-  return risks;
-}
-
+/**
+ * Sectors, sector medians, metric directions and risk rows.
+ *
+ * Delegates to `deriveAll` in derive.ts so the rules live in exactly one place
+ * and a rebuild cannot silently drop them. Three of those rules exist because
+ * their absence produced output that was actively wrong:
+ *
+ *  - A sector needs 2+ companies before a median is written. Every stock was
+ *    once "Unclassified", so all 20 shared one blended P/E median of 17.05
+ *    across banks, IT, oil and retail — which told users Infosys was cheap when
+ *    it sits on the IT median.
+ *  - No valuation row within 5% of the median: being at the median is not a
+ *    story, and padding the watch-out list makes the real flags matter less.
+ *  - No debt row when both values are under 0.05: HAL was briefly flagged
+ *    "debt: high, 0.01 vs median 0.01".
+ */
 function applyDerivedStockData(): void {
-  const stocks = readdirSync(join(DATA, "stocks"))
-    .filter((file) => file.endsWith(".json"))
-    .map((file) => JSON.parse(readFileSync(join(DATA, "stocks", file), "utf8")) as StockRecord);
-  const mediansBySector = new Map<string, Record<string, number>>();
+  const files = readdirSync(join(DATA, "stocks")).filter((file) => file.endsWith(".json"));
+  const stocks = files.map(
+    (file) => JSON.parse(readFileSync(join(DATA, "stocks", file), "utf8")) as StockRecord,
+  );
 
-  for (const sector of new Set(stocks.map((stock) => stock.sector))) {
-    const peers = stocks.filter((stock) => stock.sector === sector);
-    const medians: Record<string, number> = {};
-    for (const key of MEDIAN_KEYS) {
-      const values = peers
-        .map((stock) => metricValue(stock, key)?.value ?? null)
-        .filter((value): value is number => value !== null);
-      const value = median(values);
-      if (value !== null) medians[key] = value;
-    }
-    mediansBySector.set(sector, medians);
-  }
+  deriveAll(stocks);
 
-  for (const stock of stocks) {
-    const sectorMedians = mediansBySector.get(stock.sector) ?? {};
-    stock.sectorMedians = sectorMedians;
-    stock.metrics = stock.metrics.map((entry) => {
-      if (entry.key === "week52_range") return entry;
-      const sectorMedian = sectorMedians[entry.key] ?? null;
-      return {
-        ...entry,
-        sectorMedian,
-        direction: entry.value === null || sectorMedian === null
-          ? "unknown"
-          : entry.value > sectorMedian * 1.15
-            ? "high"
-            : entry.value < sectorMedian * 0.85
-              ? "low"
-              : "normal",
-      };
-    });
-    stock.risk = derivedRisk(stock);
-    writeSnapshot(join(DATA, "stocks", `${stock.ticker}.json`), stock);
+  for (const [index, file] of files.entries()) {
+    writeSnapshot(join(DATA, "stocks", file), stocks[index]);
   }
 }
 

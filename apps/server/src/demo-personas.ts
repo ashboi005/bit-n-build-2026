@@ -18,7 +18,17 @@ export interface PersonaDecision {
   companyName: string;
   action: DecisionAction;
   quantity: number | null;
-  pricePerShare: number | null;
+  /**
+   * What they paid, as an offset from the CURRENT price in the snapshot.
+   * -0.08 means they bought 8% below today's price, so they are up 8%.
+   *
+   * Absolute prices were tried first and were a mistake: they drift out of date
+   * the moment Tushar refreshes the data, and a hardcoded ₹980 for Tata Motors
+   * (its pre-demerger price) against a real ₹302 showed the demo user a 40%
+   * loss nobody intended. An offset keeps the story deterministic whatever the
+   * real price is.
+   */
+  priceOffsetPct: number | null;
   thesis: string | null;
   reasoning: string | null;
   outcome: "held_up" | "broke" | "unresolved";
@@ -35,16 +45,27 @@ export interface Persona {
   decisions: PersonaDecision[];
   /** Onboarding answers, so the AI knows who it is talking to from the start. */
   onboarding: {
-    ageBand: string;
-    primaryGoal: string;
-    riskComfort: string;
-    experience: string;
-    monthlyBudget: number;
-    horizon: string;
+    ageBand: string | null;
+    primaryGoal: string | null;
+    riskComfort: string | null;
+    experience: string | null;
+    monthlyBudget: number | null;
+    horizon: string | null;
     notes: string | null;
   };
 }
 
+/**
+ * ⚠️ NEVER put a biographical claim in `notes`.
+ *
+ * This once read "My father trades occasionally and I want to understand what he
+ * does." Seeding writes it into the real `user_profile` row, so the assistant
+ * then told a live tester about a father who does not exist and a budget they
+ * never chose. Inventing facts about the user is the single worst failure this
+ * product can have — it is the exact opposite of what we promise.
+ *
+ * Keep notes to a stated preference, or null.
+ */
 const ONBOARDING_BASE = {
   ageBand: "25-34",
   primaryGoal: "learn_first",
@@ -52,7 +73,24 @@ const ONBOARDING_BASE = {
   experience: "never",
   monthlyBudget: 10000,
   horizon: "over_5y",
-  notes: "My father trades occasionally and I want to understand what he does.",
+  notes: null as string | null,
+};
+
+/**
+ * Day 0 is a genuine blank slate: no onboarding answers at all.
+ *
+ * Anything non-null here gets asserted back at whoever is using the app, so a
+ * "reset" that quietly installs opinions is worse than no reset. A real tester
+ * who hits Day 0 should find the assistant knows nothing about them.
+ */
+const ONBOARDING_BLANK = {
+  ageBand: null,
+  primaryGoal: null,
+  riskComfort: null,
+  experience: null,
+  monthlyBudget: null,
+  horizon: null,
+  notes: null,
 };
 
 export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
@@ -63,7 +101,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
     knownConcepts: [],
     pastTheses: [],
     decisions: [],
-    onboarding: { ...ONBOARDING_BASE, experience: "never" },
+    onboarding: ONBOARDING_BLANK,
   },
 
   /** Has had P/E explained once, and made one cautious purchase. */
@@ -87,7 +125,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "unresolved",
@@ -132,7 +170,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
@@ -144,7 +182,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Tata Motors Ltd",
         action: "bought",
         quantity: 8,
-        pricePerShare: 980,
+        priceOffsetPct: 0.02,
         thesis: "Car sales are recovering",
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
@@ -156,7 +194,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Bharat Electronics Ltd",
         action: "bought",
         quantity: 15,
-        pricePerShare: 445,
+        priceOffsetPct: 0.12,
         thesis: "Everyone is talking about this defence stock so it will keep rising",
         reasoning: "I saw it on three different reels in one day.",
         outcome: "broke",
@@ -219,7 +257,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "ITC Ltd",
         action: "bought",
         quantity: 20,
-        pricePerShare: 412,
+        priceOffsetPct: -0.08,
         thesis: "ITC is a big company so it must be safe",
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
@@ -231,7 +269,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Tata Motors Ltd",
         action: "bought",
         quantity: 8,
-        pricePerShare: 980,
+        priceOffsetPct: 0.02,
         thesis: "Car sales are recovering",
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
@@ -243,7 +281,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Bharat Electronics Ltd",
         action: "bought",
         quantity: 15,
-        pricePerShare: 445,
+        priceOffsetPct: 0.12,
         thesis: "Everyone is talking about this defence stock so it will keep rising",
         reasoning: "I saw it on three different reels in one day.",
         outcome: "broke",
@@ -256,7 +294,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Nestle India Ltd",
         action: "skipped",
         quantity: null,
-        pricePerShare: null,
+        priceOffsetPct: null,
         thesis: "Nestle is a safe household name",
         reasoning:
           "Its P/E was far above the rest of the sector and I couldn't find a reason the earnings justified it.",
@@ -269,7 +307,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         companyName: "Infosys Ltd",
         action: "bought",
         quantity: 12,
-        pricePerShare: 1560,
+        priceOffsetPct: -0.15,
         thesis: "Infosys looks cheap compared to its own history",
         reasoning:
           "Compared its P/E to TCS and Wipro and to its own past, then checked earnings were still growing.",

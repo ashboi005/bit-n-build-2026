@@ -3,17 +3,17 @@
   "bseCode": "500209",
   "isin": "INE009A01021",
   "name": "Infosys Ltd",
-  "sector": "Unclassified",
+  "sector": "Information Technology",
   "business": "This committed fallback covers the BSE-listed company named Infosys Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 1038.2,
-    "change": 6.65,
-    "changePct": 0.64,
+    "last": 1038,
+    "change": -0.2,
+    "changePct": -0.02,
     "dayHigh": 1047.5,
     "dayLow": 1029.05,
     "week52High": 1728,
     "week52Low": 982,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:45.920Z",
     "sourceId": "bse_infy_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 421123,
-      "display": "4,21,123 Cr",
+      "display": "₹4,21,123 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "high",
+      "sectorMedian": 608696,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -49,8 +49,8 @@
       "value": 13.5,
       "display": "13.5",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "low",
+      "sectorMedian": 14.15,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 225,
-      "display": "225",
+      "display": "₹225",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 40,
       "display": "40%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": 51.5,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -88,8 +88,8 @@
       "value": 31.9,
       "display": "31.9%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": 41.85,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_infy_fundamentals"
@@ -101,7 +101,7 @@
       "value": 4.63,
       "display": "4.63%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 3.77,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -127,7 +127,7 @@
       "value": 0,
       "display": "0",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": 0.0036,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 14.15,
+    "roe": 41.85,
+    "roce": 51.5,
+    "dividend_yield": 3.77,
+    "market_cap": 608696,
+    "debt_to_equity": 0.0036
   },
   "risk": [
     {
@@ -1156,24 +1156,6 @@
       "label": "Price volatility",
       "level": "high",
       "reason": "The price moved between ₹982 and ₹1,728 over 52 weeks — a swing of about 76% from its low.",
-      "sourceIds": [
-        "screener_infy_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "low",
-      "reason": "P/E is 13.5, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_infy_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.00, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_infy_fundamentals"
       ]
@@ -1190,7 +1172,12 @@
   ],
   "documentIds": [
     "bse_infy_market_data",
-    "screener_infy_fundamentals"
+    "screener_infy_fundamentals",
+    "nse_infy_2026_09_09_updates",
+    "nse_infy_2026_09_03_updates",
+    "nse_infy_2026_09_01_updates",
+    "nse_infy_2026_09_07_updates",
+    "nse_infy_2026_08_25_updates"
   ],
   "newsIds": []
 }

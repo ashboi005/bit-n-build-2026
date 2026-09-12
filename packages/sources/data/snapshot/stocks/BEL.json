@@ -3,17 +3,17 @@
   "bseCode": "500049",
   "isin": "INE263A01024",
   "name": "Bharat Electronics Ltd",
-  "sector": "Unclassified",
+  "sector": "Defence",
   "business": "This committed fallback covers the BSE-listed company named Bharat Electronics Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 405.5,
-    "change": 2.5,
-    "changePct": 0.62,
+    "last": 404,
+    "change": 0,
+    "changePct": 0,
     "dayHigh": 405.5,
     "dayLow": 399.55,
     "week52High": 473,
     "week52Low": 380,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:37:05.725Z",
     "sourceId": "bse_bel_market_data"
   },
   "metrics": [
@@ -34,9 +34,9 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 295571,
-      "display": "2,95,571 Cr",
+      "display": "₹2,95,571 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
+      "sectorMedian": 295571,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -49,8 +49,8 @@
       "value": 48.1,
       "display": "48.1",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "high",
+      "sectorMedian": 48.1,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 32.8,
-      "display": "32.8",
+      "display": "₹32.8",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 36.4,
       "display": "36.4%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": 32,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -88,8 +88,8 @@
       "value": 27.4,
       "display": "27.4%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": 24,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -101,8 +101,8 @@
       "value": 0.62,
       "display": "0.62%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": 0.62,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_bel_fundamentals"
@@ -124,10 +124,10 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.00307995564863866,
+      "value": 0.0031,
       "display": "0",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
+      "sectorMedian": 0.0065,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 48.1,
+    "roe": 24,
+    "roce": 32,
+    "dividend_yield": 0.62,
+    "market_cap": 295571,
+    "debt_to_equity": 0.0065
   },
   "risk": [
     {
@@ -1156,24 +1156,6 @@
       "label": "Price volatility",
       "level": "low",
       "reason": "The price moved between ₹380 and ₹473 over 52 weeks — a swing of about 24% from its low.",
-      "sourceIds": [
-        "screener_bel_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "high",
-      "reason": "P/E is 48.1, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_bel_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.00, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_bel_fundamentals"
       ]
@@ -1190,7 +1172,13 @@
   ],
   "documentIds": [
     "bse_bel_market_data",
-    "screener_bel_fundamentals"
+    "screener_bel_fundamentals",
+    "pib_budget_defence",
+    "nse_bel_2026_08_28_shareholders_meeting",
+    "nse_bel_2026_08_26_bagging_receiving_of_orders_contracts",
+    "nse_bel_2026_09_11_appointment",
+    "nse_bel_2026_09_08_updates",
+    "bs_defence_priced_in"
   ],
   "newsIds": []
 }

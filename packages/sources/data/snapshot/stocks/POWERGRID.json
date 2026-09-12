@@ -3,17 +3,17 @@
   "bseCode": "532898",
   "isin": "INE752E01010",
   "name": "Power Grid Corporation of India Ltd",
-  "sector": "Unclassified",
+  "sector": "Power",
   "business": "This committed fallback covers the BSE-listed company named Power Grid Corporation of India Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 269.1,
-    "change": -2.9,
-    "changePct": -1.07,
+    "last": 269,
+    "change": -0.1,
+    "changePct": -0.04,
     "dayHigh": 274,
     "dayLow": 268.3,
     "week52High": 325,
     "week52Low": 250,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:58.584Z",
     "sourceId": "bse_powergrid_market_data"
   },
   "metrics": [
@@ -34,9 +34,9 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 250279,
-      "display": "2,50,279 Cr",
+      "display": "₹2,50,279 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
+      "sectorMedian": 250279,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": 15.8,
       "display": "15.8",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 15.8,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 108,
-      "display": "108",
+      "display": "₹108",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,7 +75,7 @@
       "value": 9.1,
       "display": "9.1%",
       "unit": "%",
-      "sectorMedian": 10.3,
+      "sectorMedian": 9.1,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": 15.3,
       "display": "15.3%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 15.1,
       "direction": "normal",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": 3.34,
       "display": "3.34%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 2.7,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 2.503785218137829,
+      "value": 2.5,
       "display": "2.5",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "high",
+      "sectorMedian": 2.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_powergrid_fundamentals"
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.8,
+    "roe": 15.1,
+    "roce": 9.1,
+    "dividend_yield": 2.7,
+    "market_cap": 250279,
+    "debt_to_equity": 2.5
   },
   "risk": [
     {
@@ -1161,19 +1161,10 @@
       ]
     },
     {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 15.8, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_powergrid_fundamentals"
-      ]
-    },
-    {
       "key": "debt",
       "label": "Debt",
-      "level": "high",
-      "reason": "Debt to equity is 2.50, compared with a sector median of 0.30.",
+      "level": "medium",
+      "reason": "Debt to equity is 2.5, compared with the Power sector median of 2.5.",
       "sourceIds": [
         "screener_powergrid_fundamentals"
       ]
@@ -1190,7 +1181,12 @@
   ],
   "documentIds": [
     "bse_powergrid_market_data",
-    "screener_powergrid_fundamentals"
+    "screener_powergrid_fundamentals",
+    "nse_powergrid_2026_09_02_general_updates",
+    "nse_powergrid_2026_09_03_general_updates",
+    "nse_powergrid_2026_08_31_change_in_management",
+    "nse_powergrid_2026_08_28_acquisition",
+    "nse_powergrid_2026_08_26_general_updates"
   ],
   "newsIds": []
 }

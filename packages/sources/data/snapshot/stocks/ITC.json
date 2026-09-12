@@ -3,17 +3,17 @@
   "bseCode": "500875",
   "isin": "INE154A01025",
   "name": "ITC Ltd",
-  "sector": "Unclassified",
+  "sector": "FMCG",
   "business": "This committed fallback covers the BSE-listed company named ITC Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 260.25,
-    "change": 1.25,
-    "changePct": 0.48,
+    "last": 260,
+    "change": 0,
+    "changePct": 0,
     "dayHigh": 261.6,
     "dayLow": 257.9,
     "week52High": 426,
     "week52Low": 256,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:37:01.777Z",
     "sourceId": "bse_itc_market_data"
   },
   "metrics": [
@@ -34,10 +34,10 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 325586,
-      "display": "3,25,586 Cr",
+      "display": "₹3,25,586 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -49,8 +49,8 @@
       "value": 16.5,
       "display": "16.5",
       "unit": null,
-      "sectorMedian": 17.05,
-      "direction": "normal",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 57.9,
-      "display": "57.9",
+      "display": "₹57.9",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 38.9,
       "display": "38.9%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -88,8 +88,8 @@
       "value": 29.3,
       "display": "29.3%",
       "unit": "%",
-      "sectorMedian": 15.75,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -101,8 +101,8 @@
       "value": 5.58,
       "display": "5.58%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 0.008476178472397277,
+      "value": 0.0085,
       "display": "0.01",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_itc_fundamentals"
@@ -1142,38 +1142,13 @@
       "close": 259.85
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
       "label": "Price volatility",
       "level": "medium",
       "reason": "The price moved between ₹256 and ₹426 over 52 weeks — a swing of about 66% from its low.",
-      "sourceIds": [
-        "screener_itc_fundamentals"
-      ]
-    },
-    {
-      "key": "valuation",
-      "label": "Valuation",
-      "level": "medium",
-      "reason": "P/E is 16.5, compared with a sector median of 17.05.",
-      "sourceIds": [
-        "screener_itc_fundamentals"
-      ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "low",
-      "reason": "Debt to equity is 0.01, compared with a sector median of 0.30.",
       "sourceIds": [
         "screener_itc_fundamentals"
       ]
@@ -1190,7 +1165,13 @@
   ],
   "documentIds": [
     "bse_itc_market_data",
-    "screener_itc_fundamentals"
+    "screener_itc_fundamentals",
+    "nse_itc_2026_08_31_acquisition",
+    "nse_itc_2026_08_14_esop_esos_esps",
+    "nse_itc_2026_08_01_general_updates",
+    "nse_itc_2026_08_14_analysts_institutional_investor_meet_con_call_updates",
+    "economic_times_bitcoin_trades_at_77_000_mark_as_profit_taking_weighs_on_market_",
+    "nse_itc_2026_09_01_general_updates"
   ],
   "newsIds": []
 }

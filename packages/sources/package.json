@@ -9,6 +9,8 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
+    "refresh": "bun run src/refresh.ts",
+    "enrich": "bun run src/enrich.ts",
     "build:snapshot": "bun run src/build-snapshot.ts",
     "verify:endpoints": "bun run src/verify-endpoints.ts"
   },

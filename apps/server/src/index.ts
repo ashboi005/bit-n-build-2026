@@ -10,12 +10,13 @@ import {
   type DemoStage,
   type OnboardingAnswers,
 } from "@bit-n-build-2026/contracts";
-import { runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
+import { computeChanges, runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
 import { extensionTrustedOrigin } from "@bit-n-build-2026/auth/extension-oauth";
 import {
   oauthProviderAuthServerMetadata,
   oauthProviderOpenIdConfigMetadata,
 } from "@better-auth/oauth-provider";
+import { checkFreshness } from "@bit-n-build-2026/sources";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
@@ -27,6 +28,10 @@ import {
   fastModel,
   getRetriever,
   llm,
+  peekRetriever,
+  resetUser,
+  scheduleFreshnessCheck,
+  warmRetriever,
   seedProfile,
   sources,
   verifyExtensionAccessToken,
@@ -39,6 +44,7 @@ import {
   getUserContext,
   listDecisions,
   listMessages,
+  listThreads,
   newId,
   recordDecision,
   saveMessage,
@@ -270,8 +276,42 @@ new Elysia()
           content,
           sourceIds,
         });
+
+        /**
+         * Index the exchange as a personal memory.
+         *
+         * Only the last 12 turns of a thread are replayed into the prompt, so
+         * without this anything said earlier — or in a different thread — is
+         * lost. Indexing it means a question weeks later can still retrieve
+         * "they asked what P/E meant and said they found it confusing", which
+         * is exactly the kind of thing a friend would forget and we should not.
+         */
+        try {
+          const retriever = await getRetriever();
+          await retriever.indexPersonal(user.id, [
+            {
+              id: messageId,
+              kind: "chat",
+              text: `They asked: "${message}" — we answered: ${content.slice(0, 600)}`,
+            },
+          ]);
+        } catch {
+          // Never fail a reply because indexing hiccuped.
+        }
       }
     });
+  })
+
+  /**
+   * The user's conversations, most recent first.
+   *
+   * Lets the UI resume where it left off: without this, navigating away loses
+   * the threadId and the conversation is orphaned in the database.
+   */
+  .get("/api/chat", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+    return listThreads(user.id);
   })
 
   .get("/api/chat/:threadId", async ({ request, params, status }) => {
@@ -339,6 +379,22 @@ new Elysia()
     return decision;
   })
 
+  /**
+   * What changed since the user last looked.
+   *
+   * Computed on request rather than by a cron job: it is a diff over data we
+   * already hold, so it takes milliseconds and is never stale. This also means
+   * it works immediately after a Time Machine seed — the seeded decisions are
+   * dated relative to today, so Day 15 has 15 days of history to review.
+   */
+  .get("/api/changes", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+
+    const context = await getUserContext(user.id);
+    return computeChanges({ sources, llm, model: fastModel }, context);
+  })
+
   .get("/api/portfolio", async ({ request, status }) => {
     const user = await currentUser(request);
     if (!user) return status(401);
@@ -394,17 +450,41 @@ new Elysia()
     };
   })
 
+  /**
+   * Full demo reset. Deletes the account and everything attached to it, so the
+   * next demo starts at sign-up and runs through onboarding.
+   */
+  .post("/api/demo/reset", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+    await resetUser(user.id);
+    return { reset: true, message: "Account deleted. Sign up again to start a fresh demo." };
+  })
+
   .get("/api/health", async () => {
-    let vectors: { store: string; points: number } | null = null;
-    try {
-      const retriever = await getRetriever();
-      vectors = { store: retriever.store.name, points: await retriever.store.count() };
-    } catch {
-      vectors = null;
+    // Must never block: a health check that waits on embedding is not a health
+    // check. Report what is ready, and say so while indexing is still running.
+    const freshness = checkFreshness();
+    const retriever = peekRetriever();
+
+    let vectors: { store: string; points: number } | { status: string };
+    if (retriever) {
+      vectors = await retriever.store
+        .count()
+        .then((points) => ({ store: retriever.store.name, points }))
+        .catch(() => ({ status: "unreachable" }));
+    } else {
+      vectors = { status: "indexing" };
     }
+
     return {
       ok: true,
       stocks: sources.listStocks().length,
+      data: {
+        stale: freshness.staleCount,
+        newestAsOf: freshness.newestAsOf,
+        oldestAsOf: freshness.oldestAsOf,
+      },
       models: { smart: env.MERGE_MODEL_SMART, fast: env.MERGE_MODEL_FAST },
       llmConfigured: env.MERGE_API_KEY !== "replace-me",
       vectors,
@@ -414,4 +494,7 @@ new Elysia()
   .get("/", () => "OK")
   .listen(Number(process.env.PORT ?? 3000), ({ port }) => {
     console.log(`Server is running on http://localhost:${port}`);
+    // Background: never delays serving the committed snapshot.
+    warmRetriever();
+    scheduleFreshnessCheck();
   });

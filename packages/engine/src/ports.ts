@@ -12,10 +12,13 @@ import type {
   SearchOptions,
   SourceDocument,
   StockRecord,
+  StockSummary,
   UserProfile,
 } from "@bit-n-build-2026/contracts";
 
 export interface SourcesPort {
+  /** The companies we hold verified sources for. */
+  listStocks(): StockSummary[];
   getStock(ticker: string): StockRecord | null;
   getDocument(id: string): SourceDocument | null;
   searchSources(query: string, opts?: SearchOptions): SearchHit[];

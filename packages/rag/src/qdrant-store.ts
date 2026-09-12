@@ -9,7 +9,7 @@
  * code change or a different env file.
  */
 
-import type { SearchFilter, VectorHit, VectorPoint, VectorStore } from "./types";
+import { PUBLIC_OWNER, type SearchFilter, type VectorHit, type VectorPoint, type VectorStore } from "./types";
 
 export interface QdrantConfig {
   url: string;
@@ -50,28 +50,31 @@ export function createQdrantStore(config: QdrantConfig): VectorStore {
     }
   }
 
-  /** Qdrant wants its own filter DSL; translate ours. */
+  /**
+   * Qdrant wants its own filter DSL; translate ours.
+   *
+   * ⚠️ Owner matching uses `must` + `match.any`, NOT `should`.
+   * `minimum_should_match` is an Elasticsearch field — Qdrant rejects the whole
+   * request with a 400 "unknown field" and the search returns nothing. Verified
+   * against a live instance; a stub happily accepted it, which is why this only
+   * showed up against the real thing.
+   *
+   * `match.any` also AND-composes cleanly with the kind/tier/ticker clauses,
+   * where a bare `should` alongside `must` would need care.
+   */
   function toQdrantFilter(filter?: SearchFilter) {
     if (!filter) return undefined;
     const must: unknown[] = [];
-    const should: unknown[] = [];
 
     if (filter.owner) {
       // The user's own points OR public ones — never another user's.
-      should.push(
-        { key: "owner", match: { value: filter.owner } },
-        { key: "owner", match: { value: "public" } },
-      );
+      must.push({ key: "owner", match: { any: [filter.owner, PUBLIC_OWNER] } });
     }
     if (filter.kinds?.length) must.push({ key: "kind", match: { any: filter.kinds } });
     if (filter.tiers?.length) must.push({ key: "tier", match: { any: filter.tiers } });
     if (filter.tickers?.length) must.push({ key: "tickers", match: { any: filter.tickers } });
 
-    if (!must.length && !should.length) return undefined;
-    return {
-      ...(must.length ? { must } : {}),
-      ...(should.length ? { should, minimum_should_match: 1 } : {}),
-    };
+    return must.length ? { must } : undefined;
   }
 
   return {

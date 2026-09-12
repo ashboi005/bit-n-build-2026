@@ -5,8 +5,9 @@ import type { DemoStage, UserProfile } from "@bit-n-build-2026/contracts";
 import type { ProfilePort } from "@bit-n-build-2026/engine";
 import { createLlm } from "@bit-n-build-2026/llm";
 import { createRetriever, createStore, type Retriever } from "@bit-n-build-2026/rag";
-import { sources } from "@bit-n-build-2026/sources";
+import { checkFreshness, refreshIfStale, sources } from "@bit-n-build-2026/sources";
 import { chatMessage, userDecision } from "@bit-n-build-2026/db/schema/activity";
+import { user } from "@bit-n-build-2026/db/schema/auth";
 import { userProfile } from "@bit-n-build-2026/db/schema/profile";
 import { eq } from "drizzle-orm";
 
@@ -35,6 +36,12 @@ export { sources };
 /* ------------------------------------------------------------------ RAG */
 
 let retrieverPromise: Promise<Retriever> | null = null;
+let retrieverReady: Retriever | null = null;
+
+/** The retriever if it has finished warming up, else null. Never blocks. */
+export function peekRetriever(): Retriever | null {
+  return retrieverReady;
+}
 
 /**
  * Built lazily and once. Indexing embeds every source chunk, which costs a few
@@ -49,11 +56,22 @@ export function getRetriever(): Promise<Retriever> {
     });
     const retriever = createRetriever(llm, store);
 
-    if (await retriever.isEmpty()) {
-      // Everything we hold. Tushar shipped listDocuments() so a document that
-      // no stock happens to link to is still retrievable.
-      const docs = sources.listDocuments();
+    /**
+     * Reindex whenever the store's contents don't match what's on disk.
+     *
+     * Checking only for "empty" meant a persistent store (Qdrant) kept whatever
+     * it had from an older, smaller dataset forever — it had 53 chunks while
+     * disk held 233 documents, and nothing ever noticed.
+     */
+    const docs = sources.listDocuments();
+    const expected = docs.reduce((sum, d) => sum + d.chunks.length, 0);
+    const stored = await retriever.store.count().catch(() => 0);
 
+    if (stored !== expected) {
+      if (stored > 0) {
+        console.log(`[rag] store has ${stored} chunks, disk has ${expected} — reindexing`);
+        await retriever.store.reset().catch(() => undefined);
+      }
       try {
         const count = await retriever.indexDocuments(docs);
         console.log(`[rag] indexed ${count} chunks from ${docs.length} documents`);
@@ -63,10 +81,57 @@ export function getRetriever(): Promise<Retriever> {
           error instanceof Error ? error.message : error,
         );
       }
+    } else {
+      console.log(`[rag] ${stored} chunks already indexed and current`);
     }
+    retrieverReady = retriever;
     return retriever;
   })();
   return retrieverPromise;
+}
+
+/* ---------------------------------------------------------- freshness */
+
+/**
+ * Keep the snapshot current without ever blocking a request.
+ *
+ * Runs in the background on boot. The committed snapshot is served immediately
+ * either way — a refresh is an upgrade, never a dependency. If it fails, the
+ * old figures stay exactly as they were, because a stale price is a small
+ * problem and a null price is a broken screen.
+ */
+export function warmRetriever(): void {
+  // Index in the background at startup, so the first user request is not the
+  // one that pays for embedding every document.
+  void getRetriever().catch((error) =>
+    console.warn("[rag] warmup failed:", error instanceof Error ? error.message : error),
+  );
+}
+
+export function scheduleFreshnessCheck(): void {
+  const report = checkFreshness();
+  console.log(
+    `[data] ${report.total} stocks, ${report.staleCount} stale` +
+      (report.newestAsOf ? ` (newest ${report.newestAsOf.slice(0, 16)})` : ""),
+  );
+
+  if (!report.shouldRefresh) return;
+
+  console.log(`[data] ${report.staleCount} stale — refreshing in background: ${report.stale.join(", ")}`);
+  void refreshIfStale()
+    .then(({ result }) => {
+      if (!result) return;
+      console.log(
+        `[data] refreshed ${result.updated.length}/${result.attempted}` +
+          (result.failed.length ? ` — kept old data for ${result.failed.join(", ")}` : ""),
+      );
+    })
+    .catch((error) => {
+      console.warn(
+        "[data] refresh failed, keeping committed snapshot:",
+        error instanceof Error ? error.message : error,
+      );
+    });
 }
 
 /* -------------------------------------------------------------- profiles */
@@ -100,6 +165,17 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
   await db.delete(userDecision).where(eq(userDecision.userId, userId));
   await db.delete(chatMessage).where(eq(chatMessage.userId, userId));
 
+  /**
+   * Resolve each persona's price offset against the CURRENT snapshot price, so
+   * the story ("BEL is down, Infosys is up") holds whatever the real numbers are.
+   */
+  const priceFor = (d: PersonaDecision): number | null => {
+    if (d.priceOffsetPct === null) return null;
+    const last = sources.getStock(d.ticker)?.price?.last;
+    if (!last) return null;
+    return Math.round(last * (1 + d.priceOffsetPct) * 100) / 100;
+  };
+
   // Insert this persona's decisions, dated relative to today.
   const rows = persona.decisions.map((d, i) => ({
     id: `seed_${stage}_${i}_${userId.slice(0, 8)}`,
@@ -108,7 +184,8 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
     companyName: d.companyName,
     action: d.action,
     quantity: d.quantity,
-    pricePerShare: d.pricePerShare,
+    pricePerShare: priceFor(d),
+    priceAtDecision: sources.getStock(d.ticker)?.price?.last ?? null,
     thesis: d.thesis,
     investigationSummary: null,
     reasoning: d.reasoning,
@@ -132,7 +209,40 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
    * a persona whose profile disagrees with its own portfolio is worse than no
    * persona at all.
    */
-  const holdings = buildHoldings(persona.decisions);
+  const holdings = buildHoldings(persona.decisions, priceFor);
+
+  /**
+   * Keep whatever the user actually answered.
+   *
+   * The persona's onboarding is only a fallback for someone who jumps straight
+   * to Day 15 without onboarding. Overwriting real answers made the assistant
+   * describe a stranger — and it breaks the demo narrative, because the goals
+   * the judges just watched you type would silently vanish. Layering history
+   * onto your own profile tells one coherent story: "this is me, 15 days in".
+   */
+  const [existing] = await db
+    .select()
+    .from(userProfile)
+    .where(eq(userProfile.userId, userId));
+
+  const keepOwn = Boolean(existing?.onboardedAt);
+  const onboarding = keepOwn
+    ? {
+        ageBand: existing!.ageBand,
+        primaryGoal: existing!.primaryGoal,
+        riskComfort: existing!.riskComfort,
+        experience: existing!.experience,
+        monthlyBudget: existing!.monthlyBudget,
+        horizon: existing!.horizon,
+        notes: existing!.notes,
+        onboardedAt: existing!.onboardedAt,
+      }
+    : {
+        ...persona.onboarding,
+        onboardedAt: persona.onboarding.experience
+          ? new Date(now - persona.dayIndex * dayMs)
+          : null,
+      };
 
   const profileRow = {
     userId,
@@ -142,14 +252,7 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
     pastTheses,
     startedAt,
     dayIndex: persona.dayIndex,
-    ageBand: persona.onboarding.ageBand,
-    primaryGoal: persona.onboarding.primaryGoal,
-    riskComfort: persona.onboarding.riskComfort,
-    experience: persona.onboarding.experience,
-    monthlyBudget: persona.onboarding.monthlyBudget,
-    horizon: persona.onboarding.horizon,
-    notes: persona.onboarding.notes,
-    onboardedAt: new Date(now - persona.dayIndex * dayMs),
+    ...onboarding,
   };
 
   await db
@@ -169,22 +272,28 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
       text:
         `They ${d.action} ${d.ticker} (${d.companyName})` +
         (d.quantity ? `, ${d.quantity} shares` : "") +
-        (d.pricePerShare ? ` at ₹${d.pricePerShare}` : "") +
+        (priceFor(d) ? ` at ₹${priceFor(d)}` : "") +
         (d.thesis ? `. Their thesis: "${d.thesis}"` : "") +
         (d.reasoning ? `. Their reasoning: "${d.reasoning}"` : "") +
         (d.outcomeNote ? `. Outcome: ${d.outcomeNote}` : ""),
     }));
 
-    const o = persona.onboarding;
-    entries.push({
+    const o = onboarding;
+    if (o.primaryGoal || o.horizon || o.riskComfort) entries.push({
       id: "onboarding",
       kind: "profile",
       tickers: [],
       text:
-        `Their goal: ${o.primaryGoal}. They may need the money: ${o.horizon}. ` +
-        `If down 20% they would: ${o.riskComfort}. Experience: ${o.experience}. ` +
-        `About ₹${o.monthlyBudget} a month to invest.` +
-        (o.notes ? ` In their words: ${o.notes}` : ""),
+        [
+          o.primaryGoal && `Their goal: ${o.primaryGoal}`,
+          o.horizon && `They may need the money: ${o.horizon}`,
+          o.riskComfort && `If down 20% they would: ${o.riskComfort}`,
+          o.experience && `Experience: ${o.experience}`,
+          o.monthlyBudget && `About ₹${o.monthlyBudget} a month to invest`,
+          o.notes && `In their words: ${o.notes}`,
+        ]
+          .filter(Boolean)
+          .join(". "),
     });
 
     if (entries.length) await retriever.indexPersonal(userId, entries);
@@ -204,14 +313,17 @@ export async function seedProfile(userId: string, stage: DemoStage): Promise<Use
 }
 
 /** Net quantity and average cost per ticker, from bought/sold decisions. */
-function buildHoldings(decisions: PersonaDecision[]): UserProfile["holdings"] {
+function buildHoldings(
+  decisions: PersonaDecision[],
+  priceFor: (d: PersonaDecision) => number | null,
+): UserProfile["holdings"] {
   const held = new Map<string, { name: string; qty: number; cost: number }>();
 
   for (const d of [...decisions].sort((a, b) => b.daysAgo - a.daysAgo)) {
     if (d.action !== "bought" || !d.quantity) continue;
     const entry = held.get(d.ticker) ?? { name: d.companyName, qty: 0, cost: 0 };
     entry.qty += d.quantity;
-    entry.cost += d.quantity * (d.pricePerShare ?? 0);
+    entry.cost += d.quantity * (priceFor(d) ?? 0);
     held.set(d.ticker, entry);
   }
 
@@ -223,6 +335,28 @@ function buildHoldings(decisions: PersonaDecision[]): UserProfile["holdings"] {
     avgPrice: e.qty > 0 ? e.cost / e.qty : 0,
     weight: total > 0 ? e.cost / total : 0,
   }));
+}
+
+/**
+ * Demo reset: delete the account entirely and start from nothing.
+ *
+ * ⚠️ DESTRUCTIVE AND IRREVERSIBLE. Deleting the user row cascades to their
+ * sessions, profile, decisions and chat, and their vectors are dropped too.
+ * The session dies with it, so the caller lands back on sign-up — which is the
+ * point: a demo can then run the whole journey from onboarding onwards.
+ *
+ * Exposed as its own endpoint rather than a seed stage so it cannot fire from a
+ * mis-click on the Time Machine bar.
+ */
+export async function resetUser(userId: string): Promise<void> {
+  try {
+    const retriever = await getRetriever();
+    await retriever.store.deleteOwner(userId);
+  } catch {
+    // A vector cleanup failure must not block the account deletion.
+  }
+  // Cascades to session, account, user_profile, user_decision, chat_message.
+  await db.delete(user).where(eq(user.id, userId));
 }
 
 export function createProfilePort(userId: string): ProfilePort {

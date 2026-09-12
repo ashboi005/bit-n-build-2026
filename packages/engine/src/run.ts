@@ -175,6 +175,29 @@ export async function* runThesis(
     return;
   }
 
+  /**
+   * They named a company we hold nothing about.
+   *
+   * Without this the run limps through five consecutive stage failures, which
+   * reads as broken software rather than honest scope. Stop here and say what
+   * we do cover — a judge typing a random ticker is a demonstration of the
+   * product's core promise, not a bug.
+   */
+  {
+    const named = (claim as ParsedClaim).asset!;
+    if (!sources.getStock(named.ticker)) {
+      yield {
+        type: "run.not_covered",
+        ticker: named.ticker,
+        name: named.name,
+        covered: sources
+          .listStocks()
+          .map((s) => ({ ticker: s.ticker, name: s.name, sector: s.sector })),
+      };
+      return;
+    }
+  }
+
   // --------------------------------------------------------------- gather
   yield* stage("gather", async function* () {
     const ticker = claim?.asset?.ticker;

@@ -23,7 +23,7 @@ export default function StockPage() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/stocks/${ticker}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/stocks/${ticker}`, {
           credentials: "include",
         });
 

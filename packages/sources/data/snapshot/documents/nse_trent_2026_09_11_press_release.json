@@ -1,0 +1,22 @@
+{
+  "id": "nse_trent_2026_09_11_press_release",
+  "title": "Trent Ltd — Press Release",
+  "publisher": "Trent Limited",
+  "tier": "filing",
+  "url": "https://nsearchives.nseindia.com/corporate/TRENT_11092026232748_Stock_Exchange_Intimation_-_Zudio_Crosses_1000_stores.pdf",
+  "pdfUrl": "https://nsearchives.nseindia.com/corporate/TRENT_11092026232748_Stock_Exchange_Intimation_-_Zudio_Crosses_1000_stores.pdf",
+  "publishedAt": "2026-09-11",
+  "tickers": [
+    "TRENT"
+  ],
+  "sectors": [
+    "Retail"
+  ],
+  "text": "Trent Limited has informed the Exchange regarding Press Release - Zudio crosses 1,000 stores",
+  "chunks": [
+    {
+      "id": "nse_trent_2026_09_11_press_release_0",
+      "text": "Trent Limited has informed the Exchange regarding Press Release - Zudio crosses 1,000 stores"
+    }
+  ]
+}

@@ -3,17 +3,17 @@
   "bseCode": "532822",
   "isin": "INE669E01016",
   "name": "Vodafone Idea Ltd",
-  "sector": "Unclassified",
+  "sector": "Telecom",
   "business": "This committed fallback covers the BSE-listed company named Vodafone Idea Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
-    "last": 14.96,
+    "last": 15,
     "change": 0,
     "changePct": 0,
     "dayHigh": 15.2,
     "dayLow": 14.85,
     "week52High": 15.8,
     "week52Low": 7.65,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T20:11:55.446Z",
     "sourceId": "bse_idea_market_data"
   },
   "metrics": [
@@ -36,8 +36,8 @@
       "value": 162190,
       "display": "1,62,190 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -49,7 +49,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -75,8 +75,8 @@
       "value": -1.72,
       "display": "-1.72%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -88,7 +88,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": null,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,8 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
-      "sectorMedian": 0.935,
-      "direction": "low",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 1.1664133408607287,
+      "value": 1.17,
       "display": "1.17",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "high",
+      "sectorMedian": null,
+      "direction": "unknown",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -1142,14 +1142,7 @@
       "close": 14.97
     }
   ],
-  "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
-  },
+  "sectorMedians": {},
   "risk": [
     {
       "key": "volatility",
@@ -1159,20 +1152,16 @@
       "sourceIds": [
         "screener_idea_fundamentals"
       ]
-    },
-    {
-      "key": "debt",
-      "label": "Debt",
-      "level": "high",
-      "reason": "Debt to equity is 1.17, compared with a sector median of 0.30.",
-      "sourceIds": [
-        "screener_idea_fundamentals"
-      ]
     }
   ],
   "documentIds": [
     "bse_idea_market_data",
-    "screener_idea_fundamentals"
+    "screener_idea_fundamentals",
+    "nse_idea_2026_09_01_press_release",
+    "nse_idea_2026_08_28_shareholders_meeting",
+    "nse_idea_2026_08_31_general_updates",
+    "nse_idea_2026_08_27_shareholders_meeting",
+    "nse_idea_2026_09_01_general_updates"
   ],
   "newsIds": []
 }

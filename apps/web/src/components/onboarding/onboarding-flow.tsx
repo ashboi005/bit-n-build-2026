@@ -28,7 +28,7 @@ export function OnboardingFlow() {
   useEffect(() => {
     async function checkState() {
       try {
-        const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/onboarding`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/onboarding`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -51,7 +51,7 @@ export function OnboardingFlow() {
   const finish = async (finalAnswers: Partial<OnboardingAnswers>) => {
     setSubmitting(true);
     try {
-      await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/onboarding`, {
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/onboarding`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

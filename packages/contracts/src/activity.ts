@@ -167,6 +167,25 @@ export interface ChatMessage {
   createdAt: string;
 }
 
+/**
+ * A conversation, for listing and resuming.
+ *
+ * Without this the frontend has to hold the threadId in memory, so navigating
+ * away or refreshing orphans the conversation — the messages are still in the
+ * database but nothing can find them again.
+ */
+export interface ChatThread {
+  threadId: string;
+  /** First thing the user said, trimmed. Used as the thread's title. */
+  title: string;
+  /** Last message in the thread, for a preview line. */
+  lastMessage: string;
+  lastRole: "user" | "assistant";
+  messageCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ChatRequest {
   message: string;
   /** Omit to start a new thread. */
@@ -179,5 +198,20 @@ export type ChatEvent =
   | { type: "chat.context"; usedPortfolio: boolean; sources: SourceRef[] }
   | { type: "chat.delta"; text: string }
   | { type: "chat.sources"; sources: SourceRef[] }
+  /**
+   * What citation validation found. Emitted before chat.completed.
+   *
+   * `removed` are source ids the model invented — already stripped from the
+   * final content. `unsupported` are sentences stating a figure that does not
+   * appear in the source they cited: a fabricated number wearing a real
+   * citation, which is worse than an uncited one because it looks verified.
+   */
+  | {
+      type: "chat.audit";
+      valid: string[];
+      removed: string[];
+      unsupported: string[];
+    }
+  /** `content` here is the AUDITED text — render this, not the accumulated deltas. */
   | { type: "chat.completed"; messageId: string; content: string }
   | { type: "chat.failed"; message: string };

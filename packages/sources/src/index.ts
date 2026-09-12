@@ -134,3 +134,5 @@ export * as bse from "./fetchers/bse";
 export * as nse from "./fetchers/nse";
 export * as screener from "./fetchers/screener";
 export * as rss from "./fetchers/rss";
+
+export { checkFreshness, refreshIfStale, refreshStale, MAX_AGE_HOURS, STALE_THRESHOLD } from "./freshness";

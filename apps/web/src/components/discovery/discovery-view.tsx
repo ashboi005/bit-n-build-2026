@@ -4,13 +4,21 @@ import { AlertCircle, Target, ArrowRight } from "lucide-react";
 import type { DiscoveryState } from "@/hooks/use-thesis-run";
 import { buttonVariants } from "@bit-n-build-2026/ui/components/button";
 import Link from "next/link";
-import { SourceCard } from "./source-card";
+import { CandidateCard } from "./candidate-card";
+import { SourceCard } from "../thesis/source-card";
 
-export function Discovery({ state }: { state: DiscoveryState }) {
+export function DiscoveryView({ state }: { state: DiscoveryState }) {
   const { intent, candidates, summary, sources } = state;
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-12">
+    <div className="w-full max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500 py-6">
+      
+      <div className="text-center space-y-2 pb-2">
+        <h3 className="text-2xl font-bold tracking-tight text-foreground">
+          No single company named — looking across what we cover…
+        </h3>
+      </div>
+
       {intent && (
         <section className="space-y-4">
           <div className="flex items-center gap-2 text-primary font-medium">
@@ -37,53 +45,7 @@ export function Discovery({ state }: { state: DiscoveryState }) {
           <h2 className="text-2xl font-bold tracking-tight">Discovered Candidates</h2>
           <div className="grid grid-cols-1 gap-6">
             {candidates.map((candidate) => (
-              <div key={candidate.ticker} className="border border-border rounded-xl overflow-hidden shadow-sm">
-                <div className="p-6 bg-card space-y-6">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold">{candidate.name}</h3>
-                      <div className="flex items-center gap-2 text-muted-foreground mt-1 text-sm">
-                        <span className="font-mono bg-muted px-1.5 py-0.5 rounded text-xs">{candidate.ticker}</span>
-                        <span>&middot;</span>
-                        <span>{candidate.sector}</span>
-                      </div>
-                    </div>
-                    <Link href={`/?ticker=${candidate.ticker}`} className={buttonVariants({ variant: "outline", size: "sm" })}>
-                      Investigate <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground">{candidate.business}</p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-semibold text-primary">Why it matches</h4>
-                      <ul className="space-y-2">
-                        {candidate.matchedOn.map((match: any, i: number) => (
-                          <li key={i} className="text-sm">
-                            <span className="font-medium block">{match.label}</span>
-                            <span className="text-muted-foreground">{match.detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-semibold text-destructive flex items-center gap-1.5">
-                        <AlertCircle className="w-4 h-4" /> What to watch out for
-                      </h4>
-                      <ul className="space-y-2">
-                        {candidate.watchOut.map((watch: any, i: number) => (
-                          <li key={i} className="text-sm">
-                            <span className="font-medium block">{watch.label}</span>
-                            <span className="text-muted-foreground">{watch.detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CandidateCard key={candidate.ticker} candidate={candidate} />
             ))}
           </div>
         </section>

@@ -1,0 +1,1 @@
+ALTER TABLE "user_decision" ADD COLUMN "price_at_decision" real;

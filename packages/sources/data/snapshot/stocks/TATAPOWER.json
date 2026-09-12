@@ -3,17 +3,17 @@
   "bseCode": "500400",
   "isin": "INE245A01021",
   "name": "Tata Power Company Ltd",
-  "sector": "Unclassified",
+  "sector": "Power",
   "business": "This committed fallback covers the BSE-listed company named Tata Power Company Ltd. Detailed business information is unavailable in this fallback.",
   "price": {
     "last": 365,
-    "change": -2,
-    "changePct": -0.54,
+    "change": 0,
+    "changePct": 0,
     "dayHigh": 367.4,
     "dayLow": 362.6,
     "week52High": 465,
     "week52Low": 342,
-    "asOf": "2026-09-11T10:30:00.000Z",
+    "asOf": "2026-09-12T21:36:57.290Z",
     "sourceId": "bse_tatapower_market_data"
   },
   "metrics": [
@@ -34,9 +34,9 @@
       "key": "market_cap",
       "label": "Market capitalization",
       "value": 116518,
-      "display": "1,16,518 Cr",
+      "display": "₹1,16,518 Cr",
       "unit": "INR crore",
-      "sectorMedian": 294031,
+      "sectorMedian": 250279,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": 29.8,
       "display": "29.8",
       "unit": null,
-      "sectorMedian": 17.05,
+      "sectorMedian": 15.8,
       "direction": "high",
       "explanation": "",
       "sourceIds": [
@@ -60,7 +60,7 @@
       "key": "book_value",
       "label": "Book value",
       "value": 124,
-      "display": "124",
+      "display": "₹124",
       "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
@@ -75,8 +75,8 @@
       "value": 10.5,
       "display": "10.5%",
       "unit": "%",
-      "sectorMedian": 10.3,
-      "direction": "normal",
+      "sectorMedian": 9.1,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_tatapower_fundamentals"
@@ -88,7 +88,7 @@
       "value": 10.2,
       "display": "10.2%",
       "unit": "%",
-      "sectorMedian": 15.75,
+      "sectorMedian": 15.1,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,7 @@
       "value": 0.69,
       "display": "0.69%",
       "unit": "%",
-      "sectorMedian": 0.935,
+      "sectorMedian": 2.7,
       "direction": "low",
       "explanation": "",
       "sourceIds": [
@@ -124,11 +124,11 @@
     {
       "key": "debt_to_equity",
       "label": "Debt to equity",
-      "value": 2.836080458164548,
+      "value": 2.84,
       "display": "2.84",
       "unit": null,
-      "sectorMedian": 0.2989332520572996,
-      "direction": "high",
+      "sectorMedian": 2.5,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_tatapower_fundamentals"
@@ -1143,12 +1143,12 @@
     }
   ],
   "sectorMedians": {
-    "pe": 17.05,
-    "roe": 15.75,
-    "roce": 10.3,
-    "dividend_yield": 0.935,
-    "market_cap": 294031,
-    "debt_to_equity": 0.2989332520572996
+    "pe": 15.8,
+    "roe": 15.1,
+    "roce": 9.1,
+    "dividend_yield": 2.7,
+    "market_cap": 250279,
+    "debt_to_equity": 2.5
   },
   "risk": [
     {
@@ -1164,7 +1164,7 @@
       "key": "valuation",
       "label": "Valuation",
       "level": "high",
-      "reason": "P/E is 29.8, compared with a sector median of 17.05.",
+      "reason": "P/E is 29.8, compared with the Power sector median of 15.8. Investors are paying more for its earnings than for its peers'.",
       "sourceIds": [
         "screener_tatapower_fundamentals"
       ]
@@ -1172,8 +1172,8 @@
     {
       "key": "debt",
       "label": "Debt",
-      "level": "high",
-      "reason": "Debt to equity is 2.84, compared with a sector median of 0.30.",
+      "level": "medium",
+      "reason": "Debt to equity is 2.84, compared with the Power sector median of 2.5.",
       "sourceIds": [
         "screener_tatapower_fundamentals"
       ]
@@ -1190,7 +1190,12 @@
   ],
   "documentIds": [
     "bse_tatapower_market_data",
-    "screener_tatapower_fundamentals"
+    "screener_tatapower_fundamentals",
+    "nse_tatapower_2026_09_04_analysts_institutional_investor_meet_con_call_updates",
+    "nse_tatapower_2026_08_27_press_release",
+    "nse_tatapower_2026_09_03_press_release",
+    "nse_tatapower_2026_08_31_press_release",
+    "nse_tatapower_2026_09_11_analysts_institutional_investor_meet_con_call_updates"
   ],
   "newsIds": []
 }

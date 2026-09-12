@@ -150,6 +150,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "price_at_decision": {
+          "name": "price_at_decision",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
         "thesis": {
           "name": "thesis",
           "type": "text",
