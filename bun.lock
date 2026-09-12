@@ -20,6 +20,7 @@
         "@bit-n-build-2026/auth": "workspace:*",
         "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/db": "workspace:*",
+        "@bit-n-build-2026/llm": "workspace:*",
         "@elysiajs/cors": "^1.4.2",
         "@sinclair/typebox": "^0.34.52",
         "better-auth": "catalog:",
@@ -101,6 +102,30 @@
         "drizzle-kit": "^0.31.10",
         "typescript": "catalog:",
         "varlock": "catalog:",
+      },
+    },
+    "packages/engine": {
+      "name": "@bit-n-build-2026/engine",
+      "version": "0.0.0",
+      "dependencies": {
+        "@bit-n-build-2026/contracts": "workspace:*",
+        "@bit-n-build-2026/llm": "workspace:*",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@bit-n-build-2026/config": "workspace:*",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/llm": {
+      "name": "@bit-n-build-2026/llm",
+      "version": "0.0.0",
+      "dependencies": {
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@bit-n-build-2026/config": "workspace:*",
+        "typescript": "catalog:",
       },
     },
     "packages/ui": {
@@ -238,6 +263,10 @@
     "@bit-n-build-2026/contracts": ["@bit-n-build-2026/contracts@workspace:packages/contracts"],
 
     "@bit-n-build-2026/db": ["@bit-n-build-2026/db@workspace:packages/db"],
+
+    "@bit-n-build-2026/engine": ["@bit-n-build-2026/engine@workspace:packages/engine"],
+
+    "@bit-n-build-2026/llm": ["@bit-n-build-2026/llm@workspace:packages/llm"],
 
     "@bit-n-build-2026/ui": ["@bit-n-build-2026/ui@workspace:packages/ui"],
 

@@ -1,0 +1,26 @@
+{
+  "name": "@bit-n-build-2026/engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bit-n-build-2026/contracts": "workspace:*",
+    "@bit-n-build-2026/llm": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@bit-n-build-2026/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

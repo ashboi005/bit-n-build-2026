@@ -1,0 +1,24 @@
+{
+  "name": "@bit-n-build-2026/llm",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@bit-n-build-2026/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
