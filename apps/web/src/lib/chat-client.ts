@@ -6,7 +6,7 @@ export async function* streamChat(
   threadId?: string,
   signal?: AbortSignal,
 ): AsyncGenerator<ChatEvent> {
-  const res = await fetch(`${ENV.NEXT_PUBLIC_SERVER_URL}/api/chat/stream`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
