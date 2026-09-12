@@ -17,6 +17,7 @@ export default function Header() {
     { to: "/", label: "THWIP" },
     { to: "/chat", label: "Chat" },
     { to: "/portfolio", label: "Portfolio" },
+    { to: "/compare", label: "Compare" },
   ] as const;
 
   return (
