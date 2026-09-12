@@ -1,191 +1,358 @@
-# Tushar — linking your sources into the running system
+# Tushar — sources integration tasks
 
-Your `packages/sources` work is **committed, wired in, and the backend is running
-on it right now.** 20 stocks, 43 documents, real provenance. The layered
-library → snapshot → cache precedence is exactly the right call.
-
-This doc is only about the seams where your data meets the engine. Nothing here
-is about code quality — it's a hackathon, and it works. These are the things that
-are currently **silently doing nothing** because a field is empty.
-
----
-
-## What's already live
-
-```
-[rag] indexed 43 chunks from 43 documents
-```
-
-A real investigation now pulls your tiers in order, and they render with the
-right badges:
-
-```
-official     PIB
-press        Business Standard
-filing       Hindustan Aeronautics
-market_data  Screener.in
-market_data  BSE
-```
-
-I didn't change anything in `packages/sources`. I briefly built my own fetchers
-before I saw you'd pushed — that's been deleted, your version is what ships.
+> **How to use this file:** paste it whole into your AI coding agent and say
+> *"Read this and do TASK 1."* Then TASK 2, then TASK 3. One task per message.
+> Every task is self-contained and has acceptance criteria you can check.
+>
+> This is a hackathon. **Do not refactor anything, do not add tests, do not
+> improve code quality.** Just make the data complete.
 
 ---
 
-## 🔴 The three gaps that matter
+## Context for the agent
 
-Each of these is a feature that exists, is built, and currently shows nothing.
+`packages/sources` is committed and working. The backend runs on it right now:
+20 stocks, 43 documents, real provenance, layered library → snapshot → cache.
+Nothing in this file asks you to change that architecture.
 
-### 1. `sectorMedians` is `{}` on all 20 stocks
+Three fields are **empty on almost every stock record**, and each one silently
+disables a feature that is already built elsewhere in the product. The fixes are
+arithmetic over numbers already on disk.
 
-This is the highest-value fix on the page. Without it:
+**Files you will edit:**
+- `packages/sources/data/snapshot/stocks/*.json` — 20 files
+- `packages/sources/src/build-snapshot.ts` — so a rebuild keeps the fix
+- `packages/sources/src/index.ts` — one small addition in TASK 4
 
-- ❌ Every "compared to its sector" line in the product is dead. `Metric.sectorMedian`
-  is null, so the UI can't say "P/E 35.2 against a sector median of 19.2" — which
-  is the single most useful sentence we produce for a beginner.
-- ❌ `direction` on every metric falls back to `"unknown"`, so no high/low indicator.
-- ❌ Discovery ("I want something cheap / low debt") can't filter at all, because
-  it compares against the median.
+**Type definitions live in** `packages/contracts/src/stocks.ts`. Read that file
+first. Match the types exactly — `bun run check-types` must stay clean.
 
-**The fix is arithmetic on data you already have.** Group your stocks by `sector`,
-take the median of each metric across that group, and write it into every stock in
-the group:
+**The unbreakable rule of this codebase:** never invent a number. If a figure
+isn't available, the field is `null`. A `null` renders as an honest dash. A
+guessed number breaks the one promise the product is built on.
 
-```jsonc
-"sectorMedians": { "pe": 19.2, "roe": 15.4, "roce": 18.1, "dividend_yield": 1.2, "market_cap": 295571 }
+---
+
+# TASK 1 — populate `sectorMedians` (highest value)
+
+## The problem
+
+Every one of the 20 stock files has:
+
+```json
+"sectorMedians": {}
 ```
 
-Median, not mean — one Nestle at P/E 72 drags a mean into nonsense. With 2–3
-companies per sector the median is thin but still honest; it's the comparison a
-human would make.
+## What this breaks right now
 
-### 2. `risk` is empty on 19 of 20 stocks
+- Every "compared to its sector" line in the product is dead. `Metric.sectorMedian`
+  is `null`, so the UI cannot say *"P/E 35.2 against a sector median of 19.2"* —
+  which is the single most useful sentence we produce for a beginner.
+- Every metric's `direction` falls back to `"unknown"`, so no high/low indicator
+  renders anywhere.
+- The discovery feature (`packages/engine/src/discovery.ts`) filters "I want
+  something cheap" and "I want low debt" by comparing against the median. With an
+  empty object it can never match, so those queries return nothing.
 
-Sayam has already built `risk-breakdown.tsx` and it renders nothing.
+## What to do
 
-Four keys, and **each one needs a plain-English `reason` and `sourceIds`** — a bare
-level with no reason is the exact thing this product argues against:
+1. Load all 20 files in `packages/sources/data/snapshot/stocks/`.
+2. Group them by their `sector` field (exact string match).
+3. For each sector group, compute the **median** — not the mean — of these keys,
+   reading each stock's `metrics[]` array and using `metric.value`:
+   `pe`, `roe`, `roce`, `dividend_yield`, `market_cap`, and `debt_to_equity`
+   if present.
+4. Skip `null` values when computing. If fewer than 2 stocks in the sector have a
+   value for a key, **omit that key entirely** rather than writing a median of one.
+5. Write the result into `sectorMedians` on **every** stock in that group.
+6. Then, for every metric in every stock, set `sectorMedian` to the matching value
+   from `sectorMedians` (or `null` if absent) and set `direction`:
+   - `"high"` if `value > median * 1.15`
+   - `"low"` if `value < median * 0.85`
+   - `"normal"` otherwise
+   - `"unknown"` if there is no median
 
-```jsonc
-"risk": [
-  { "key": "volatility", "label": "Price volatility", "level": "medium",
-    "reason": "Over the past year the price moved between ₹3,479 and ₹5,150 — a swing of about 48% from its low.",
-    "sourceIds": ["screener_hal_fundamentals"] },
-  { "key": "debt",       "label": "Debt", ... },
-  { "key": "valuation",  "label": "Valuation", ... },
-  { "key": "stability",  "label": "Business returns", ... }
-]
+**Use median, not mean.** One Nestle at P/E 72 drags a mean into nonsense.
+
+## Expected shape
+
+```json
+"sectorMedians": {
+  "pe": 19.2,
+  "roe": 15.4,
+  "roce": 18.1,
+  "dividend_yield": 1.2,
+  "market_cap": 295571
+}
 ```
 
-You can derive all four mechanically from figures you already hold:
+## Also update the builder
 
-| key | derive from | suggested bands |
-|---|---|---|
-| `volatility` | `(week52High - week52Low) / week52Low` | `>0.7` high, `>0.35` medium, else low |
-| `valuation` | `pe` vs `sectorMedians.pe` | `>30%` above → high, `>20%` below → low, else medium |
-| `debt` | `debt_to_equity` vs sector median | same shape |
-| `stability` | `roe` | `>18` low risk, `>10` medium, else high |
+Add this as a step in `packages/sources/src/build-snapshot.ts` so a rebuild
+recomputes medians instead of wiping them back to `{}`.
 
-⚠️ **Calibrate volatility against Indian reality.** I had `>0.4 = medium` first and
-it labelled a **66% annual swing as "steady"** — which then matched a query asking
-for something safe. That's precisely the reassuring half-truth we exist to remove.
-The bands above are calibrated against the actual spread of our 20.
+## Acceptance criteria
 
-### 3. `week52High` / `week52Low` are `null`
+- [ ] No stock file has `"sectorMedians": {}` (unless it is alone in its sector)
+- [ ] `bun run check-types` is clean
+- [ ] `curl -s localhost:3000/api/stocks/HAL | grep sectorMedians` shows numbers
+- [ ] Metrics have non-null `sectorMedian` and a `direction` other than `"unknown"`
 
-They're on the screener page as **High / Low**, rendered as two `<span class="number">`
-inside one value span, so a single-number regex misses them:
+---
+
+# TASK 2 — populate the `risk` array on every stock
+
+## The problem
+
+19 of 20 stock files have `"risk": []`.
+
+## What this breaks right now
+
+Sayam has already built `apps/web/src/components/stocks/risk-breakdown.tsx` and
+it renders nothing. The discovery feature's "I want something steady" filter and
+its watch-out list both read from this array.
+
+## What to do
+
+Give every stock **four** risk entries. Derive each one mechanically from figures
+already in the file. Read the `RiskFactor` type in
+`packages/contracts/src/stocks.ts` — the shape is:
+
+```json
+{
+  "key": "volatility",
+  "label": "Price volatility",
+  "level": "medium",
+  "reason": "Over the past year the price moved between ₹3,479 and ₹5,150 — a swing of about 48% from its low.",
+  "sourceIds": ["screener_hal_fundamentals"]
+}
+```
+
+### The four keys — use exactly these strings
+
+| `key` | `label` | derive from | bands |
+|---|---|---|---|
+| `volatility` | Price volatility | `(price.week52High - price.week52Low) / price.week52Low` | `>0.7` → high, `>0.35` → medium, else low |
+| `valuation` | Valuation | `pe` vs `sectorMedians.pe` | `>30%` above → high, `>20%` below → low, else medium |
+| `debt` | Debt | `debt_to_equity` vs its sector median | same shape as valuation |
+| `stability` | Business returns | `roe` | `>18` → low, `>10` → medium, else high |
+
+### ⚠️ Calibrate volatility against Indian reality — this matters
+
+I first used `>0.4 = medium` and it labelled a **66% annual swing as "steady"**,
+which then matched a user query asking for *something safe*. That is precisely the
+reassuring half-truth this product exists to remove. The bands above are
+calibrated against the actual spread of our 20 companies. **Use them as given.**
+
+### Rules for `reason`
+
+- One plain sentence, written for someone who has never bought a share.
+- **State the actual numbers it was derived from.** "Price volatility is medium" is
+  useless. "The price moved between ₹3,479 and ₹5,150 — a swing of about 48%" is
+  the product.
+- No jargon without expanding it.
+
+### Rules for `sourceIds`
+
+- Must reference a real document id that exists in
+  `packages/sources/data/snapshot/documents/`.
+- Use whichever document the underlying figure came from — usually the
+  `screener_*_fundamentals` or `bse_*_market_data` doc for that stock.
+- **Never leave this empty.** A risk level with no source is exactly what the
+  product argues against, and the engine drops uncited claims anyway.
+
+### If the input figure is missing
+
+Skip that risk entry entirely. Do **not** emit a level with a made-up reason.
+Three honest entries beat four with one invented.
+
+## Also update the builder
+
+Add the derivation to `build-snapshot.ts` so rebuilds keep it.
+
+## Acceptance criteria
+
+- [ ] Every stock has 3–4 risk entries
+- [ ] Every entry has a non-empty `reason` containing real numbers
+- [ ] Every entry has at least one `sourceIds` value that exists on disk
+- [ ] Only `volatility`, `debt`, `valuation`, `stability` appear as keys
+- [ ] No stock with a >60% 52-week swing is rated `"low"` volatility
+
+---
+
+# TASK 3 — fix `week52High` / `week52Low` (currently `null`)
+
+## The problem
+
+Every stock has:
+
+```json
+"price": { "week52High": null, "week52Low": null, ... }
+```
+
+TASK 2's volatility derivation depends on these, and the glossary already defines
+a `week52_range` term that has no metric to attach to.
+
+## Why the current parser misses them
+
+Screener renders High / Low as **two** `<span class="number">` inside a single
+value span, so a regex expecting one number per row finds nothing:
 
 ```html
 <span class="name"> High / Low </span>
 <span class="nowrap value">₹ <span class="number">5,150</span> / <span class="number">3,479</span></span>
 ```
 
-These unlock the `week52_range` metric (which the glossary already defines) and the
-volatility derivation above.
+## What to do
+
+1. Add a parser in `build-snapshot.ts` that captures **both** numbers:
+
+```ts
+const re = /<span class="name">\s*High\s*\/\s*Low\s*<\/span>[\s\S]{0,300}?<span class="number">([\d.,]+)<\/span>\s*\/\s*<span class="number">([\d.,]+)<\/span>/i;
+```
+
+   First capture is the **high**, second is the **low**. Strip commas, then `Number()`.
+
+2. Write them into `price.week52High` and `price.week52Low`.
+
+3. Add a `week52_range` metric to each stock:
+
+```json
+{
+  "key": "week52_range",
+  "label": "52-week range",
+  "value": null,
+  "display": "₹3,479 – ₹5,150",
+  "unit": "INR",
+  "sectorMedian": null,
+  "direction": "high",
+  "explanation": "",
+  "sourceIds": ["screener_hal_fundamentals"]
+}
+```
+
+   - `value` stays `null` — it is a range, not a single number. The UI reads `display`.
+   - `direction`: where the current price sits in the range —
+     `>70%` of the way up → `"high"`, `<30%` → `"low"`, else `"normal"`.
+   - **Leave `explanation` as an empty string.** The AI writes it at request time,
+     at the individual user's level. Do not fill it in.
+
+## Acceptance criteria
+
+- [ ] Every stock has non-null `week52High` and `week52Low`
+- [ ] `week52High > week52Low` on every stock
+- [ ] Every stock has a `week52_range` metric with a `display` like `"₹3,479 – ₹5,150"`
+- [ ] TASK 2's volatility entries now compute
 
 ---
 
-## 🟡 Smaller things
+# TASK 4 — add `listDocuments()` to the sources API
 
-### `listDocuments()` on `SourcesApi`
+## The problem
 
-Retrieval currently walks each stock's `documentIds`, so **a document no stock links
-to is invisible to the RAG index** — a PIB release about the defence budget that
-nobody attached would never be retrieved.
+The RAG indexer currently walks each stock's `documentIds` to find documents.
+A document that **no stock links to is invisible to retrieval** — a PIB release
+about the defence budget that nobody attached would never be found.
 
-One method fixes it:
+## What to do
+
+In `packages/sources/src/index.ts`, inside the object returned by
+`createSources(...)`, add:
 
 ```ts
 listDocuments(): SourceDocument[] {
   return [...snapshot.documents.values()];
-}
+},
 ```
 
-I've written a workaround on my side so nothing of yours has to change to run
-today. But if you add this, tell me and I'll switch to it — it's strictly better.
+Then add the same method signature to the `SourcesApi` interface in
+`packages/contracts/src/stocks.ts`:
 
-### Metric keys the rest of the system expects
+```ts
+listDocuments(): SourceDocument[];
+```
 
-You currently emit: `previous_close`, `market_cap`, `pe`, `book_value`, `roce`,
-`roe`, `dividend_yield`.
+**Tell Ashwath when this lands** — there is a workaround in
+`apps/server/src/services.ts` that switches over to this in one line.
 
-| Missing | Why it matters |
-|---|---|
-| `eps` | In the glossary, referenced in prompts, commonly asked about |
-| `debt_to_equity` | In the glossary; the `debt` risk row and the "low debt" discovery filter both need it |
-| `week52_range` | In the glossary; needs the High/Low fix above. `value: null`, `display: "₹3,479 – ₹5,150"` |
+## Acceptance criteria
 
-Also: `previous_close` has no glossary entry, so tap-to-explain will 404 on it.
-Either add one or drop the metric — it's not that useful to a beginner anyway.
-
-### Keys must match exactly
-
-Metric `key` → glossary `key` → `sectorMedians` key are all matched by **exact
-string**. `pe` everywhere, not `PE` or `stock_pe`. Same for risk keys: only
-`volatility` / `debt` / `valuation` / `stability` are recognised.
+- [ ] `bun run check-types` clean across the repo
+- [ ] `curl -s localhost:3000/api/health` shows a higher `vectors.points` count
 
 ---
 
-## The one thing not to change without telling me
+# TASK 5 — add the two missing metrics
 
-The `SourcesApi` shape in `packages/contracts/src/stocks.ts`. The engine, the RAG
-indexer and the discovery filter all call it. **Adding** a method is free; changing
-a signature or a field name breaks all three.
+## What to do
 
-If you want a change, message me and I'll do both sides at once — it's two minutes
-if we know, and a confusing half hour at 3am if we don't.
+Add these to every stock where the figure is available on the screener page:
+
+| `key` | `label` | notes |
+|---|---|---|
+| `eps` | EPS | In the glossary, referenced in prompts, commonly asked about |
+| `debt_to_equity` | Debt to equity | The `debt` risk row and the "low debt" discovery filter both need it |
+
+Follow the same `Metric` shape as TASK 3. `explanation` stays `""`.
+
+Also: `previous_close` is currently emitted as a metric but has **no glossary
+entry**, so tap-to-explain will 404 on it. Either add a glossary entry or drop the
+metric — it isn't useful to a beginner.
+
+## Acceptance criteria
+
+- [ ] `eps` and `debt_to_equity` present wherever screener has them, `null` elsewhere
+- [ ] `curl -s "localhost:3000/api/glossary/previous_close"` does not 404,
+      or the metric is gone
 
 ---
 
-## How to check your own work
+# Rules that apply to every task
+
+### Key names are matched by exact string
+
+`metric.key` → glossary `key` → `sectorMedians` key are all exact matches.
+`pe` everywhere — not `PE`, not `stock_pe`, not `p_e`. Same for the four risk keys.
+
+### Never change the `SourcesApi` signature without telling Ashwath
+
+The engine, the RAG indexer and the discovery filter all call it. **Adding** a
+method is free. Changing a signature or renaming a field breaks all three
+silently. Message him and both sides get changed at once.
+
+### `explanation` on metrics stays empty
+
+The AI writes it per-request at the user's level. Filling it in means everyone
+gets the same explanation, which defeats the whole personalisation feature.
+
+---
+
+# How to verify your work
 
 ```bash
+bun run check-types
 bun run --filter server dev
-curl -s localhost:3000/api/health           # stocks count, vector store, points
+curl -s localhost:3000/api/health
 
-# does a real investigation find your sources?
-curl -sN -b cookies.txt -X POST localhost:3000/api/thesis/stream \
-  -H 'Content-Type: application/json' \
-  -d '{"query":"Defence spending is up so HAL should benefit"}' | grep source.found
+# sector comparisons alive?
+curl -s localhost:3000/api/stocks/HAL | python3 -m json.tool | grep -A6 sectorMedians
 
-# does discovery filter on your medians?
-curl -sN -b cookies.txt -X POST localhost:3000/api/thesis/stream \
-  -H 'Content-Type: application/json' \
-  -d '{"query":"I want to invest long term in something safe"}' | grep discovery.candidate
+# risk breakdown alive?
+curl -s localhost:3000/api/stocks/HAL | python3 -m json.tool | grep -A4 '"risk"'
 ```
 
-If a stock appears with no matched reasons, or a sector comparison says nothing,
-it's one of the three gaps above.
+Then sign up through the web app and run a real query. If a stock appears in
+discovery with no matched reasons, or a comparison says nothing, it is one of the
+tasks above.
 
 ---
 
-## Priority, if you only have time for some
+# Priority if you run out of time
 
-1. **`sectorMedians`** — unlocks comparisons, metric directions, and discovery filters
-2. **`risk` arrays** — unlocks a screen Sayam has already built
-3. **`week52High/Low`** — unlocks the range metric and volatility
-4. `eps` + `debt_to_equity`
-5. `listDocuments()`
+1. **TASK 1** — `sectorMedians`. Unlocks comparisons, directions, discovery filters
+2. **TASK 2** — `risk`. Unlocks a screen Sayam has already built
+3. **TASK 3** — 52-week range. Unlocks the range metric and feeds TASK 2
+4. TASK 5 — `eps`, `debt_to_equity`
+5. TASK 4 — `listDocuments()`
 
-Everything above 3 is pure arithmetic over data you already have on disk.
+Tasks 1–3 are pure arithmetic over data already on disk. They need no network.

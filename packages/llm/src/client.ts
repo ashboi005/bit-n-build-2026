@@ -42,6 +42,9 @@ const RETRY_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
  */
 const MAX_IN_FLIGHT = 3;
 
+/** Generous enough for a slow structured call, short enough to fail visibly. */
+const REQUEST_TIMEOUT_MS = 90_000;
+
 let inFlight = 0;
 const waiting: (() => void)[] = [];
 
@@ -73,6 +76,15 @@ export function createLlm(env: LlmConfig) {
       await acquire();
       let res: Response;
       try {
+        /**
+         * Hard timeout on every call.
+         *
+         * Without one, a hung gateway request stalls the generator forever and
+         * the SSE stream just stops mid-investigation — no error, no failed
+         * stage, nothing in the log. Seen once at the verdict stage. Failing
+         * loudly after 90s is far better than a demo that quietly truncates.
+         */
+        const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
         res = await fetch(`${baseUrl}${path}`, {
           method: "POST",
           headers: {
@@ -80,14 +92,15 @@ export function createLlm(env: LlmConfig) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
-          signal,
+          signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
         });
       } catch (error) {
         // fetch THROWS on connection reset rather than returning a status, so
         // without this a dropped socket would skip the retry loop entirely.
         if (signal?.aborted) throw error;
+        const reason = error instanceof Error ? error.message : "unknown";
         lastError = new LlmError(
-          `${path} network error: ${error instanceof Error ? error.message : "unknown"}`,
+          `${path} ${reason.includes("timed out") || reason.includes("aborted") ? `timed out after ${REQUEST_TIMEOUT_MS / 1000}s` : `network error: ${reason}`}`,
         );
         continue;
       } finally {
