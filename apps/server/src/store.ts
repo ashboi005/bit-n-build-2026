@@ -137,7 +137,7 @@ function rowToDecision(row: typeof userDecision.$inferSelect): Decision {
     companyName: row.companyName,
     action: row.action as DecisionAction,
     quantity: row.quantity,
-    pricePerShare: row.pricePerShare,
+    pricePerShare: row.pricePerShare ?? row.priceAtDecision,
     thesis: row.thesis,
     investigationSummary: row.investigationSummary,
     reasoning: row.reasoning,
@@ -173,6 +173,9 @@ export async function recordDecision(
       action: input.action,
       quantity: input.quantity ?? null,
       pricePerShare: input.pricePerShare ?? null,
+      // Reference point for "what changed since" — a skipped or watched
+      // decision has no purchase price but still needs something to measure from.
+      priceAtDecision: stock?.price?.last ?? null,
       thesis: input.thesis ?? null,
       investigationSummary: input.investigationSummary ?? null,
       reasoning: input.reasoning ?? null,

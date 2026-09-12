@@ -10,7 +10,7 @@ import {
   type DemoStage,
   type OnboardingAnswers,
 } from "@bit-n-build-2026/contracts";
-import { runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
+import { computeChanges, runChat, runDiscovery, runThesis } from "@bit-n-build-2026/engine";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
@@ -22,6 +22,7 @@ import {
   fastModel,
   getRetriever,
   llm,
+  resetUser,
   seedProfile,
   sources,
 } from "./services";
@@ -336,6 +337,22 @@ new Elysia()
     return decision;
   })
 
+  /**
+   * What changed since the user last looked.
+   *
+   * Computed on request rather than by a cron job: it is a diff over data we
+   * already hold, so it takes milliseconds and is never stale. This also means
+   * it works immediately after a Time Machine seed — the seeded decisions are
+   * dated relative to today, so Day 15 has 15 days of history to review.
+   */
+  .get("/api/changes", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+
+    const context = await getUserContext(user.id);
+    return computeChanges({ sources, llm, model: fastModel }, context);
+  })
+
   .get("/api/portfolio", async ({ request, status }) => {
     const user = await currentUser(request);
     if (!user) return status(401);
@@ -389,6 +406,17 @@ new Elysia()
       // A question to prefill, NOT a scripted answer — the pipeline runs live.
       suggestedPrompt: DEMO_PROMPTS[stage],
     };
+  })
+
+  /**
+   * Full demo reset. Deletes the account and everything attached to it, so the
+   * next demo starts at sign-up and runs through onboarding.
+   */
+  .post("/api/demo/reset", async ({ request, status }) => {
+    const user = await currentUser(request);
+    if (!user) return status(401);
+    await resetUser(user.id);
+    return { reset: true, message: "Account deleted. Sign up again to start a fresh demo." };
   })
 
   .get("/api/health", async () => {
