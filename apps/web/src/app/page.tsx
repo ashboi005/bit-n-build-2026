@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useThesisRun } from "@/hooks/use-thesis-run";
 import { ThesisInput } from "@/components/thesis/thesis-input";
@@ -12,13 +12,14 @@ import Loader from "@/components/loader";
 
 export default function Home() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
   const { 
     status, claim, stages, sources, metrics, concepts, verdict,
     discoveryState, mode,
     run 
   } = useThesisRun();
-  const [suggestedQuery, setSuggestedQuery] = useState("");
+  const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
 
   useEffect(() => {
     if (!isPending && !session) {
