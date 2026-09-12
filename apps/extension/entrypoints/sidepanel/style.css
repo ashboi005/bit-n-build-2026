@@ -6,6 +6,7 @@ button, textarea { font: inherit; }
 textarea { min-height: 108px; padding: 10px; resize: vertical; }
 button { cursor: pointer; padding: 8px 12px; }
 .notice, footer { color: #5f6368; font-size: 12px; }
+.context { background: #e8f0fe; border-radius: 999px; color: #1a73e8; font-size: 13px; margin: 0; padding: 6px 10px; width: fit-content; }
 article { border-top: 1px solid #d5d8dc; padding: 10px 0; }
 article p { margin: 6px 0; }
 #results section { border-top: 1px solid #d5d8dc; padding: 10px 0; }
