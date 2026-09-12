@@ -41,25 +41,9 @@ export function getRetriever(): Promise<Retriever> {
     const retriever = createRetriever(llm, store);
 
     if (await retriever.isEmpty()) {
-      /**
-       * Collect every document we can reach through the public sources API.
-       *
-       * `SourcesApi` has no listDocuments() yet, so this walks each stock's
-       * documentIds. A document that no stock links to is therefore invisible
-       * to retrieval — asked Tushar for listDocuments() in
-       * docs/handoff-sources-integration.md; this workaround needs no change
-       * on his side to run today.
-       */
-      const docs = [
-        ...new Map(
-          sources
-            .listStocks()
-            .flatMap((s) => sources.getStock(s.ticker)?.documentIds ?? [])
-            .map((id) => sources.getDocument(id))
-            .filter((d): d is NonNullable<typeof d> => d !== null)
-            .map((d) => [d.id, d] as const),
-        ).values(),
-      ];
+      // Everything we hold. Tushar shipped listDocuments() so a document that
+      // no stock happens to link to is still retrievable.
+      const docs = sources.listDocuments();
 
       try {
         const count = await retriever.indexDocuments(docs);
