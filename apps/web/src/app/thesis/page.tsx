@@ -3,6 +3,7 @@
 import { useThesisRun } from "@/hooks/use-thesis-run";
 import { ThesisInput } from "@/components/thesis/thesis-input";
 import { Investigation } from "@/components/thesis/investigation";
+import { TimeMachineBar } from "@/components/demo/time-machine-bar";
 
 export default function ThesisPage() {
   const { status, claim, stages, sources, metrics, concepts, verdict, run } =
@@ -14,6 +15,7 @@ export default function ThesisPage() {
   return (
     <main className="min-h-[calc(100vh-4rem)] p-4 md:p-8 bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
+        <TimeMachineBar />
         {/* Header Title section */}
         {isIdle && (
           <div className="text-center space-y-2 py-8">
