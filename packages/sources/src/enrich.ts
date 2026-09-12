@@ -16,11 +16,13 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { dataPath } from "./paths";
+
 import type { Metric, StockRecord } from "@bit-n-build-2026/contracts";
 
 import { deriveAll } from "./derive";
 
-const DIR = join(import.meta.dir, "../data/snapshot/stocks");
+const DIR = dataPath("snapshot", "stocks");
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
 
