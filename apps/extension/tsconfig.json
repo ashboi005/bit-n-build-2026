@@ -1,0 +1,8 @@
+{
+  "extends": "@bit-n-build-2026/config/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["@types/bun"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  },
+  "include": ["**/*.ts", ".wxt/**/*.ts"]
+}

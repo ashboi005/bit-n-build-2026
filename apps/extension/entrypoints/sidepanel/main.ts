@@ -1,0 +1,147 @@
+import "./style.css";
+
+import {
+  STAGE_IDS,
+  initialThesisState,
+  reduceThesis,
+  type StreamEvent,
+} from "@bit-n-build-2026/contracts";
+import { browser } from "wxt/browser";
+
+const port = browser.runtime.connect({ name: "mind-over-money-side-panel" });
+const query = document.querySelector<HTMLTextAreaElement>("#query")!;
+const analyze = document.querySelector<HTMLButtonElement>("#analyze")!;
+const auth = document.querySelector<HTMLButtonElement>("#auth")!;
+const status = document.querySelector<HTMLParagraphElement>("#status")!;
+const results = document.querySelector<HTMLElement>("#results")!;
+
+let thesis = initialThesisState();
+
+function setStatus(message: string): void {
+  status.textContent = message;
+}
+
+function section(title: string): HTMLElement {
+  const element = document.createElement("section");
+  const heading = document.createElement("h2");
+  heading.textContent = title;
+  element.append(heading);
+  return element;
+}
+
+function listItem(list: HTMLUListElement, text: string): void {
+  const item = document.createElement("li");
+  item.textContent = text;
+  list.append(item);
+}
+
+function render(): void {
+  results.replaceChildren();
+  if (thesis.claim?.asset) {
+    const asset = document.createElement("p");
+    asset.textContent = `Investigating: ${thesis.claim.asset.name} (${thesis.claim.asset.ticker})`;
+    results.append(asset);
+  }
+  for (const stageId of STAGE_IDS) {
+    const stage = thesis.stages[stageId];
+    if (stage.status === "pending" && stage.findings.length === 0) continue;
+    const card = section(`${stage.label} — ${stage.status}`);
+    if (stage.message) {
+      const message = document.createElement("p");
+      message.textContent = stage.message;
+      card.append(message);
+    }
+    const findings = document.createElement("ul");
+    for (const finding of stage.findings) {
+      listItem(findings, `${finding.text} (${finding.stance}; ${finding.strength})`);
+    }
+    if (stage.findings.length) card.append(findings);
+    results.append(card);
+  }
+  if (thesis.metrics.length) {
+    const card = section("The numbers");
+    const metrics = document.createElement("ul");
+    for (const metric of thesis.metrics) {
+      listItem(metrics, `${metric.label}: ${metric.display}. ${metric.explanation}`);
+    }
+    card.append(metrics);
+    results.append(card);
+  }
+  for (const source of Object.values(thesis.sources)) {
+    const article = document.createElement("article");
+    const title = document.createElement("strong");
+    title.textContent = source.title;
+    const snippet = document.createElement("p");
+    snippet.textContent = source.snippet;
+    article.append(title, snippet);
+    if (source.url) {
+      const link = document.createElement("a");
+      link.href = source.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Open citation";
+      article.append(link);
+    }
+    results.append(article);
+  }
+  if (thesis.concepts.length) {
+    const card = section("What you just learned");
+    const concepts = document.createElement("ul");
+    for (const concept of thesis.concepts) {
+      listItem(concepts, `${concept.term}: ${concept.explanation}`);
+    }
+    card.append(concepts);
+    results.append(card);
+  }
+  if (thesis.verdict) {
+    const card = section("Where you stand");
+    const verdict = document.createElement("ul");
+    for (const claim of thesis.verdict.holdsOn) listItem(verdict, `Holds on: ${claim}`);
+    for (const claim of thesis.verdict.weakOn) listItem(verdict, `Weak on: ${claim}`);
+    for (const claim of thesis.verdict.unverified) listItem(verdict, `Unverified: ${claim}`);
+    for (const check of thesis.verdict.nextChecks) listItem(verdict, `Next check: ${check}`);
+    card.append(verdict);
+    const disclaimer = document.createElement("p");
+    disclaimer.textContent = thesis.verdict.disclaimer;
+    card.append(disclaimer);
+    results.append(card);
+  }
+}
+
+port.onMessage.addListener((message: unknown) => {
+  if (!message || typeof message !== "object") return;
+  const payload = message as { type?: string; draft?: { draft?: string } | null; event?: StreamEvent; message?: string };
+  if (payload.type === "draft" && payload.draft?.draft) {
+    query.value = payload.draft.draft;
+    setStatus("Review the draft before sending it.");
+  } else if (payload.type === "signed-in") {
+    auth.textContent = "Sign out";
+    setStatus("Signed in. You can analyze a reviewed thesis.");
+  } else if (payload.type === "signed-out") {
+    auth.textContent = "Sign in";
+    setStatus("Signed out.");
+  } else if (payload.type === "event" && payload.event) {
+    thesis = reduceThesis(thesis, payload.event as never);
+    render();
+  } else if (payload.type === "completed") {
+    analyze.disabled = false;
+    setStatus("Investigation complete.");
+  } else if (payload.type === "error") {
+    analyze.disabled = false;
+    setStatus(payload.message ?? "Request failed.");
+  }
+});
+
+auth.addEventListener("click", () => {
+  port.postMessage({ type: auth.textContent === "Sign out" ? "logout" : "login" });
+});
+
+analyze.addEventListener("click", () => {
+  thesis = initialThesisState();
+  results.replaceChildren();
+  analyze.disabled = true;
+  setStatus("Analyzing the reviewed query…");
+  port.postMessage({ type: "run", query: query.value });
+});
+
+port.postMessage({ type: "draft" });

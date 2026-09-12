@@ -1,5 +1,8 @@
 # Dependencies
 node_modules
+.wxt
+apps/extension/.output
+apps/server/server.exe
 .pnp
 .pnp.js
 

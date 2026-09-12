@@ -6,8 +6,9 @@
     "build": "tsdown",
     "check-types": "tsc --noEmit",
     "compile": "bun build --compile --no-compile-autoload-dotenv --minify --sourcemap --bytecode ./src/index.ts --outfile server",
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun run src/index.ts",
     "seed:demo": "bun run src/seed-demo.ts",
+    "oauth:provision": "bun run src/provision-extension-client.ts",
     "start": "bun run dist/index.mjs",
     "env:generate": "varlock codegen"
   },

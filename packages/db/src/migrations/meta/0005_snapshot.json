@@ -1,6 +1,6 @@
 {
-  "id": "20179173-9e1a-4ae8-85c6-cb071ea237a0",
-  "prevId": "5496fe84-c49d-41d5-b22f-d795d3618e2c",
+  "id": "e63f4420-2d6b-4418-b298-3995d413e982",
+  "prevId": "20179173-9e1a-4ae8-85c6-cb071ea237a0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -146,12 +146,6 @@
         },
         "price_per_share": {
           "name": "price_per_share",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "price_at_decision": {
-          "name": "price_at_decision",
           "type": "real",
           "primaryKey": false,
           "notNull": false
@@ -967,15 +961,15 @@
         }
       },
       "foreignKeys": {
-        "oauthAccessToken_client_id_oauthClient_id_fk": {
-          "name": "oauthAccessToken_client_id_oauthClient_id_fk",
+        "oauthAccessToken_client_id_oauthClient_client_id_fk": {
+          "name": "oauthAccessToken_client_id_oauthClient_client_id_fk",
           "tableFrom": "oauthAccessToken",
           "tableTo": "oauthClient",
           "columnsFrom": [
             "client_id"
           ],
           "columnsTo": [
-            "id"
+            "client_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -1421,15 +1415,15 @@
         }
       },
       "foreignKeys": {
-        "oauthClientResource_client_id_oauthClient_id_fk": {
-          "name": "oauthClientResource_client_id_oauthClient_id_fk",
+        "oauthClientResource_client_id_oauthClient_client_id_fk": {
+          "name": "oauthClientResource_client_id_oauthClient_client_id_fk",
           "tableFrom": "oauthClientResource",
           "tableTo": "oauthClient",
           "columnsFrom": [
             "client_id"
           ],
           "columnsTo": [
-            "id"
+            "client_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -1548,15 +1542,15 @@
         }
       },
       "foreignKeys": {
-        "oauthConsent_client_id_oauthClient_id_fk": {
-          "name": "oauthConsent_client_id_oauthClient_id_fk",
+        "oauthConsent_client_id_oauthClient_client_id_fk": {
+          "name": "oauthConsent_client_id_oauthClient_client_id_fk",
           "tableFrom": "oauthConsent",
           "tableTo": "oauthClient",
           "columnsFrom": [
             "client_id"
           ],
           "columnsTo": [
-            "id"
+            "client_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -1758,15 +1752,15 @@
         }
       },
       "foreignKeys": {
-        "oauthRefreshToken_client_id_oauthClient_id_fk": {
-          "name": "oauthRefreshToken_client_id_oauthClient_id_fk",
+        "oauthRefreshToken_client_id_oauthClient_client_id_fk": {
+          "name": "oauthRefreshToken_client_id_oauthClient_client_id_fk",
           "tableFrom": "oauthRefreshToken",
           "tableTo": "oauthClient",
           "columnsFrom": [
             "client_id"
           ],
           "columnsTo": [
-            "id"
+            "client_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
