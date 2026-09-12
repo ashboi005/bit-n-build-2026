@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://www.screener.in/company/BDL/consolidated/",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:29.108Z",
+  "publishedAt": "2026-09-12T18:56:35.137Z",
   "tickers": [
     "BDL"
   ],
   "sectors": [],
-  "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T17:55:29.108Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable.",
+  "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T18:56:35.137Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable; 52-week high (₹): unavailable; 52-week low (₹): unavailable; EPS (₹): unavailable; Debt to equity: unavailable.",
   "chunks": [
     {
       "id": "screener_bdl_fundamentals_0",
-      "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T17:55:29.108Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable."
+      "text": "Screener.in consolidated fundamentals for BDL. Fetched at: 2026-09-12T18:56:35.137Z. Returned values: Market Cap (₹ Cr): unavailable; Stock P/E: unavailable; Book Value: unavailable; ROCE (%): unavailable; ROE (%): unavailable; Dividend Yield (%): unavailable; 52-week high (₹): unavailable; 52-week low (₹): unavailable; EPS (₹): unavailable; Debt to equity: unavailable."
     }
   ]
 }

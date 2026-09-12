@@ -11,8 +11,8 @@
     "changePct": 0,
     "dayHigh": 15.2,
     "dayLow": 14.85,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 15.8,
+    "week52Low": 7.65,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_idea_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 162190,
       "display": "1,62,190 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -49,7 +49,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": null,
+      "sectorMedian": 17.05,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -75,8 +75,8 @@
       "value": -1.72,
       "display": "-1.72%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 10.3,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -88,7 +88,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": null,
+      "sectorMedian": 15.75,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -101,8 +101,47 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "screener_idea_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": -1.61,
+      "display": "-1.61",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_idea_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 1.1664133408607287,
+      "display": "1.17",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_idea_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹7.65 – ₹15.8",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_idea_fundamentals"
@@ -1103,8 +1142,34 @@
       "close": 14.97
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "high",
+      "reason": "The price moved between ₹7.65 and ₹15.8 over 52 weeks — a swing of about 107% from its low.",
+      "sourceIds": [
+        "screener_idea_fundamentals"
+      ]
+    },
+    {
+      "key": "debt",
+      "label": "Debt",
+      "level": "high",
+      "reason": "Debt to equity is 1.17, compared with a sector median of 0.30.",
+      "sourceIds": [
+        "screener_idea_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_idea_market_data",
     "screener_idea_fundamentals"

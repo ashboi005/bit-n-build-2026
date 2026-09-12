@@ -117,6 +117,7 @@ export interface GlossaryEntry {
 /** The interface `packages/sources` exports. Ashwath calls this; Tushar implements it. */
 export interface SourcesApi {
   listStocks(): StockSummary[];
+  listDocuments(): SourceDocument[];
   getStock(ticker: string): StockRecord | null;
   getDocument(id: string): SourceDocument | null;
   searchSources(query: string, opts?: SearchOptions): SearchHit[];

@@ -36,7 +36,7 @@
       "value": null,
       "display": "—",
       "unit": "INR crore",
-      "sectorMedian": null,
+      "sectorMedian": 294031,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -49,7 +49,7 @@
       "value": null,
       "display": "—",
       "unit": null,
-      "sectorMedian": null,
+      "sectorMedian": 17.05,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -75,7 +75,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": null,
+      "sectorMedian": 10.3,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -88,7 +88,7 @@
       "value": null,
       "display": "—",
       "unit": "%",
-      "sectorMedian": null,
+      "sectorMedian": 15.75,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -101,7 +101,33 @@
       "value": null,
       "display": "—",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_bdl_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": null,
+      "display": "—",
+      "unit": "INR",
       "sectorMedian": null,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_bdl_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": null,
+      "display": "—",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
       "direction": "unknown",
       "explanation": "",
       "sourceIds": [
@@ -1103,7 +1129,14 @@
       "close": 1190
     }
   ],
-  "sectorMedians": {},
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
   "risk": [],
   "documentIds": [
     "bse_bdl_market_data",

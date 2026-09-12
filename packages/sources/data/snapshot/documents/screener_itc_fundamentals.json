@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://www.screener.in/company/ITC/consolidated/",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:34.436Z",
+  "publishedAt": "2026-09-12T18:56:35.183Z",
   "tickers": [
     "ITC"
   ],
   "sectors": [],
-  "text": "Screener.in consolidated fundamentals for ITC. Fetched at: 2026-09-12T17:55:34.436Z. Returned values: Market Cap (₹ Cr): 325586; Stock P/E: 16.5; Book Value: 57.9; ROCE (%): 38.9; ROE (%): 29.3; Dividend Yield (%): 5.58.",
+  "text": "Screener.in consolidated fundamentals for ITC. Fetched at: 2026-09-12T18:56:35.183Z. Returned values: Market Cap (₹ Cr): 325586; Stock P/E: 16.5; Book Value: 57.9; ROCE (%): 38.9; ROE (%): 29.3; Dividend Yield (%): 5.58; 52-week high (₹): 426; 52-week low (₹): 256; EPS (₹): 4.1; Debt to equity: 0.008476178472397277.",
   "chunks": [
     {
       "id": "screener_itc_fundamentals_0",
-      "text": "Screener.in consolidated fundamentals for ITC. Fetched at: 2026-09-12T17:55:34.436Z. Returned values: Market Cap (₹ Cr): 325586; Stock P/E: 16.5; Book Value: 57.9; ROCE (%): 38.9; ROE (%): 29.3; Dividend Yield (%): 5.58."
+      "text": "Screener.in consolidated fundamentals for ITC. Fetched at: 2026-09-12T18:56:35.183Z. Returned values: Market Cap (₹ Cr): 325586; Stock P/E: 16.5; Book Value: 57.9; ROCE (%): 38.9; ROE (%): 29.3; Dividend Yield (%): 5.58; 52-week high (₹): 426; 52-week low (₹): 256; EPS (₹): 4.1; Debt to equity: 0.008476178472397277."
     }
   ]
 }

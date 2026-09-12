@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://www.screener.in/company/INFY/consolidated/",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:32.236Z",
+  "publishedAt": "2026-09-12T18:56:35.168Z",
   "tickers": [
     "INFY"
   ],
   "sectors": [],
-  "text": "Screener.in consolidated fundamentals for INFY. Fetched at: 2026-09-12T17:55:32.236Z. Returned values: Market Cap (₹ Cr): 421123; Stock P/E: 13.5; Book Value: 225; ROCE (%): 40; ROE (%): 31.9; Dividend Yield (%): 4.63.",
+  "text": "Screener.in consolidated fundamentals for INFY. Fetched at: 2026-09-12T18:56:35.168Z. Returned values: Market Cap (₹ Cr): 421123; Stock P/E: 13.5; Book Value: 225; ROCE (%): 40; ROE (%): 31.9; Dividend Yield (%): 4.63; 52-week high (₹): 1728; 52-week low (₹): 982; EPS (₹): 14.32; Debt to equity: 0.",
   "chunks": [
     {
       "id": "screener_infy_fundamentals_0",
-      "text": "Screener.in consolidated fundamentals for INFY. Fetched at: 2026-09-12T17:55:32.236Z. Returned values: Market Cap (₹ Cr): 421123; Stock P/E: 13.5; Book Value: 225; ROCE (%): 40; ROE (%): 31.9; Dividend Yield (%): 4.63."
+      "text": "Screener.in consolidated fundamentals for INFY. Fetched at: 2026-09-12T18:56:35.168Z. Returned values: Market Cap (₹ Cr): 421123; Stock P/E: 13.5; Book Value: 225; ROCE (%): 40; ROE (%): 31.9; Dividend Yield (%): 4.63; 52-week high (₹): 1728; 52-week low (₹): 982; EPS (₹): 14.32; Debt to equity: 0."
     }
   ]
 }

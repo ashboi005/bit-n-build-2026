@@ -11,8 +11,8 @@
     "changePct": 0.78,
     "dayHigh": 324.8,
     "dayLow": 316,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 368,
+    "week52Low": 213,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_eternal_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 312189,
       "display": "3,12,189 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -49,8 +49,8 @@
       "value": 721,
       "display": "721",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 17.05,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -75,8 +75,8 @@
       "value": 2.48,
       "display": "2.48%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 10.3,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -88,8 +88,8 @@
       "value": 0.38,
       "display": "0.38%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 15.75,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -101,8 +101,47 @@
       "value": 0,
       "display": "0%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 0,
+      "display": "0",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": 0.179531480748627,
+      "display": "0.18",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "low",
+      "explanation": "",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹213 – ₹368",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_eternal_fundamentals"
@@ -1103,8 +1142,52 @@
       "close": 323.5
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "high",
+      "reason": "The price moved between ₹213 and ₹368 over 52 weeks — a swing of about 73% from its low.",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "high",
+      "reason": "P/E is 721, compared with a sector median of 17.05.",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "debt",
+      "label": "Debt",
+      "level": "low",
+      "reason": "Debt to equity is 0.18, compared with a sector median of 0.30.",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "high",
+      "reason": "Return on equity is 0.38%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "screener_eternal_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_eternal_market_data",
     "screener_eternal_fundamentals"

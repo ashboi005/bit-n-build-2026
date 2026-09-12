@@ -168,5 +168,9 @@
   {
     "key": "volatility", "term": "Volatility", "oneLiner": "How widely and quickly a price has moved.",
     "byLevel": {"new": "Volatility describes how much prices fluctuate; higher means larger or more frequent moves.", "learning": "Historical volatility describes past movement, not a guaranteed future move.", "practicing": "Compare matching periods and note major events.", "independent": "Volatility: dispersion of price returns."}, "related": ["week52_range"]
+  },
+  {
+    "key": "previous_close", "term": "Previous close", "oneLiner": "The last price recorded when the market closed on the previous trading day.",
+    "byLevel": {"new": "It gives you yesterday's final market price to compare with today's price.", "learning": "Comparing it with the current price shows the day's price change.", "practicing": "Use it as a short-term reference, not a measure of business performance.", "independent": "Previous close: the final traded price from the preceding session."}, "related": ["week52_range"]
   }
 ]

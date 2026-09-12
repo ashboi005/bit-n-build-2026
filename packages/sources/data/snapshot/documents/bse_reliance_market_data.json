@@ -5,16 +5,16 @@
   "tier": "market_data",
   "url": "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w?Debtflag=&scripcode=500325&seriesid=",
   "pdfUrl": null,
-  "publishedAt": "2026-09-12T17:55:30.130Z",
+  "publishedAt": "2026-09-12T18:56:35.149Z",
   "tickers": [
     "RELIANCE"
   ],
   "sectors": [],
-  "text": "BSE market-data response for RELIANCE. Fetched at: 2026-09-12T17:55:30.130Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1258.00; change -17.00; change percent -1.33; previous close ₹1275.00; open ₹1268.10; high ₹1268.15; low ₹1253.20.",
+  "text": "BSE market-data response for RELIANCE. Fetched at: 2026-09-12T18:56:35.149Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1258.00; change -17.00; change percent -1.33; previous close ₹1275.00; open ₹1268.10; high ₹1268.15; low ₹1253.20.",
   "chunks": [
     {
       "id": "bse_reliance_market_data_0",
-      "text": "BSE market-data response for RELIANCE. Fetched at: 2026-09-12T17:55:30.130Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1258.00; change -17.00; change percent -1.33; previous close ₹1275.00; open ₹1268.10; high ₹1268.15; low ₹1253.20."
+      "text": "BSE market-data response for RELIANCE. Fetched at: 2026-09-12T18:56:35.149Z. BSE market timestamp: 11 Sep 26 | 16:00. Returned values: LTP ₹1258.00; change -17.00; change percent -1.33; previous close ₹1275.00; open ₹1268.10; high ₹1268.15; low ₹1253.20."
     }
   ]
 }

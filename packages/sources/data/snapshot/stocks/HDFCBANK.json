@@ -11,8 +11,8 @@
     "changePct": 2.02,
     "dayHigh": 708.9,
     "dayLow": 682,
-    "week52High": null,
-    "week52Low": null,
+    "week52High": 1020,
+    "week52Low": 682,
     "asOf": "2026-09-11T10:30:00.000Z",
     "sourceId": "bse_hdfcbank_market_data"
   },
@@ -36,8 +36,8 @@
       "value": 1091709,
       "display": "10,91,709 Cr",
       "unit": "INR crore",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 294031,
+      "direction": "high",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -49,8 +49,8 @@
       "value": 13.8,
       "display": "13.8",
       "unit": null,
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 17.05,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -75,8 +75,8 @@
       "value": 7.02,
       "display": "7.02%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 10.3,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -88,8 +88,8 @@
       "value": 13.6,
       "display": "13.6%",
       "unit": "%",
-      "sectorMedian": null,
-      "direction": "unknown",
+      "sectorMedian": 15.75,
+      "direction": "normal",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -101,8 +101,47 @@
       "value": 1.84,
       "display": "1.84%",
       "unit": "%",
+      "sectorMedian": 0.935,
+      "direction": "high",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    },
+    {
+      "key": "eps",
+      "label": "EPS",
+      "value": 11.06,
+      "display": "11.06",
+      "unit": "INR",
       "sectorMedian": null,
       "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    },
+    {
+      "key": "debt_to_equity",
+      "label": "Debt to equity",
+      "value": null,
+      "display": "—",
+      "unit": null,
+      "sectorMedian": 0.2989332520572996,
+      "direction": "unknown",
+      "explanation": "",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    },
+    {
+      "key": "week52_range",
+      "label": "52-week range",
+      "value": null,
+      "display": "₹682 – ₹1,020",
+      "unit": "INR",
+      "sectorMedian": null,
+      "direction": "low",
       "explanation": "",
       "sourceIds": [
         "screener_hdfcbank_fundamentals"
@@ -1103,8 +1142,43 @@
       "close": 708.25
     }
   ],
-  "sectorMedians": {},
-  "risk": [],
+  "sectorMedians": {
+    "pe": 17.05,
+    "roe": 15.75,
+    "roce": 10.3,
+    "dividend_yield": 0.935,
+    "market_cap": 294031,
+    "debt_to_equity": 0.2989332520572996
+  },
+  "risk": [
+    {
+      "key": "volatility",
+      "label": "Price volatility",
+      "level": "medium",
+      "reason": "The price moved between ₹682 and ₹1,020 over 52 weeks — a swing of about 50% from its low.",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    },
+    {
+      "key": "valuation",
+      "label": "Valuation",
+      "level": "medium",
+      "reason": "P/E is 13.8, compared with a sector median of 17.05.",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "Business returns",
+      "level": "medium",
+      "reason": "Return on equity is 13.6%, showing how much profit the business earned from shareholders' money.",
+      "sourceIds": [
+        "screener_hdfcbank_fundamentals"
+      ]
+    }
+  ],
   "documentIds": [
     "bse_hdfcbank_market_data",
     "screener_hdfcbank_fundamentals"
