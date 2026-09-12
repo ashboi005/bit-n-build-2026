@@ -3,6 +3,8 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { dataPath } from "./paths";
+
 import type { Metric, SourceDocument, StockRecord } from "@bit-n-build-2026/contracts";
 
 import { fetchScripMaster } from "./fetchers/bse";
@@ -10,7 +12,7 @@ import { fetchFundamentals, fetchPriceHistory, searchCompany } from "./fetchers/
 import { deriveAll } from "./derive";
 import { getJson, getText } from "./http";
 
-const DATA = join(import.meta.dir, "../data/snapshot");
+const DATA = dataPath("snapshot");
 
 /** This is the product's deliberately small, committed fallback universe. */
 const COVERED = [

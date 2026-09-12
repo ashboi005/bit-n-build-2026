@@ -100,7 +100,29 @@ export function warmRetriever(): void {
 }
 
 export function scheduleFreshnessCheck(): void {
+  try {
+    runFreshnessCheck();
+  } catch (error) {
+    // Startup diagnostics must never take the process down. An ENOENT here once
+    // put the deployed container into a restart loop.
+    console.warn(
+      "[data] freshness check failed, continuing with the committed snapshot:",
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+function runFreshnessCheck(): void {
   const report = checkFreshness();
+
+  if (report.total === 0) {
+    console.error(
+      "[data] NO STOCKS LOADED — the snapshot directory was not found. " +
+        "Set SOURCES_DATA_DIR to the absolute path of packages/sources/data. " +
+        "The server will run but every company will report as uncovered.",
+    );
+    return;
+  }
   console.log(
     `[data] ${report.total} stocks, ${report.staleCount} stale` +
       (report.newestAsOf ? ` (newest ${report.newestAsOf.slice(0, 16)})` : ""),

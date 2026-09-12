@@ -3,11 +3,13 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { dataPath } from "./paths";
+
 import type { GlossaryEntry, SourceDocument, StockRecord } from "@bit-n-build-2026/contracts";
 
-const DATA_DIR = join(import.meta.dir, "../data/snapshot");
-const LIBRARY_DIR = join(import.meta.dir, "../data/library");
-const NORMALIZED_CACHE_DIR = join(import.meta.dir, "../.cache/snapshot");
+const DATA_DIR = dataPath("snapshot");
+const LIBRARY_DIR = dataPath("library");
+const NORMALIZED_CACHE_DIR = dataPath("../.cache/snapshot");
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 export interface Snapshot {

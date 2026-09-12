@@ -120,13 +120,27 @@ export function CompareChart({ records }: CompareChartProps) {
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                 color: 'var(--foreground)'
               }}
-              formatter={(value: number, name: string) => [
-                <span key={name} className="font-mono font-medium">{value > 0 ? '+' : ''}{value}%</span>,
-                <span key={name+"_label"} className="font-semibold">{name}</span>
-              ]}
-              labelFormatter={(label) => new Date(label).toLocaleDateString('en-US', { 
-                month: 'long', day: 'numeric', year: 'numeric' 
-              })}
+              // recharts types these loosely (ValueType/NameType), so narrow here
+              // rather than fighting the generic signature.
+              formatter={(value, name) => {
+                const pct = Number(value);
+                return [
+                  <span key={String(name)} className="font-mono font-medium">
+                    {pct > 0 ? "+" : ""}
+                    {pct}%
+                  </span>,
+                  <span key={`${String(name)}_label`} className="font-semibold">
+                    {String(name)}
+                  </span>,
+                ];
+              }}
+              labelFormatter={(label) =>
+                new Date(String(label)).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              }
             />
             
             <ReferenceLine y={0} stroke="var(--muted-foreground)" strokeDasharray="3 3" />
