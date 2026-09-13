@@ -17,6 +17,39 @@ export type Draft = {
   pageContext: string;
 };
 
+/**
+ * Derives only a human-readable company name from a Groww stock-page URL.
+ * The original URL, query string, and fragment are deliberately discarded.
+ */
+export function companyFromGrowwUrl(value: string | undefined): string | null {
+  if (!value) return null;
+
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.hostname !== "groww.in") return null;
+
+    const segments = url.pathname.split("/").filter(Boolean);
+    if (segments.length !== 2 || segments[0] !== "stocks") return null;
+
+    const slug = decodeURIComponent(segments[1] ?? "");
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(slug)) return null;
+
+    return slug
+      .split("-")
+      .map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1).toLowerCase()}`)
+      .join(" ");
+  } catch {
+    return null;
+  }
+}
+
+/** Creates the single reviewed query sent to the existing thesis endpoint. */
+export function buildGrowwQuery(companyName: string | null, question: string): string | null {
+  const safeQuestion = sanitizeSelection(question);
+  if (!companyName || !safeQuestion) return null;
+  return `Regarding ${companyName}: ${safeQuestion}`;
+}
+
 export function sanitizeSelection(
   value: string,
   options: { isHidden?: boolean } = {},

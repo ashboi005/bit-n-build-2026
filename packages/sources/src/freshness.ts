@@ -15,14 +15,16 @@
  *      the server must serve the committed snapshot immediately regardless.
  */
 
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+
+import { dataPath } from "./paths";
 
 import type { StockRecord } from "@bit-n-build-2026/contracts";
 
 import { deriveAll } from "./derive";
 
-const STOCKS_DIR = join(import.meta.dir, "../data/snapshot/stocks");
+const STOCKS_DIR = dataPath("snapshot", "stocks");
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
 
@@ -47,12 +49,23 @@ export interface FreshnessReport {
 }
 
 function loadStocks(): { file: string; record: StockRecord }[] {
-  return readdirSync(STOCKS_DIR)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => ({
-      file: join(STOCKS_DIR, f),
-      record: JSON.parse(readFileSync(join(STOCKS_DIR, f), "utf8")) as StockRecord,
-    }));
+  // A missing or unreadable snapshot must degrade to "no coverage", never throw.
+  // This ran on boot and an ENOENT here put the container in a restart loop.
+  if (!existsSync(STOCKS_DIR)) return [];
+  try {
+    return readdirSync(STOCKS_DIR)
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => ({
+        file: join(STOCKS_DIR, f),
+        record: JSON.parse(readFileSync(join(STOCKS_DIR, f), "utf8")) as StockRecord,
+      }));
+  } catch (error) {
+    console.warn(
+      "[sources] could not read the stock snapshot:",
+      error instanceof Error ? error.message : error,
+    );
+    return [];
+  }
 }
 
 export function checkFreshness(maxAgeHours = MAX_AGE_HOURS): FreshnessReport {

@@ -14,11 +14,30 @@ const analyze = document.querySelector<HTMLButtonElement>("#analyze")!;
 const auth = document.querySelector<HTMLButtonElement>("#auth")!;
 const status = document.querySelector<HTMLParagraphElement>("#status")!;
 const results = document.querySelector<HTMLElement>("#results")!;
+const companyContext = document.querySelector<HTMLParagraphElement>("#company-context")!;
 
 let thesis = initialThesisState();
+let signingIn = false;
 
 function setStatus(message: string): void {
   status.textContent = message;
+}
+
+function renderCompanyContext(context: unknown): void {
+  const record = context && typeof context === "object" ? context as Record<string, unknown> : null;
+  const companyName = typeof record?.companyName === "string" ? record.companyName : null;
+  const message = typeof record?.message === "string" ? record.message : null;
+  companyContext.hidden = !companyName;
+  companyContext.textContent = companyName ? `Company context: ${companyName}` : "";
+  if (companyName) setStatus("Company context is ready. Ask a question before sending.");
+  else if (message) setStatus(message);
+}
+
+function renderDraft(draft: unknown): void {
+  const record = draft && typeof draft === "object" ? draft as Record<string, unknown> : null;
+  if (typeof record?.draft !== "string") return;
+  query.value = record.draft;
+  setStatus("Review the draft before sending it.");
 }
 
 function section(title: string): HTMLElement {
@@ -110,14 +129,25 @@ function render(): void {
 
 port.onMessage.addListener((message: unknown) => {
   if (!message || typeof message !== "object") return;
-  const payload = message as { type?: string; draft?: { draft?: string } | null; event?: StreamEvent; message?: string };
+  const payload = message as {
+    type?: string;
+    draft?: { draft?: string } | null;
+    context?: unknown;
+    event?: StreamEvent;
+    message?: string;
+  };
   if (payload.type === "draft" && payload.draft?.draft) {
-    query.value = payload.draft.draft;
-    setStatus("Review the draft before sending it.");
+    renderDraft(payload.draft);
+  } else if (payload.type === "context") {
+    renderCompanyContext(payload.context);
   } else if (payload.type === "signed-in") {
+    signingIn = false;
+    auth.disabled = false;
     auth.textContent = "Sign out";
     setStatus("Signed in. You can analyze a reviewed thesis.");
   } else if (payload.type === "signed-out") {
+    signingIn = false;
+    auth.disabled = false;
     auth.textContent = "Sign in";
     setStatus("Signed out.");
   } else if (payload.type === "event" && payload.event) {
@@ -127,13 +157,33 @@ port.onMessage.addListener((message: unknown) => {
     analyze.disabled = false;
     setStatus("Investigation complete.");
   } else if (payload.type === "error") {
+    if (signingIn) {
+      signingIn = false;
+      auth.disabled = false;
+      auth.textContent = "Sign in";
+    }
     analyze.disabled = false;
     setStatus(payload.message ?? "Request failed.");
   }
 });
 
+browser.storage.session.onChanged.addListener((changes) => {
+  if (changes.draft) renderDraft(changes.draft.newValue);
+  if (changes.growwContext || changes.contextMessage) {
+    renderCompanyContext(changes.growwContext?.newValue ?? changes.contextMessage?.newValue ?? null);
+  }
+});
+
 auth.addEventListener("click", () => {
-  port.postMessage({ type: auth.textContent === "Sign out" ? "logout" : "login" });
+  if (auth.textContent === "Sign out") {
+    port.postMessage({ type: "logout" });
+    return;
+  }
+  signingIn = true;
+  auth.disabled = true;
+  auth.textContent = "Signing in…";
+  setStatus("Finish signing in in the secure browser window.");
+  port.postMessage({ type: "login" });
 });
 
 analyze.addEventListener("click", () => {
@@ -145,3 +195,4 @@ analyze.addEventListener("click", () => {
 });
 
 port.postMessage({ type: "draft" });
+port.postMessage({ type: "context" });

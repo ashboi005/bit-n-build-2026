@@ -23,11 +23,13 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { dataPath } from "./paths";
+
 import type { SourceDocument, SourceTier, StockRecord } from "@bit-n-build-2026/contracts";
 
 import { deriveAll } from "./derive";
 
-const DATA = join(import.meta.dir, "../data/snapshot");
+const DATA = dataPath("snapshot");
 const STOCKS = join(DATA, "stocks");
 const DOCS = join(DATA, "documents");
 const UA =

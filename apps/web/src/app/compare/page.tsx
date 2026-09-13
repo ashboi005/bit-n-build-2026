@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ComparePicker } from "@/components/compare/compare-picker";
 import { CompareTable } from "@/components/compare/compare-table";
 
@@ -11,8 +12,10 @@ export default function ComparePage() {
         </p>
       </div>
       
-      <ComparePicker />
-      <CompareTable />
+      <Suspense fallback={null}>
+        <ComparePicker />
+        <CompareTable />
+      </Suspense>
     </main>
   );
 }

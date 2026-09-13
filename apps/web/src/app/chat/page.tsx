@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useChat } from "@/hooks/use-chat";
@@ -29,7 +29,7 @@ import type { SourceRef, ChatThread } from "@bit-n-build-2026/contracts";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@bit-n-build-2026/ui/lib/utils";
 
-export default function ChatPage() {
+function ChatPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const threadIdParam = searchParams.get("threadId");
@@ -253,6 +253,14 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={null}>
+      <ChatPageContent />
+    </Suspense>
   );
 }
 
