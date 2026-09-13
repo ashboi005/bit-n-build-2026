@@ -22,6 +22,12 @@ function HomeContent() {
   } = useThesisRun();
   const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handler = (e: Event) => {
       const customEvent = e as CustomEvent<{ suggestedPrompt?: string }>;
@@ -33,7 +39,7 @@ function HomeContent() {
     return () => window.removeEventListener("thwip-seed-demo", handler);
   }, []);
 
-  if (isPending) {
+  if (!mounted || isPending) {
     return <Loader />;
   }
 
