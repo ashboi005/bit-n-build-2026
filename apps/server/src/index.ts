@@ -457,7 +457,15 @@ new Elysia()
   .post("/api/demo/reset", async ({ request, status }) => {
     const user = await currentUser(request);
     if (!user) return status(401);
-    await resetUser(user.id);
+    try {
+      await resetUser(user.id);
+    } catch (error) {
+      // Never report success for a delete that did not happen — that is how
+      // this failed silently in production the first time.
+      const message = error instanceof Error ? error.message : "Reset failed";
+      console.error("[demo] reset failed:", message);
+      return status(500, { reset: false, message });
+    }
     return { reset: true, message: "Account deleted. Sign up again to start a fresh demo." };
   })
 

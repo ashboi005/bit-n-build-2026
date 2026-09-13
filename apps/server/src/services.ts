@@ -9,7 +9,7 @@ import { checkFreshness, refreshIfStale, sources } from "@bit-n-build-2026/sourc
 import { chatMessage, userDecision } from "@bit-n-build-2026/db/schema/activity";
 import { user } from "@bit-n-build-2026/db/schema/auth";
 import { userProfile } from "@bit-n-build-2026/db/schema/profile";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { DEMO_PERSONAS, type PersonaDecision } from "./demo-personas";
 import { env } from "./env.server";
@@ -377,7 +377,31 @@ export async function resetUser(userId: string): Promise<void> {
   } catch {
     // A vector cleanup failure must not block the account deletion.
   }
-  // Cascades to session, account, user_profile, user_decision, chat_message.
+
+  /**
+   * Clear the OAuth provider's rows first.
+   *
+   * session, account, user_profile, user_decision and chat_message all declare
+   * ON DELETE CASCADE, but the four oauth tables declare ON DELETE NO ACTION.
+   * So as soon as a user had any oauth row, deleting them raised a foreign key
+   * violation — the endpoint 500'd, the account survived, and the demo reset
+   * silently did nothing. Deleting them explicitly works whatever the schema
+   * says, which matters because we cannot assume a migration has run in prod.
+   *
+   * Table names are quoted because the oauth plugin creates them camelCased.
+   */
+  for (const table of ["oauthAccessToken", "oauthRefreshToken", "oauthConsent", "oauthClient"]) {
+    try {
+      await db.execute(sql.raw(`DELETE FROM "${table}" WHERE "user_id" = '${userId.replace(/'/g, "''")}'`));
+    } catch (error) {
+      // The table may not exist in every environment — that is fine.
+      const message = error instanceof Error ? error.message : String(error);
+      if (!/does not exist|relation/i.test(message)) {
+        console.warn(`[demo] could not clear ${table}:`, message);
+      }
+    }
+  }
+
   await db.delete(user).where(eq(user.id, userId));
 }
 

@@ -219,6 +219,24 @@ export async function* runChat(deps: ChatDeps, opts: ChatOptions): AsyncGenerato
     unsupported: audit.unsupported,
   };
 
+  /**
+   * Flag unverifiable figures in the answer itself.
+   *
+   * Detecting them is not enough — the sentence has already streamed to the
+   * screen. Caught live: the model wrote "BEL's price has already moved 13% in
+   * the last day" when our data says 0%. Marking it inline means the worst case
+   * is a visible "we could not verify this" rather than a confident wrong
+   * number, which is the difference between a safety net and a liability.
+   */
+  if (audit.unsupported.length) {
+    const note =
+      `\n\n> ⚠️ We could not verify ${audit.unsupported.length === 1 ? "a figure" : "some figures"} ` +
+      `in the answer above against our sources. Treat ${audit.unsupported.length === 1 ? "it" : "them"} ` +
+      `as unconfirmed and check the cited sources yourself.`;
+    full += note;
+    yield { type: "chat.delta", text: note };
+  }
+
   // Law 2, checked after the fact for chat: we stream, so we can't withhold
   // tokens. If it slipped through, append the correction rather than pretend.
   const check = checkNoRecommendation(full);

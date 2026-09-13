@@ -40,14 +40,25 @@ export interface UserProfile {
   dayIndex: number;
 }
 
-export const DEMO_STAGES = ["day0", "day5", "day15", "day25"] as const;
+/**
+ * Demo stages.
+ *
+ * Widened from 0/5/15/25. Five days is not enough time to have learned four
+ * concepts or for an investment thesis to have visibly broken, so the story
+ * strained credibility exactly where it needed to be believable. 15 / 45 / 90
+ * spans a realistic learning arc, and the gaps are big enough that the change
+ * in the AI's tone reads as growth rather than noise.
+ *
+ * day0 is not a seed — it is a full account reset. See /api/demo/reset.
+ */
+export const DEMO_STAGES = ["day0", "day15", "day45", "day90"] as const;
 export type DemoStage = (typeof DEMO_STAGES)[number];
 
 export const DEMO_STAGE_LABELS: Record<DemoStage, string> = {
-  day0: "Day 0",
-  day5: "Day 5",
+  day0: "Reset",
   day15: "Day 15",
-  day25: "Day 25",
+  day45: "Day 45",
+  day90: "Day 90",
 };
 
 /** POST /api/demo/seed */

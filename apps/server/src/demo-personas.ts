@@ -105,14 +105,14 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
   },
 
   /** Has had P/E explained once, and made one cautious purchase. */
-  day5: {
-    dayIndex: 5,
+  day15: {
+    dayIndex: 15,
     level: "learning",
     knownConcepts: ["pe"],
     pastTheses: [
       {
         id: "pt1",
-        at: "day-3",
+        at: "day-11",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "unresolved",
@@ -130,7 +130,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "unresolved",
         outcomeNote: null,
-        daysAgo: 3,
+        daysAgo: 11,
       },
     ],
     onboarding: { ...ONBOARDING_BASE, experience: "tried_a_bit" },
@@ -141,14 +141,14 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
    * which is what lets the AI say "this is the same reasoning that failed for
    * you before" at day 25.
    */
-  day15: {
-    dayIndex: 15,
+  day45: {
+    dayIndex: 45,
     level: "practicing",
     knownConcepts: ["pe", "eps", "week52_range", "order_book"],
     pastTheses: [
       {
         id: "pt1",
-        at: "day-13",
+        at: "day-41",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "held_up",
@@ -156,7 +156,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
       },
       {
         id: "pt2",
-        at: "day-4",
+        at: "day-12",
         query: "Everyone is talking about this defence stock so it will keep rising",
         ticker: "BEL",
         outcome: "broke",
@@ -175,7 +175,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
         outcomeNote: "Still holding. The reasoning was weak but the company was fine.",
-        daysAgo: 13,
+        daysAgo: 41,
       },
       {
         ticker: "TATAMOTORS",
@@ -187,7 +187,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
         outcomeNote: null,
-        daysAgo: 9,
+        daysAgo: 28,
       },
       {
         ticker: "BEL",
@@ -200,7 +200,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         outcome: "broke",
         outcomeNote:
           "Bought after the move had already happened. The budget news was months old by then.",
-        daysAgo: 4,
+        daysAgo: 12,
       },
     ],
     onboarding: { ...ONBOARDING_BASE, experience: "tried_a_bit" },
@@ -211,8 +211,8 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
    * investigated and deliberately DIDN'T buy, with their reasoning recorded.
    * That "skipped" decision is the product thesis in one row.
    */
-  day25: {
-    dayIndex: 25,
+  day90: {
+    dayIndex: 90,
     level: "independent",
     knownConcepts: [
       "pe",
@@ -226,7 +226,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
     pastTheses: [
       {
         id: "pt1",
-        at: "day-23",
+        at: "day-86",
         query: "ITC is a big company so it must be safe",
         ticker: "ITC",
         outcome: "held_up",
@@ -234,7 +234,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
       },
       {
         id: "pt2",
-        at: "day-14",
+        at: "day-57",
         query: "Everyone is talking about this defence stock so it will keep rising",
         ticker: "BEL",
         outcome: "broke",
@@ -243,7 +243,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
       },
       {
         id: "pt3",
-        at: "day-5",
+        at: "day-16",
         query: "Infosys looks cheap compared to its own history",
         ticker: "INFY",
         outcome: "held_up",
@@ -262,7 +262,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         reasoning: "Everyone knows the brand and my father owns it too.",
         outcome: "held_up",
         outcomeNote: "Still holding. The reasoning was weak but the company was fine.",
-        daysAgo: 23,
+        daysAgo: 86,
       },
       {
         ticker: "TATAMOTORS",
@@ -274,7 +274,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         reasoning: "I checked quarterly results before buying this time.",
         outcome: "unresolved",
         outcomeNote: null,
-        daysAgo: 19,
+        daysAgo: 72,
       },
       {
         ticker: "BEL",
@@ -287,7 +287,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
         outcome: "broke",
         outcomeNote:
           "Bought after the move had already happened. The budget news was months old by then.",
-        daysAgo: 14,
+        daysAgo: 57,
       },
       {
         ticker: "NESTLEIND",
@@ -300,7 +300,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
           "Its P/E was far above the rest of the sector and I couldn't find a reason the earnings justified it.",
         outcome: "held_up",
         outcomeNote: "Chose not to buy after checking the valuation. First time I've done that.",
-        daysAgo: 8,
+        daysAgo: 31,
       },
       {
         ticker: "INFY",
@@ -313,7 +313,7 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
           "Compared its P/E to TCS and Wipro and to its own past, then checked earnings were still growing.",
         outcome: "held_up",
         outcomeNote: null,
-        daysAgo: 5,
+        daysAgo: 16,
       },
     ],
     onboarding: { ...ONBOARDING_BASE, experience: "invest_regularly", monthlyBudget: 15000 },
@@ -327,8 +327,8 @@ export const DEMO_PERSONAS: Record<DemoStage, Persona> = {
  * nothing here is a canned response. See docs/demo.md.
  */
 export const DEMO_PROMPTS: Record<DemoStage, string> = {
-  day0: "Government increased defense spending, so I want to buy HAL",
-  day5: "Everyone on Instagram is saying this stock will explode",
-  day15: "Defence spending is up, so HAL should benefit",
-  day25: "HAL's P/E looks high against the sector — is the order book enough to justify it?",
+  day0: "My friend told me to buy HAL because defence spending is going up",
+  day15: "Everyone on Instagram is saying BEL will keep going up",
+  day45: "Defence spending is up, so HAL should benefit",
+  day90: "HAL's P/E is 35 against a sector median of 48 — is the order book enough to justify the gap?",
 };

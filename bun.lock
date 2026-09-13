@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "bit-n-build-2026",
@@ -29,6 +30,7 @@
     "apps/server": {
       "name": "server",
       "dependencies": {
+        "@better-auth/oauth-provider": "1.7.3",
         "@bit-n-build-2026/auth": "workspace:*",
         "@bit-n-build-2026/contracts": "workspace:*",
         "@bit-n-build-2026/db": "workspace:*",
