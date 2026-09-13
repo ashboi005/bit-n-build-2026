@@ -21,7 +21,10 @@ export default function Header() {
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex flex-row items-center justify-between px-4 py-3">
         {session ? (
-          <BottomNavBar className="hidden md:flex" />
+          <>
+            <BottomNavBar className="hidden md:flex" />
+            <BottomNavBar stickyBottom className="md:hidden" />
+          </>
         ) : (
           <div className="hidden md:block w-32" /> /* Placeholder to maintain flex layout */
         )}

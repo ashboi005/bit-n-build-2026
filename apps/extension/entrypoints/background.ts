@@ -3,7 +3,12 @@ import { browser } from "wxt/browser";
 import type { Browser } from "wxt/browser";
 import { defineBackground } from "wxt/utils/define-background";
 
-import { buildDraft, sanitizeSelection } from "../utils/page-context";
+import {
+  buildDraft,
+  buildGrowwQuery,
+  companyFromGrowwUrl,
+  sanitizeSelection,
+} from "../utils/page-context";
 import {
   ACCESS_TOKEN_TTL_MS,
   authorizationCodeFromCallback,
@@ -28,6 +33,8 @@ type TokenResponse = {
   refresh_token?: string;
   expires_in?: number;
 };
+type GrowwContext = { companyName: string };
+const CONTEXT_UNAVAILABLE_MESSAGE = "No company context found. Open a Groww stock page or select a claim on the page.";
 
 function assertOAuthConfig(): void {
   if (!API_ORIGIN || !OAUTH_CLIENT_ID || !EXTENSION_ID) {
@@ -165,10 +172,14 @@ async function signOut(): Promise<void> {
   await Promise.all([browser.storage.session.clear(), browser.storage.local.remove("refresh")]);
 }
 
-async function streamThesis(query: string, port: Browser.runtime.Port): Promise<void> {
-  const safeQuery = sanitizeSelection(query);
+async function streamThesis(question: string, port: Browser.runtime.Port): Promise<void> {
+  const { growwContext } = await browser.storage.session.get("growwContext");
+  const companyName = (growwContext as GrowwContext | undefined)?.companyName ?? null;
+  const safeQuery = companyName
+    ? buildGrowwQuery(companyName, question)
+    : sanitizeSelection(question);
   if (!safeQuery || safeQuery.length > MAX_QUERY_CHARS) {
-    throw new Error("Enter a short claim without a URL or portfolio data.");
+    throw new Error("Enter a short question without a URL or portfolio data.");
   }
   const { accessToken } = await accessForUserAction();
   const response = await fetch(apiUrl("/api/thesis/stream"), {
@@ -204,11 +215,31 @@ export default defineBackground(() => {
     void (async () => {
       try {
         await browser.sidePanel.setOptions({ tabId, path: "sidepanel.html", enabled: true });
+        const companyName = companyFromGrowwUrl(tab.url);
+        if (companyName) {
+          await browser.storage.session.set({ growwContext: { companyName } satisfies GrowwContext });
+          await Promise.all([
+            browser.storage.session.remove("draft"),
+            browser.storage.session.remove("contextMessage"),
+          ]);
+          return;
+        }
+
+        await browser.storage.session.remove("growwContext");
         const context = await readVisibleSelection(tabId);
         const draft = buildDraft(context);
-        await browser.storage.session.set({ draft });
+        if (draft) {
+          await browser.storage.session.set({ draft });
+          await browser.storage.session.remove("contextMessage");
+        } else {
+          await browser.storage.session.set({ draft: null, contextMessage: CONTEXT_UNAVAILABLE_MESSAGE });
+        }
       } catch {
-        await browser.storage.session.remove("draft");
+        await browser.storage.session.set({
+          draft: null,
+          growwContext: null,
+          contextMessage: CONTEXT_UNAVAILABLE_MESSAGE,
+        });
       }
     })();
   });
@@ -229,6 +260,15 @@ export default defineBackground(() => {
         if (payload.type === "draft") {
           const { draft } = await browser.storage.session.get("draft");
           port.postMessage({ type: "draft", draft: draft ?? null });
+        } else if (payload.type === "context") {
+          const { growwContext, contextMessage } = await browser.storage.session.get([
+            "growwContext",
+            "contextMessage",
+          ]);
+          port.postMessage({
+            type: "context",
+            context: growwContext ?? (contextMessage ? { message: contextMessage } : null),
+          });
         } else if (payload.type === "login") {
           await signIn();
           port.postMessage({ type: "signed-in" });

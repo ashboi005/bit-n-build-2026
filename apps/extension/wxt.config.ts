@@ -13,12 +13,12 @@ const apiOrigin = (buildEnv.WXT_API_ORIGIN ?? "https://thwip-api.ashwathsoni.dev
 
 export default defineConfig({
   manifest: {
-    name: "Mind Over Money — Private Alpha",
+    name: "THWIP — Private Alpha",
     description: "Review an investment thesis with citable evidence.",
     minimum_chrome_version: "116",
     permissions: ["activeTab", "scripting", "sidePanel", "storage", "identity"],
     host_permissions: [`${apiOrigin}/*`],
-    action: { default_title: "Analyze with Mind Over Money" },
+    action: { default_title: "Analyze with THWIP" },
     side_panel: { default_path: "sidepanel.html" },
     ...(buildEnv.WXT_EXTENSION_KEY ? { key: buildEnv.WXT_EXTENSION_KEY } : {}),
     content_security_policy: {

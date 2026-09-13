@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mind Over Money</title>
+    <title>THWIP</title>
   </head>
   <body>
     <main>
-      <header><strong>Mind Over Money</strong><button id="auth" type="button">Sign in</button></header>
+      <header><strong>THWIP</strong><button id="auth" type="button">Sign in</button></header>
       <p class="notice">Page context is local, temporary, and not evidence. Review before sending.</p>
-      <label for="query">Your thesis</label>
-      <textarea id="query" maxlength="2000" placeholder="Select a claim on the page, then review it here."></textarea>
+      <p id="company-context" class="context" hidden></p>
+      <label for="query">Your question</label>
+      <textarea id="query" maxlength="2000" placeholder="Ask a question about the selected company."></textarea>
       <button id="analyze" type="button">Analyze</button>
       <p id="status" role="status"></p>
       <section id="results" aria-live="polite"></section>

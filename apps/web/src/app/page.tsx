@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useThesisRun } from "@/hooks/use-thesis-run";
@@ -11,7 +11,7 @@ import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 import Loader from "@/components/loader";
 import { LandingPage } from "@/components/landing-page";
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
@@ -21,6 +21,12 @@ export default function Home() {
     run 
   } = useThesisRun();
   const [suggestedQuery, setSuggestedQuery] = useState(searchParams.get("q") || "");
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -33,7 +39,7 @@ export default function Home() {
     return () => window.removeEventListener("thwip-seed-demo", handler);
   }, []);
 
-  if (isPending) {
+  if (!mounted || isPending) {
     return <Loader />;
   }
 
@@ -88,5 +94,13 @@ export default function Home() {
       </div>
       <OnboardingFlow />
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
   );
 }

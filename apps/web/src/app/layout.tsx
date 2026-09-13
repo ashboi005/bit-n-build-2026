@@ -31,7 +31,9 @@ export default function RootLayout({
         <Providers>
           <div className="grid grid-rows-[auto_1fr] h-svh overflow-hidden">
             <Header />
-            {children}
+            <main className="overflow-y-auto h-full pb-20 md:pb-0 relative">
+              {children}
+            </main>
           </div>
         </Providers>
       </body>
