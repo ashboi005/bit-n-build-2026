@@ -403,6 +403,30 @@ new Elysia()
 
   /* ------------------------------------------------------ stocks + glossary */
 
+  /**
+   * Resolve document ids to full source references.
+   *
+   * Persisted chat messages only store sourceIds, so a reloaded thread had no
+   * way to render its citations. `?ids=a,b,c`.
+   */
+  .get("/api/sources", ({ query }) => {
+    const raw = typeof query.ids === "string" ? query.ids : "";
+    const ids = raw.split(",").map((id) => id.trim()).filter(Boolean).slice(0, 50);
+
+    return ids
+      .map((id) => sources.getDocument(id))
+      .filter((doc): doc is NonNullable<typeof doc> => doc !== null)
+      .map((doc) => ({
+        id: doc.id,
+        title: doc.title,
+        publisher: doc.publisher,
+        url: doc.url,
+        tier: doc.tier,
+        publishedAt: doc.publishedAt,
+        snippet: doc.chunks[0]?.text.slice(0, 300) ?? doc.text.slice(0, 300),
+      }));
+  })
+
   .get("/api/stocks", () => sources.listStocks())
 
   .get("/api/stocks/:ticker", ({ params, status }) => {

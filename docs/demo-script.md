@@ -1,29 +1,3 @@
-# Demo runbook
-
-Everything here was rehearsed live. Quotes are verbatim.
-
-**Use the THESIS screen for the big moments** — it assembles visibly *and* it
-recalls history. Chat is for the personal-details proof and as a backup.
-
----
-
-## 0 · Before you walk up
-
-```bash
-bun run --filter @bit-n-build-2026/sources refresh
-curl -s localhost:3000/api/health
-```
-- `stocks: 20`
-- `vectors` says `"store":"qdrant"` — **not** `"status":"indexing"` (wait ~30s after a restart)
-
----
-
-## 1 · Reset & onboard  ·  60s
-
-1. Click **Reset** → lands on sign-up
-2. Sign up
-3. **Ask a judge to shout a monthly amount.** Type exactly that.
-
 | Field | Enter |
 |---|---|
 | Age | 18–24 |
@@ -34,27 +8,12 @@ curl -s localhost:3000/api/health
 | Monthly amount | **← the judge's number** |
 | Notes | I'm a student, money from part-time work |
 
----
 
 ## 2 · Chat — the judge's number  ·  30s
-
-Go to **chat**, type:
-
-> **How much should I put into my first stock?**
-
-Tested with ₹1,332 →
-
-> "You have about **₹1,332 a month**… You also said you would **sell immediately if a
-> stock dropped 20%**… you may need the money in **3 to 5 years**."
-
-🗣️ *"Nobody typed that into a prompt. It's from what I answered ninety seconds ago."*
-
----
+How much should I put into my first stock?
 
 ## 3 · Thesis — the bad idea  ·  60s
-
 Go to **thesis**, type:
-
 > **My friend told me to buy HAL because defence spending is going up**
 
 Let it assemble. **Don't talk over it.** Stop on:
