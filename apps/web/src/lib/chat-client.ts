@@ -30,7 +30,14 @@ export async function* streamChat(
     for (const frame of frames) {
       const line = frame.split("\n").find((l) => l.startsWith("data: "));
       if (!line) continue;
-      yield JSON.parse(line.slice(6)) as ChatEvent;
+      
+      const payload = line.slice(6);
+      try {
+        yield JSON.parse(payload) as ChatEvent;
+      } catch (e) {
+        console.error("Stream parse error on payload:", payload);
+        yield { type: "chat.failed", message: payload } as ChatEvent;
+      }
     }
   }
 }

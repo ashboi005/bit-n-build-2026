@@ -28,6 +28,7 @@ import { SpiderTingle } from "@/components/chat/spider-tingle";
 import type { SourceRef, ChatThread } from "@bit-n-build-2026/contracts";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@bit-n-build-2026/ui/lib/utils";
+import { BorderBeam } from "@/components/ui/border-beam-search";
 
 function ChatPageContent() {
   const searchParams = useSearchParams();
@@ -231,23 +232,29 @@ function ChatPageContent() {
         </div>
 
         {/* Input Section with rounded corners and clean spacing */}
-        <div className="p-3 sm:p-4 bg-background/80 backdrop-blur-md border-t border-border/50">
-          <form onSubmit={handleSubmit} className="flex items-center gap-2.5 max-w-4xl mx-auto w-full">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              disabled={status === "streaming"}
-              className="flex-1 h-11 px-4 text-sm rounded-2xl bg-card border-border/70 shadow-2xs transition-colors focus-visible:ring-1 focus-visible:ring-ring"
-            />
-            <Button
-              type="submit"
-              disabled={!input.trim() || status === "streaming"}
-              size="icon"
-              className="h-11 w-11 rounded-2xl shrink-0 cursor-pointer shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+        <div className="p-3 sm:p-4 pb-6 sm:pb-8 bg-background/80 backdrop-blur-md border-t border-border/50">
+          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto w-full">
+            <BorderBeam size="line" colorVariant="colorful" duration={3.1} borderRadius={24}>
+              <div className="flex items-center bg-card rounded-2xl border border-border/70 shadow-2xs focus-within:ring-1 focus-within:ring-ring transition-colors">
+                <Input 
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  disabled={status === "streaming"}
+                  className="flex-1 h-11 px-4 text-sm bg-transparent border-0 shadow-none focus-visible:ring-0"
+                />
+                <div className="pr-1">
+                  <Button 
+                    type="submit" 
+                    disabled={!input.trim() || status === "streaming"} 
+                    size="icon"
+                    className="h-9 w-9 rounded-xl shrink-0 cursor-pointer shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </BorderBeam>
           </form>
 
         </div>

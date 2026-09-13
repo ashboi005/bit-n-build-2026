@@ -48,10 +48,10 @@ export function LandingPage() {
             initial={{ opacity: 0, y: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="w-full flex justify-center mb-8 -mt-16 md:-mt-32 relative z-20 drop-shadow-2xl"
+            className="w-full flex justify-center mb-8 md:mb-12 -mt-8 md:-mt-12 relative z-20 drop-shadow-2xl"
           >
             <div 
-              className="h-80 sm:h-[400px] md:h-[500px] lg:h-[700px] w-full max-w-[1600px] bg-white"
+              className="h-32 sm:h-48 md:h-64 lg:h-[220px] xl:h-[260px] w-full max-w-[1000px] bg-white"
               style={{
                 WebkitMaskImage: 'url(/thwip-logo-transparent.png)',
                 maskImage: 'url(/thwip-logo-transparent.png)',
