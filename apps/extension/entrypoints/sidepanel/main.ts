@@ -167,7 +167,8 @@ port.onMessage.addListener((message: unknown) => {
   }
 });
 
-browser.storage.session.onChanged.addListener((changes) => {
+browser.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "session") return;
   if (changes.draft) renderDraft(changes.draft.newValue);
   if (changes.growwContext || changes.contextMessage) {
     renderCompanyContext(changes.growwContext?.newValue ?? changes.contextMessage?.newValue ?? null);
