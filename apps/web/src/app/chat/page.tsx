@@ -4,15 +4,15 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useChat } from "@/hooks/use-chat";
-import { 
+import {
   MessageScroller,
   MessageScrollerContent,
   MessageScrollerViewport,
   MessageScrollerItem,
   MessageScrollerButton,
-  MessageScrollerProvider 
+  MessageScrollerProvider
 } from "@bit-n-build-2026/ui/components/message-scroller";
-import { 
+import {
   Message,
   MessageGroup,
   MessageContent,
@@ -37,6 +37,7 @@ export default function ChatPage() {
   const { messages, status, sendMessage, threadId } = useChat(threadIdParam || undefined);
   const [input, setInput] = useState("");
   const [threads, setThreads] = useState<ChatThread[]>([]);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Fetch threads on mount and on new thread creation
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function ChatPage() {
         if (res.ok) {
           const data = await res.json();
           setThreads(data);
-          
+
           // Auto-open most recent if no thread is specified
           if (!threadIdParam && data.length > 0) {
             router.replace(`/chat?threadId=${data[0].threadId}`);
@@ -76,140 +77,180 @@ export default function ChatPage() {
     }
   };
 
+  const sidebarContent = (
+    <>
+      <div className="p-4 border-b flex items-center justify-between">
+        <span className="font-medium text-sm">Past Conversations</span>
+        <Link href="/chat" onClick={() => setIsMobileSidebarOpen(false)}>
+          <Button size="icon" variant="ghost" className="h-8 w-8">
+            <Plus className="h-4 w-4" />
+          </Button>
+        </Link>
+      </div>
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        {threads.length === 0 && (
+          <div className="p-4 text-xs text-muted-foreground text-center">
+            No conversations yet.
+          </div>
+        )}
+        {threads.map((t) => {
+          const isActive = t.threadId === (threadId || threadIdParam);
+          return (
+            <Link
+              key={t.threadId}
+              href={`/chat?threadId=${t.threadId}`}
+              onClick={() => setIsMobileSidebarOpen(false)}
+              className={`block p-3 rounded-lg text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <MessageSquare className="h-3 w-3 opacity-70 flex-shrink-0" />
+                <div className="truncate font-semibold">{t.title || "New Chat"}</div>
+              </div>
+              <div className="truncate text-xs text-muted-foreground pl-5">{t.lastMessage}</div>
+            </Link>
+          );
+        })}
+      </div>
+    </>
+  );
+
   return (
-    <div className="flex h-[calc(100vh-60px)] w-full max-w-[1400px] mx-auto">
-      {/* Sidebar */}
+    <div className="flex h-[calc(100vh-120px)] md:h-[calc(100vh-60px)] w-full max-w-[1400px] mx-auto pb-4">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isMobileSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          >
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="w-[280px] h-full border-r bg-card shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {sidebarContent}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
       <div className="w-64 border-r bg-muted/10 hidden md:flex flex-col">
-        <div className="p-4 border-b flex items-center justify-between">
-          <span className="font-medium text-sm">Past Conversations</span>
-          <Link href="/chat">
-            <Button size="icon" variant="ghost" className="h-8 w-8">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {threads.length === 0 && (
-            <div className="p-4 text-xs text-muted-foreground text-center">
-              No conversations yet.
-            </div>
-          )}
-          {threads.map((t) => {
-            const isActive = t.threadId === (threadId || threadIdParam);
-            return (
-              <Link 
-                key={t.threadId} 
-                href={`/chat?threadId=${t.threadId}`} 
-                className={`block p-3 rounded-lg text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <MessageSquare className="h-3 w-3 opacity-70 flex-shrink-0" />
-                  <div className="truncate font-semibold">{t.title || "New Chat"}</div>
-                </div>
-                <div className="truncate text-xs text-muted-foreground pl-5">{t.lastMessage}</div>
-              </Link>
-            );
-          })}
-        </div>
+        {sidebarContent}
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0 pt-2 sm:pt-4 relative min-h-0 overflow-hidden max-w-4xl mx-auto w-full">
-      <SpiderTingle isActive={status === "streaming"} />
-      
-      <div className="flex-1 min-h-0 relative">
-        <MessageScrollerProvider>
-          <MessageScroller>
-            <MessageScrollerViewport className="px-4 pb-6 scrollbar-thin">
-              <MessageScrollerContent className="gap-6">
-                {messages.length === 0 && status === "idle" && (
-                  <div className="h-full min-h-[300px] flex items-center justify-center text-sm text-muted-foreground">
-                    Ask a general question or ask about your portfolio...
-                  </div>
-                )}
-                {messages.map((m) => (
-                  <MessageScrollerItem key={m.id}>
-                    <MessageGroup>
-                      <Message align={m.role === "user" ? "end" : "start"} className="gap-3">
-                        <MessageAvatar className="self-start mt-0.5 size-8 shrink-0 rounded-full border border-border/50 bg-muted/70 text-muted-foreground shadow-2xs">
-                          {m.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                        </MessageAvatar>
-                        
-                        <MessageContent className="gap-2">
-                          {m.role === "assistant" && m.usedPortfolio && (
-                            <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-medium mb-0.5 bg-blue-50 dark:bg-blue-900/20 w-fit px-3 py-1 rounded-full border border-blue-500/20">
-                              <Briefcase className="h-3 w-3" />
-                              Used your portfolio context
-                            </div>
-                          )}
+      <div className="flex-1 flex flex-col min-w-0 relative min-h-0 overflow-hidden max-w-4xl mx-auto w-full">
+        <SpiderTingle isActive={status === "streaming"} />
 
-                          <Bubble 
-                            variant={m.role === "user" ? "default" : "secondary"}
-                            className={cn(
-                              "transition-all duration-200",
-                              m.role === "user" ? "rounded-2xl rounded-tr-xs" : "rounded-2xl rounded-tl-xs"
+        {/* Mobile Header for Sidebar Toggle */}
+        <div className="md:hidden flex items-center px-4 py-2 border-b bg-card/50 backdrop-blur-sm z-10 shrink-0">
+          <Button variant="outline" size="sm" onClick={() => setIsMobileSidebarOpen(true)} className="gap-2 rounded-xl">
+            <MessageSquare className="w-4 h-4" />
+            Conversations
+          </Button>
+        </div>
+
+        <div className="flex-1 min-h-0 relative">
+          <MessageScrollerProvider>
+            <MessageScroller>
+              <MessageScrollerViewport className="px-4 pb-6 scrollbar-thin">
+                <MessageScrollerContent className="gap-6">
+                  {messages.length === 0 && status === "idle" && (
+                    <div className="h-full min-h-[300px] flex items-center justify-center text-sm text-muted-foreground">
+                      Ask a general question or ask about your portfolio...
+                    </div>
+                  )}
+                  {messages.map((m) => (
+                    <MessageScrollerItem key={m.id}>
+                      <MessageGroup>
+                        <Message align={m.role === "user" ? "end" : "start"} className="gap-3">
+                          <MessageAvatar className="self-start mt-0.5 size-8 shrink-0 rounded-full border border-border/50 bg-muted/70 text-muted-foreground shadow-2xs">
+                            {m.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                          </MessageAvatar>
+
+                          <MessageContent className="gap-2">
+                            {m.role === "assistant" && m.usedPortfolio && (
+                              <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-medium mb-0.5 bg-blue-50 dark:bg-blue-900/20 w-fit px-3 py-1 rounded-full border border-blue-500/20">
+                                <Briefcase className="h-3 w-3" />
+                                Used your portfolio context
+                              </div>
                             )}
-                          >
-                            <BubbleContent 
+
+                            <Bubble
+                              variant={m.role === "user" ? "default" : "secondary"}
                               className={cn(
-                                "w-fit max-w-full min-w-0 border border-transparent leading-relaxed text-sm wrap-break-word shadow-xs",
-                                m.role === "user" 
-                                  ? "rounded-2xl rounded-tr-xs px-4.5 py-3 text-primary-foreground" 
-                                  : "rounded-2xl rounded-tl-xs px-5 py-4 bg-secondary/80 border-border/40 text-foreground"
+                                "transition-all duration-200",
+                                m.role === "user" ? "rounded-2xl rounded-tr-xs" : "rounded-2xl rounded-tl-xs"
                               )}
                             >
-                              {m.role === "user" ? (
-                                <p className="leading-relaxed whitespace-pre-wrap">{m.content}</p>
-                              ) : (
-                                <ParsedMessage
-                                  content={m.content}
-                                  sources={m.sources}
-                                  isStreaming={m.status === "streaming"}
-                                />
-                              )}
-                            </BubbleContent>
-                          </Bubble>
+                              <BubbleContent
+                                className={cn(
+                                  "w-fit max-w-full min-w-0 border border-transparent leading-relaxed text-sm wrap-break-word shadow-xs",
+                                  m.role === "user"
+                                    ? "rounded-2xl rounded-tr-xs px-4.5 py-3 text-primary-foreground"
+                                    : "rounded-2xl rounded-tl-xs px-5 py-4 bg-secondary/80 border-border/40 text-foreground"
+                                )}
+                              >
+                                {m.role === "user" ? (
+                                  <p className="leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                                ) : (
+                                  <ParsedMessage
+                                    content={m.content}
+                                    sources={m.sources}
+                                    isStreaming={m.status === "streaming"}
+                                  />
+                                )}
+                              </BubbleContent>
+                            </Bubble>
 
-                          {m.status === "failed" && (
-                            <div className="text-destructive text-xs px-1">Error generating response</div>
-                          )}
+                            {m.status === "failed" && (
+                              <div className="text-destructive text-xs px-1">Error generating response</div>
+                            )}
 
-                          {/* Collapsible Resources / Sources Dropdown */}
-                          {m.sources && m.sources.length > 0 && (
-                            <SourcesDropdown sources={m.sources} />
-                          )}
-                        </MessageContent>
-                      </Message>
-                    </MessageGroup>
-                  </MessageScrollerItem>
-                ))}
-              </MessageScrollerContent>
-            </MessageScrollerViewport>
-            <MessageScrollerButton />
-          </MessageScroller>
-        </MessageScrollerProvider>
-      </div>
+                            {/* Collapsible Resources / Sources Dropdown */}
+                            {m.sources && m.sources.length > 0 && (
+                              <SourcesDropdown sources={m.sources} />
+                            )}
+                          </MessageContent>
+                        </Message>
+                      </MessageGroup>
+                    </MessageScrollerItem>
+                  ))}
+                </MessageScrollerContent>
+              </MessageScrollerViewport>
+              <MessageScrollerButton />
+            </MessageScroller>
+          </MessageScrollerProvider>
+        </div>
 
-      {/* Input Section with rounded corners and clean spacing */}
-      <div className="p-3 sm:p-4 bg-background/80 backdrop-blur-md border-t border-border/50">
-        <form onSubmit={handleSubmit} className="flex items-center gap-2.5 max-w-4xl mx-auto w-full">
-          <Input 
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            disabled={status === "streaming"}
-            className="flex-1 h-11 px-4 text-sm rounded-2xl bg-card border-border/70 shadow-2xs transition-colors focus-visible:ring-1 focus-visible:ring-ring"
-          />
-          <Button 
-            type="submit" 
-            disabled={!input.trim() || status === "streaming"} 
-            size="icon"
-            className="h-11 w-11 rounded-2xl shrink-0 cursor-pointer shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
-      </div>
+        {/* Input Section with rounded corners and clean spacing */}
+        <div className="p-3 sm:p-4 bg-background/80 backdrop-blur-md border-t border-border/50">
+          <form onSubmit={handleSubmit} className="flex items-center gap-2.5 max-w-4xl mx-auto w-full">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+              disabled={status === "streaming"}
+              className="flex-1 h-11 px-4 text-sm rounded-2xl bg-card border-border/70 shadow-2xs transition-colors focus-visible:ring-1 focus-visible:ring-ring"
+            />
+            <Button
+              type="submit"
+              disabled={!input.trim() || status === "streaming"}
+              size="icon"
+              className="h-11 w-11 rounded-2xl shrink-0 cursor-pointer shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </form>
+
+        </div>
       </div>
     </div>
   );
@@ -233,11 +274,11 @@ function SourcesDropdown({ sources }: { sources: SourceRef[] }) {
       >
         <BookOpen className="w-3.5 h-3.5 text-primary" />
         <span>Sources ({sources.length})</span>
-        <ChevronDown 
+        <ChevronDown
           className={cn(
-            "w-3.5 h-3.5 transition-transform duration-200 text-muted-foreground", 
+            "w-3.5 h-3.5 transition-transform duration-200 text-muted-foreground",
             isOpen && "rotate-180"
-          )} 
+          )}
         />
       </button>
 
@@ -329,10 +370,10 @@ function renderParagraphWithCitations(text: string, sources?: SourceRef[]) {
             </MarkerIcon>
             <MarkerContent className="rounded-md">
               {source.url ? (
-                <a 
-                  href={source.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:underline text-xs"
                 >
                   {source.publisher}
